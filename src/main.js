@@ -2,6 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+//npm i axios firebase
 import axios from "axios";
 import firebase from "firebase/app";
 //will do firebase initialization later.
