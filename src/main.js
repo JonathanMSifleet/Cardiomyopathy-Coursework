@@ -1,13 +1,12 @@
 import { createApp } from 'vue';
-// import axios from 'axios';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import './assets/styles/main.module.css';
+import './assets/styles/main.css';
+// import axios from "axios";
+// import firebase from "firebase/app";
 
-// npm i axios firebase
-// will do firebase initialization later.
-
+//will do firebase initialization later.
 const app = createApp(App);
 app.use(store);
 app.use(router);
