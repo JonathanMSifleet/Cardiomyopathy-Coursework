@@ -11,13 +11,12 @@ module.exports = {
     }
   },
   rules: {
-    indent: ['error', 2],
-    'vue/script-indent': [
+    'comma-dangle': [
       'error',
-      2,
-      { baseIndent: 1 }
+      'never'
     ],
     'eol-last': [2, 'windows'],
+    indent: ['error', 2, { "SwitchCase": 1 }],
     'linebreak-style': [
       'error',
       'windows'
@@ -28,17 +27,20 @@ module.exports = {
         code: 100
       }
     ],
-    quotes: [
+    'no-trailing-spaces': 'error',
+    "quotes": [
       'error',
       'single'
     ],
-    'comma-dangle': [
-      'error',
-      'never'
-    ],
+    semi: ['error', 'always'],
     'vue/html-indent': ['error', 2, {
       baseIndent: 1
-    }]
+    }],
+    'vue/script-indent': [
+      'error',
+      2,
+      { baseIndent: 1 }
+    ]
   },
   extends: [
     'plugin:vue/vue3-essential',
