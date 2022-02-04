@@ -1,0 +1,11 @@
+//// credit: https://www.npmjs.com/package/scss-reset
+@import './reset.scss';
+@import './variables.scss';
+@import './typography';
+////
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
