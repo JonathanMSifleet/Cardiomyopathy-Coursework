@@ -6,12 +6,15 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "forceUpdate": "ncu -u"
+    "forceUpdate": "ncu -u",
+    "insertHCMData": "node --trace-warnings ./src/functions/insertHcmDataToDatabase.js"
   },
   "dependencies": {
     "axios": "^0.25.0",
     "core-js": "^3.21.0",
+    "csvtojson": "^2.0.10",
     "firebase": "^9.6.5",
+    "path": "^0.12.7",
     "style-loader": "^3.3.1",
     "vue": "^3.0.0",
     "vue-fragment": "^1.5.2",
@@ -21,8 +24,6 @@
   "devDependencies": {
     "@babel/core": "^7.16.12",
     "@babel/preset-env": "^7.16.11",
-    "@types/sass": "^1.43.1",
-    "@types/sass-loader": "^8.0.3",
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-eslint": "^3.1.1",
     "@vue/cli-plugin-router": "^4.5.15",
