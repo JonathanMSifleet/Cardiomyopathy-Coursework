@@ -1,9 +1,10 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div :class="[$style.nav]" id="nav">
+    <router-link to="/"/>
   </div>
   <router-view />
 </template>
 
-<style></style>
+<style lang="scss" module scoped>
+  @import './App.module.scss';
+</style>
