@@ -1,18 +1,30 @@
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+@import '../../components/Header/Header.module.scss';
 
-.nav {
-  padding: 30px;
+.PageWrapper {
+  background-color: white;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 
-  .nav a {
-    font-weight: bold;
-    color: #2c3e50;
+  .Footer {
+    position: fixed;
   }
 
-  .nav a.router-link-exact-active {
-    color: #42b983;
+  .Row {
+    height: 100%;
+    margin: 0;
+    padding-top: $headerHeight;
+
+    .MainContent {
+      padding: 0.5%;
+    }
+
+    .SideColumn {
+      background-color: #F0F0F0;
+      display: flex;
+      height: 100vh;
+      padding: 0;
+    }
   }
 }

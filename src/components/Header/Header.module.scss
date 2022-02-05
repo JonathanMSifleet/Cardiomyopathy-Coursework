@@ -1,3 +1,7 @@
+$headerHeight: 6vh;
+
 .Header {
-  width: 100vw;
+  height: $headerHeight;
+  position: fixed;
+  width: 100%;
 }
