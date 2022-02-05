@@ -6,9 +6,6 @@
         <MDBNavbarItem href="/" active>
           Home
         </MDBNavbarItem>
-        <MDBNavbarItem href="/about">
-          About
-        </MDBNavbarItem>
       </MDBNavbarNav>
     </MDBNavbar>
   </header>
