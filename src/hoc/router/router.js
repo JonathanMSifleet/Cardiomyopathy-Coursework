@@ -11,6 +11,11 @@ const routes = [
     name: "About",
     component: () => import("../../views/About/About.vue"),
   },
+  // no route, route:
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
+  },
 ];
 
 const router = createRouter({
