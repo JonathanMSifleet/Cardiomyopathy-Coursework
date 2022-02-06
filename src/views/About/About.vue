@@ -1,12 +1,12 @@
 <template>
-  <PageWrapper> test </PageWrapper>
+  <PageWrapper> test2 </PageWrapper>
 </template>
 
 <script>
 import PageWrapper from "../../hoc/PageWrapper/PageWrapper.vue";
 
 export default {
-  name: "Home",
+  name: "About",
   components: {
     PageWrapper,
   },
