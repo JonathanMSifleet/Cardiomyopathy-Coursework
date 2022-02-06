@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: () => import('../../views/Home/Home.vue')
+    path: "/",
+    name: "Home",
+    component: () => import("../../views/Home/Home.vue"),
   },
   {
     path: "/About",
@@ -13,15 +13,14 @@ const routes = [
   },
   // no route, route:
   {
-    path: '/:pathMatch(.*)*',
-    redirect: '/'
-  }
-  
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 export default router;
