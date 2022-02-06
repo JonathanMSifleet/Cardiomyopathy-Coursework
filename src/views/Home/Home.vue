@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper> {{ title }} </PageWrapper>
+  <PageWrapper> {{ homePage.title }} </PageWrapper>
 </template>
 
 <script>
@@ -11,9 +11,9 @@ export default {
     PageWrapper,
   },
   setup() {
-    const title = "Welcome";
+    const homePage = { title: "Welcome" };
 
-    return { title };
+    return { homePage };
   },
 };
 </script>
