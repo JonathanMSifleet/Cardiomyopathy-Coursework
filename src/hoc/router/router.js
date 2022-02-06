@@ -5,6 +5,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import('../../views/Home/Home.vue')
+  },
+  // no route, route:
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/'
   }
 ];
 
