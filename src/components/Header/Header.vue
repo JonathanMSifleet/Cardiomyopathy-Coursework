@@ -3,8 +3,8 @@
     <MDBNavbar :class="[$style.Header, 'header']" expand="lg" light bg="success" container>
       <MDBNavbarToggler target="#navbarExample01"/>
       <MDBNavbarNav collapse="navbarExample01" class="mb-2 mb-lg-0">
-        <MDBNavbarItem href="/" active>
-          Home
+        <MDBNavbarItem active>
+          <router-link to="/">Home</router-link>
         </MDBNavbarItem>
       </MDBNavbarNav>
     </MDBNavbar>
