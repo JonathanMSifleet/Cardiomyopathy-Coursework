@@ -1,19 +1,19 @@
 <template>
-  <PageWrapper> {{ homePage.title }} </PageWrapper>
+  <PageWrapper> {{ title }} </PageWrapper>
 </template>
 
 <script>
 import PageWrapper from "../../hoc/PageWrapper/PageWrapper.vue";
 
 export default {
-  name: "Home",
+  name: "About",
   components: {
     PageWrapper,
   },
   setup() {
-    const homePage = { title: "Welcome" };
+    const title = "About";
 
-    return { homePage };
+    return { title };
   },
 };
 </script>
