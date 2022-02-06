@@ -1,5 +1,5 @@
 <template>
-  <PageWrapper> test </PageWrapper>
+  <PageWrapper> {{ title }} </PageWrapper>
 </template>
 
 <script>
@@ -9,6 +9,11 @@ export default {
   name: "Home",
   components: {
     PageWrapper,
+  },
+  setup() {
+    const title = "Welcome";
+
+    return { title };
   },
 };
 </script>
