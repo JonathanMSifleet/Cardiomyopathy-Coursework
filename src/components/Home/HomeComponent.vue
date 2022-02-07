@@ -7,11 +7,11 @@
       <h2 v-else>{{ post.title }}</h2>
       <h2 v-if="post.WelcomeSection">{{ post.description }}</h2>
       <h2 v-else>{{ post.description }}</h2>
-      <router-link v-if="post.WelcomeSection" to='#'>Login/Register</router-link>
-      <!-- <router-link v-else to='#'></router-link> -->
-      <div class="bg-photo">
-        <img src="../assets/imgs/hcm-diagram-img.jpg" alt="">
-      </div>
+      <router-link class="link link-light" v-if="post.WelcomeSection" to='#'>Login/Register</router-link>
+      <router-link v-else to='#'>Read More</router-link>
+    </div>
+    <div class="bg-photo">
+      <img src="../../assets/imgs/hcm-diagram-img.jpg" alt="">
     </div>
   </div>
 </template>
@@ -23,4 +23,6 @@
   };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" module scoped>
+@import "./HomeComponent.module.scss";
+</style>

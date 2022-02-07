@@ -8,7 +8,7 @@
 
 <script>
   import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
-  import HomeComponent from '../../components/HomeComponent.vue';
+  import HomeComponent from '../../components/Home/HomeComponent.vue';
 
   export default {
     name: 'Home',

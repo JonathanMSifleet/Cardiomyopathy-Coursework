@@ -43,9 +43,16 @@ export default {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.png$/,
-        loader: 'url-loader?mimetype=image/jpg'
-      }
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 81920,
+            },
+          },
+        ],
+      },
     ]
   },
   plugins: [
