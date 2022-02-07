@@ -1,4 +1,4 @@
-import data from './.env';
+import data from '../../.env';
 exports.details = {
   apiKey: data.apiKey,
   appId: data.appId,
