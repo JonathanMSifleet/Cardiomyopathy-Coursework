@@ -1,9 +1,9 @@
 <template>
   <PageWrapper>
     <div>
-      <button @click="getResults()"> Click </button>
-      <br />
-      {{ data }}
+      <li v-for="item in data" :key="item.message">
+        {{item.id}} {{ item.data }}
+      </li>
     </div>
   </PageWrapper>
 </template>
@@ -23,14 +23,13 @@
       };
     },
     setup() {},
-    methods: {
-      async getResults() {
-        const results = await generateQuery();
-
-        results.forEach((result) => this.data.push(result));
-
-        console.log('data', this.data);
-      }
+    async mounted() {
+      const results = await generateQuery([{
+        fieldPath: 'MYH7',
+        opStr: '==',
+        value: true
+      }]);
+      results.forEach((result) => this.data.push(result));
     }
   };
 </script>

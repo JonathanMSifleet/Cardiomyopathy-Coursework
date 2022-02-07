@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
   {
@@ -9,9 +9,10 @@ const routes = [
   },
   {
     name: 'Query',
-    path: '/Query',
+    path: '/Query/:geneMutation',
     base: '/',
-    component: () => import('../views/Query/Query.vue')
+    component: () => import('../views/Query/Query.vue'),
+    params: true
   },
   // no route, route:
   {
@@ -22,7 +23,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes
 });
 
