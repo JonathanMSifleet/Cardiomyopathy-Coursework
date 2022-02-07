@@ -58,7 +58,7 @@ const insertHcmData = async () => {
   // relative path needs to be written from the root of the project
   // if being run from package.json script, otherwise path needs
   // to be relative to this file being run
-  const data = await parseData('./src/data/hcm_data.csv');
+  const data = await parseData('./hcm_data.csv');
 
   console.log('Beginning to add items to database');
   addItemsToDatabase(initialiseDatabase(), data);
