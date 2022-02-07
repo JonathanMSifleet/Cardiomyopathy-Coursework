@@ -24,11 +24,18 @@
     },
     setup() {},
     async mounted() {
-      const results = await generateQuery([{
-        fieldPath: 'MYH7',
-        opStr: '==',
-        value: true
-      }]);
+      const results = await generateQuery([
+        {
+          fieldPath: 'MYH7',
+          opStr: '==',
+          value: true
+        },
+        {
+          fieldPath: 'scar5',
+          opStr: '==',
+          value: true
+        }
+      ]);
       results.forEach((result) => this.data.push(result));
     }
   };
