@@ -4,23 +4,24 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../../views/Home/Home.vue'),
+    component: () => import('../../views/Home/Home.vue')
   },
   {
-    path: '/About',
-    name: 'About',
-    component: () => import('../../views/About/About.vue'),
+    path: '/',
+    name: 'Query',
+    component: () => import('../../views/Home/Home.vue')
   },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
-    redirect: '/',
-  },
+    redirect: '/'
+  }
+
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes
 });
 
 export default router;

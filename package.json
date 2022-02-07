@@ -8,6 +8,7 @@
     "forceUpdate": "ncu -u",
     "insertHCMData": "node --trace-warnings ./src/functions/insertHcmDataToDatabase.js"
   },
+  "type": "module",
   "dependencies": {
     "axios": "^0.25.0",
     "core-js": "^3.21.0",
