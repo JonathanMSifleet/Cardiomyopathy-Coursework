@@ -52,6 +52,7 @@ module.exports = {
       template: './public/index.html'
     }),
     new VueLoaderPlugin(),
+    // define process variables here:
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false
