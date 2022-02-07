@@ -7,6 +7,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 module.exports = {
   mode: 'development',
   entry: './src/main.js',
+  devtool: 'eval-source-map',
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'build')
@@ -43,6 +44,11 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader']
       }
     ]
   },

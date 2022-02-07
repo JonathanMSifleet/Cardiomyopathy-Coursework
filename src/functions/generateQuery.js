@@ -10,7 +10,6 @@ const generateQuery = async (queries) => {
 
   const generatedQueries = queries.map((query) => query = { ...query });
 
-  let q1;
 
   generatedQueries.forEach((curQuery) => {
     q1 = query(queryRef, where(curQuery.fieldPath, curQuery.opStr, curQuery.value));
