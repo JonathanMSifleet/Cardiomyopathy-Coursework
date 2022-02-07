@@ -1,13 +1,15 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import webpack from 'webpack';
-import { CleanWebpackPlugin }from 'clean-webpack-plugin';
-import { VueLoaderPlugin } from 'vue-loader';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
-export default {
+module.exports = {
   mode: 'development',
   entry: './src/main.js',
   output: {
-    filename: 'index.js'
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'build')
   },
   resolve: {
     extensions: ['.js', '.vue']
