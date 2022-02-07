@@ -3,7 +3,7 @@
 </template>
 
 <script>
-  import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
 
   export default {
     name: 'Home',
