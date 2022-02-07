@@ -12,7 +12,6 @@
     "axios": "^0.25.0",
     "core-js": "^3.21.0",
     "csvtojson": "^2.0.10",
-    "dotenv": "^16.0.0",
     "firebase": "^9.6.6",
     "mdb-vue-ui-kit": "^1.9.0",
     "vue": "^3.2.30",
