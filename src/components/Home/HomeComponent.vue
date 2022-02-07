@@ -11,7 +11,7 @@
       <router-link v-else to='#'>Read More</router-link>
     </div>
     <div class="bg-photo">
-      <img src="../../assets/imgs/hcm-diagram-img.jpg" alt="">
+      <img src="../../assets/imgs/hcm-diagram-img.jpg" alt="hcm diagram"> <!--need to turn into a component and parse -->
     </div>
   </div>
 </template>
