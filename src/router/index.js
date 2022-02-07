@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
-import Register from '../views/Registration.vue'
-import PassReset from '../views/PassReset.vue';
 
 const routes = [
   {
@@ -12,12 +10,14 @@ const routes = [
   {
     path: '/register',
     name: 'Registration',
-    component: Register
+    component: () =>
+      import(/* webpackChunkName: "register" */ '../components/Registration.vue')
   },
   {
     path: '/reset',
     name: 'Password Reset',
-    component: PassReset
+    component: () =>
+      import(/* webpackChunkName: "reset" */ '../components/PassReset.vue')
   },
   {
     path: '/about',
