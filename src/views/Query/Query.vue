@@ -1,5 +1,9 @@
 <template>
-  <PageWrapper> {{ homePage.title }} </PageWrapper>
+  <PageWrapper>
+    <div>
+      Results page
+    </div>
+  </PageWrapper>
 </template>
 
 <script>
@@ -11,9 +15,7 @@
       PageWrapper
     },
     setup() {
-      const homePage = { title: 'Welcome' };
-
-      return { homePage };
+      return {  };
     }
   };
 </script>
