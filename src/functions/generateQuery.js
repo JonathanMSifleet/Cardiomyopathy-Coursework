@@ -3,20 +3,26 @@ import { initializeApp } from 'firebase/app';
 import firebaseDetails from '../constants/firebaseDetails';
 
 const generateQuery = async (whereClauses) => {
-  const app = initializeApp(firebaseDetails.details);
-  const db = getFirestore(app);
+  const mappedWhereClauses = mapClausesToArray(whereClauses);
 
-  const whereArray = whereClauses.map((curQuery) =>
-    where(curQuery.fieldPath, curQuery.opStr, curQuery.value));
+  const results = await executeQuery(getDatabase(), mappedWhereClauses);
+  return extractResults(results);
+};
 
-  const queryRef = collection(db, 'hcmData');
-  const querySnapshot = await getDocs(query(queryRef, ...whereArray));
+const getDatabase = () => getFirestore(initializeApp(firebaseDetails.details));
 
-  const results = [];
-  querySnapshot.forEach((doc) =>
-    results.push({id: doc.id, data: doc.data()}));
+const mapClausesToArray = (whereClauses) => whereClauses.map((curQuery) =>
+  where(curQuery.fieldPath, curQuery.opStr, curQuery.value));
 
-  return results;
+const executeQuery = async (db, whereClauses) => await getDocs(
+  query(collection(db, 'hcmData'), ...whereClauses));
+
+const extractResults = (results) => {
+  const documents = [];
+  results.forEach((doc) =>
+    documents.push({id: doc.id, data: doc.data()}));
+
+  return documents;
 };
 
 export default generateQuery;
