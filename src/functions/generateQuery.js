@@ -6,13 +6,10 @@ const generateQuery = async (whereClauses) => {
   const app = initializeApp(firebaseDetails.details);
   const db = getFirestore(app);
 
+  const whereArray = whereClauses.map((curQuery) =>
+    where(curQuery.fieldPath, curQuery.opStr, curQuery.value));
+
   const queryRef = collection(db, 'hcmData');
-
-  const whereArray = [];
-  whereClauses.forEach((curQuery) => {
-    whereArray.push(where(curQuery.fieldPath, curQuery.opStr, curQuery.value));
-  });
-
   const querySnapshot = await getDocs(query(queryRef, ...whereArray));
 
   const results = [];
