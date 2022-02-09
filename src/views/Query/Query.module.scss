@@ -1,3 +1,10 @@
+.Heading {
+  font-size: 2rem;
+  color: darkgreen;
+  float: left;
+  margin-right: 2%;
+}
+
 .SelectWrapper {
   height: auto;
   min-height: 1px;
@@ -8,7 +15,6 @@
     height: 4vh;
     padding: 1%;
     width: fit-content;
-
   }
 }
 

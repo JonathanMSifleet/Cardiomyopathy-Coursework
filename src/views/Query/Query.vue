@@ -1,8 +1,15 @@
 <template>
   <PageWrapper>
+    <h1 :class="[$style.Heading]">Statistics</h1>
+
     <div id="v-model-select" :class="[$style.SelectWrapper]">
       <select v-model="selectedGeneMutation" :class="[$style.Select]">
-        <option v-for="geneMutation in geneMutations" :key="geneMutation">{{geneMutation}}</option>
+        <option v-for="geneMutation in geneMutations"
+                :disabled="geneMutation === 'Please select' ? true : false"
+                :key="geneMutation"
+        >
+          {{geneMutation}}
+        </option>
       </select>
     </div>
 
@@ -11,8 +18,8 @@
     </MDBBtn>
 
     <div>
-      <li v-for="item in results" :key="item.message">
-        {{item.id}} {{ item.data }}
+      <li v-for="key in keys" :key="key">
+        {{key}}
       </li>
     </div>
   </PageWrapper>
@@ -31,7 +38,8 @@
       MDBBtn, PageWrapper
     },
     setup() {
-      const geneMutations = reactive(['ACTC',
+      const geneMutations = reactive(['Please select',
+                                      'ACTC',
                                       'MYBPC3',
                                       'MYH7',
                                       'MYL2',
@@ -39,9 +47,10 @@
                                       'TNNT2',
                                       'TPM1',
                                       'TTN']);
+      const keys = reactive([]);
       const queryConstraints = [];
-      let selectedGeneMutation = ref('');
-      const results = reactive([]);
+      let selectedGeneMutation = ref('Please select');
+      const queryResults = reactive([]);
 
       const getGeneMutationData = async () => {
         queryConstraints.push({
@@ -50,11 +59,20 @@
           value: true
         });
 
-        const queryResults = await generateQuery(queryConstraints);
-        queryResults.forEach((result) => results.push(result));
+        const result = await generateQuery(queryConstraints);
+        result.forEach((result) => queryResults.push(result));
+        keys.push(...determineKeys(queryResults));
       };
 
-      return { getGeneMutationData, geneMutations, results, selectedGeneMutation };
+      const determineKeys = (data) => {
+        const localKeys = [];
+        data.forEach((curDoc) => Object.keys(curDoc.data).forEach((key) => localKeys.push(key)));
+
+        // remove duplicate keys:
+        return [...new Set(localKeys)].sort();
+      };
+
+      return { getGeneMutationData, geneMutations, keys, queryResults, selectedGeneMutation };
     }
   };
 </script>
