@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "axios": "^0.25.0",
+    "chunk": "0.0.3",
     "core-js": "^3.21.0",
     "csvtojson": "^2.0.10",
     "firebase": "^9.6.6",
+    "google-charts": "^2.0.0",
     "mdb-vue-ui-kit": "^1.9.0",
     "vue": "^3.2.30",
     "vue-router": "^4.0.12",

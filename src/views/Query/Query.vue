@@ -17,10 +17,17 @@
       Get data
     </MDBBtn>
 
+    <MDBRow :class="[$style.KeyColumnRow]">
+      <MDBCol md="3" v-for="index in chunkedKeys.length" :key="index">
+        <li v-for="key in chunkedKeys[index-1]" :key="key"
+            @click="generateGraph(key)"
+        >
+          {{key}}
+        </li>
+      </MDBCol>
+    </MDBRow>
     <div>
-      <li v-for="key in keys" :key="key">
-        {{key}}
-      </li>
+
     </div>
   </PageWrapper>
 </template>
@@ -29,15 +36,17 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import generateQuery from '../../utils/generateQuery';
   import mapGeneName from '../../utils/mapGeneMutationNameToDBColumnName';
-  import { MDBBtn } from 'mdb-vue-ui-kit';
+  import {  MDBBtn, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
   import { reactive, ref } from 'vue';
+  import chunk from 'chunk';
 
   export default {
     name: 'Home',
     components: {
-      MDBBtn, PageWrapper
+      MDBBtn, MDBCol, MDBRow, PageWrapper
     },
     setup() {
+      const chunkedKeys = reactive([]);
       const geneMutations = reactive(['Please select',
                                       'ACTC',
                                       'MYBPC3',
@@ -49,10 +58,12 @@
                                       'TTN']);
       const keys = reactive([]);
       const queryConstraints = [];
-      let selectedGeneMutation = ref('Please select');
       const queryResults = reactive([]);
+      let selectedGeneMutation = ref('Please select');
 
       const getGeneMutationData = async () => {
+        cleanup();
+
         queryConstraints.push({
           fieldPath: mapGeneName(selectedGeneMutation.value),
           opStr: '==',
@@ -62,17 +73,33 @@
         const result = await generateQuery(queryConstraints);
         result.forEach((result) => queryResults.push(result));
         keys.push(...determineKeys(queryResults));
+
+        // groups array of keys into smaller keys to be rendered in columns
+        chunkedKeys.push(...chunk(keys, Math.ceil(keys.length/4)));
       };
 
       const determineKeys = (data) => {
         const localKeys = [];
         data.forEach((curDoc) => Object.keys(curDoc.data).forEach((key) => localKeys.push(key)));
 
-        // remove duplicate keys:
-        return [...new Set(localKeys)].sort();
+        // remove duplicate keys and insensitive sort:
+        return [...new Set(localKeys)].sort(Intl.Collator().compare);
       };
 
-      return { getGeneMutationData, geneMutations, keys, queryResults, selectedGeneMutation };
+      const cleanup = () => {
+        chunkedKeys.length  = 0;
+        keys.length = 0;
+        queryConstraints.length = 0;
+        queryResults.length = 0;
+      };
+
+      const generateGraph = (keyName) => {
+        console.log('🚀 ~ file: Query.vue ~ line 97 ~ generateGraph ~ keyName', keyName);
+        console.log(queryResults);
+      };
+
+      return { chunkedKeys, generateGraph, getGeneMutationData, geneMutations,
+               keys, queryResults, selectedGeneMutation };
     }
   };
 </script>
