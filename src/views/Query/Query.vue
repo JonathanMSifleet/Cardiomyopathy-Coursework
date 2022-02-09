@@ -17,10 +17,14 @@
       Get data
     </MDBBtn>
 
+    <div id="chart" />
+
     <MDBRow :class="[$style.KeyColumnRow]">
+      <p>Click a key to view a graph on it </p>
       <MDBCol md="3" v-for="index in chunkedKeys.length" :key="index">
         <li v-for="key in chunkedKeys[index-1]" :key="key"
             @click="generateGraph(key)"
+            :class="[$style.Key]"
         >
           {{key}}
         </li>
@@ -39,6 +43,8 @@
   import {  MDBBtn, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
   import { reactive, ref } from 'vue';
   import chunk from 'chunk';
+  import { GoogleCharts } from 'google-charts';
+
 
   export default {
     name: 'Home',
@@ -62,7 +68,7 @@
       let selectedGeneMutation = ref('Please select');
 
       const getGeneMutationData = async () => {
-        cleanup();
+        // cleanup();
 
         queryConstraints.push({
           fieldPath: mapGeneName(selectedGeneMutation.value),
@@ -93,9 +99,31 @@
         queryResults.length = 0;
       };
 
-      const generateGraph = (keyName) => {
-        console.log('🚀 ~ file: Query.vue ~ line 97 ~ generateGraph ~ keyName', keyName);
-        console.log(queryResults);
+      const generateGraph = async (keyName) => {
+        const quantity = {true: 0, false: 0};
+
+        queryResults.forEach((doc) => {
+          const keyValue = doc.data[keyName];
+
+          switch (typeof keyValue) {
+          case 'boolean':
+            quantity[`${keyValue}`] = ++quantity[`${keyValue}`];
+            break;
+          case 'number':
+            // to do
+            break;
+          }
+
+        });
+
+        const chartData =  Object.entries(quantity);
+        chartData.unshift(['Chart thing', 'Chart amount']);
+
+        GoogleCharts.load(() => {
+          const data = GoogleCharts.api.visualization.arrayToDataTable(chartData);
+          const chart = new GoogleCharts.api.visualization.PieChart(document.getElementById('chart'));
+          chart.draw(data);
+        });
       };
 
       return { chunkedKeys, generateGraph, getGeneMutationData, geneMutations,
