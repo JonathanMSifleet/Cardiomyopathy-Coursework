@@ -1,8 +1,8 @@
 .SelectWrapper {
   height: auto;
   min-height: 1px;
-  overflow: hidden;
-  width: 100%;
+  width: fit-content;
+  float: left;
 
   .Select {
     height: 4vh;
@@ -10,4 +10,9 @@
     width: fit-content;
 
   }
+}
+
+.FetchDataButton {
+  margin-left: 2%;
+  float: left;
 }

@@ -9,10 +9,10 @@ const generateQuery = async (whereClauses) => {
   return extractResults(results);
 };
 
-const getDatabase = () => getFirestore(initializeApp(firebaseDetails.details));
-
 const mapClausesToArray = (whereClauses) => whereClauses.map((curQuery) =>
   where(curQuery.fieldPath, curQuery.opStr, curQuery.value));
+
+const getDatabase = () => getFirestore(initializeApp(firebaseDetails.details));
 
 const executeQuery = async (db, whereClauses) => await getDocs(
   query(collection(db, 'hcmData'), ...whereClauses));
