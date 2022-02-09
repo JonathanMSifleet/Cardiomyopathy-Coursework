@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 <template>
   <PageWrapper>
     <h1>{{homePage.title}}</h1>
@@ -24,18 +26,13 @@
           title: 'COMPANY TITLE',
           description: 'this will be content to explain a bit about the site',
           WelcomeSection: true,
-          photo: 'hcm-diagram-img'
+          photo: 'hcm'
         },
         HCM: [
           {
             title: 'Hypertrophic cardiomyopathy (HCM)',
             description: hcmDesc1+hcmDesc2,
-            photo: 'hcm-diagram-img'
-          },
-          {
-            title: 'extra1',
-            description: 'extra content 1',
-            photo: 'hcm-img'
+            photo: 'hcm'
           }
         ]
       };

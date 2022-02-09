@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 
 <template>
   <div class="information-wrapper">
@@ -11,7 +12,7 @@
       <router-link v-else to='#'>Read More</router-link>
     </div>
     <div class="bg-photo">
-      <img src="../../assets/imgs/hcm-diagram-img.jpg" alt="hcm diagram"> <!--need to turn into a component and parse -->
+      <img :src="require('../../assets/imgs/' + post.photo + '.jpg').default">
     </div>
   </div>
 </template>

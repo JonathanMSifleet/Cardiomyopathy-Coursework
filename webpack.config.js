@@ -43,16 +43,25 @@ export default {
         use: ['style-loader', 'css-loader']
       },
       {
-        test: /\.(png|jpg|gif)$/i,
+        test: /\.(svg|png|jpg|gif)$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: 'file-loader',
             options: {
-              limit: 81920,
-            },
-          },
-        ],
+              name: '[name].[hash].[ext]',
+              outputPath: 'assets',
+            }
+          }
+        ]
       },
+      {
+        rules: [
+          {
+            test: /\.html$/i,
+            loader: 'html-loader'
+          }
+        ]
+      }
     ]
   },
   plugins: [
