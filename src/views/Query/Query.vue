@@ -1,7 +1,15 @@
 <template>
   <PageWrapper>
+    <div id="v-model-select" :class="[$style.SelectWrapper]">
+      <select v-model="selectedGeneMutation" :class="[$style.Select]">
+        <option v-for="geneMutation in geneMutations" :key="geneMutation">{{geneMutation}}</option>
+      </select>
+    </div>
+
+    <MDBBtn @click="getGeneMutationData" color="success">Get results</MDBBtn>
+
     <div>
-      <li v-for="item in data" :key="item.message">
+      <li v-for="item in results" :key="item.message">
         {{item.id}} {{ item.data }}
       </li>
     </div>
@@ -10,33 +18,46 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import generateQuery from '../../functions/generateQuery';
+  import generateQuery from '../../utils/generateQuery';
+  import { MDBBtn } from 'mdb-vue-ui-kit';
 
   export default {
     name: 'Home',
     components: {
-      PageWrapper
+      MDBBtn, PageWrapper
     },
-    data() {
-      return {
-        data: []
-      };
-    },
+    data: () => ({
+      geneMutations: ['ACTC',
+                      'MYBPC3',
+                      'MYH7',
+                      'MYL2',
+                      'TNNI3',
+                      'TNNT2',
+                      'TPM1',
+                      'TTN'],
+      queryConstraints: [],
+      results: [],
+      selectedGeneMutation: ''
+    }),
     setup() {},
-    async mounted() {
-      const results = await generateQuery([
-        {
-          fieldPath: 'MYH7',
+    methods: {
+      getGeneMutationData: () => {
+        this.queryConstraints.push({
+          fieldPath: this.selectedGeneMutation,
           opStr: '==',
           value: true
-        },
-        {
-          fieldPath: 'scar5',
-          opStr: '==',
-          value: true
-        }
-      ]);
-      results.forEach((result) => this.data.push(result));
+        });
+
+        console.log(this.queryConstraints);
+
+        generateQuery(this.queryConstraints).then(results => {
+          results.forEach((result) => this.results.push(result));
+        });
+      }
     }
   };
 </script>
+
+<style lang="scss" module scoped>
+  @import './Query.module.scss';
+</style>

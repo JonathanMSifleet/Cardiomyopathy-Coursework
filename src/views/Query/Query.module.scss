@@ -1,0 +1,13 @@
+.SelectWrapper {
+  height: auto;
+  min-height: 1px;
+  overflow: hidden;
+  width: 100%;
+
+  .Select {
+    height: 4vh;
+    padding: 1%;
+    width: fit-content;
+
+  }
+}
