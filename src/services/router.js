@@ -9,7 +9,7 @@ const routes = [
   },
   {
     name: 'Query',
-    path: '/Query/:geneMutation',
+    path: '/Query/',
     base: '/',
     component: () => import('../views/Query/Query.vue'),
     params: true
@@ -19,7 +19,6 @@ const routes = [
     path: '/:pathMatch(.*)*',
     redirect: '/'
   }
-
 ];
 
 const router = createRouter({
