@@ -1,4 +1,4 @@
-import { auth } from '../firebase/config';
+import {auth} from '../firebase/config'
 import {sendPasswordResetEmail, actionCodeSettings } from 'firebase/auth';
 import {ref} from 'vue';
 import 'regenerator-runtime/runtime';//needed for async 

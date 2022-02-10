@@ -16,6 +16,16 @@ const firebaseConfig = {
   appId: process.env.VUE_APP_APP_ID
 }
 
+//HUMZAHS FIREBASE INFO - replace info in .env file to use this
+//firebase.initializeApp({
+//apiKey: 'AIzaSyCHWE9w0W9Z3BO_mGQakqkm-GAs2jhZTUE',
+// authDomain: 'adv-web-test.firebaseapp.com',
+// projectId: 'adv-web-test',
+// storageBucket: 'adv-web-test.appspot.com',
+//messagingSenderId: '412829793841',
+// appId: '1:412829793841:web:b1be5d7cf02a310f4b5f10'
+//});
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();

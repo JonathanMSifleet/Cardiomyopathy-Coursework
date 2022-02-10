@@ -2,7 +2,7 @@ import {ref} from 'vue';
 import 'regenerator-runtime/runtime';
 
 //firebase
-import { auth } from '../firebase/config';
+import {auth} from '../firebase/config'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import 'regenerator-runtime/runtime';//needed for async 
 const error =ref(null);

@@ -6,28 +6,34 @@
       <input type="password" placeholder="Password" v-model="password" />
       <input type="submit" value="Login" />
       <p v-if="errorMessage">{{ errorMessage }}</p>
-      <p><router-link to="/">Forgotten password?</router-link></p>
-      <p>Need an account? <router-link to="/">Register here</router-link></p>
+      <p><router-link to="/reset">Forgotten password?</router-link></p>
+      <p>Need an account? <router-link to="/register">Register here</router-link></p>
     </form>
   </div>
 </template>
 
 <script>
   import { ref } from 'vue';
-  import firebase from 'firebase/compat/app';
-  import 'firebase/compat/auth';
+  //import firebase from 'firebase/compat/app';
+  import { getAuth } from 'firebase/auth';
+  import {signInWithEmailAndPassword} from 'firebase/auth';
+  import { useRouter } from 'vue-router';
+  //import { auth } from '../firebase/config';
   export default {
+    name: 'Login',
     setup() {
       const email = ref('');
       const password = ref('');
       const errorMessage = ref();
+      const auth = getAuth();
+      const router = useRouter();
 
       const Login = () => {
-        firebase
-          .auth()
-          .signInWithEmailAndPassword(email.value, password.value)
+        signInWithEmailAndPassword(auth, email.value, password.value)
           .then((data) => {
             console.log(data);
+            router.push('/');
+            //const user = data.user;
           })
           .catch((error) => {
             switch (error.code) {
