@@ -28,6 +28,7 @@ module.exports = {
       }
     ],
     'no-trailing-spaces': 'error',
+    'object-curly-spacing': ['error', 'always'],
     'quotes': [
       'error',
       'single'

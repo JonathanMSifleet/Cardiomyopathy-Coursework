@@ -1,8 +1,8 @@
 <template>
   <MDBFooter
     :class="[$style.Footer]"
-    :text="['center', 'white', 'lg-start']"
     bg="success"
+    :text="['center', 'white', 'lg-start']"
   >
     <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
       <a class="text-dark" href="https://github.com/MuminRahman2001/advanced-web-project">
