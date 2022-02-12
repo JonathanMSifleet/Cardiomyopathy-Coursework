@@ -31,3 +31,14 @@
   color: green;
   cursor: pointer;
 }
+
+.ChartWrapper {
+  clear: left;
+  height: fit-content;
+  width: fit-content;
+
+  .Chart {
+    height: 25vh;
+    width: auto;
+  }
+}
