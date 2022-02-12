@@ -32,7 +32,7 @@
     setup() {
       let advancedSearchMode = ref(false);
 
-      return {advancedSearchMode};
+      return { advancedSearchMode };
     }
   };
 </script>

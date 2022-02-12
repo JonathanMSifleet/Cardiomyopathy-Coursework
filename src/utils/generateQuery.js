@@ -20,7 +20,7 @@ const executeQuery = async (db, whereClauses) => await getDocs(
 const extractResults = (results) => {
   const documents = [];
   results.forEach((doc) =>
-    documents.push({id: doc.id, data: doc.data()}));
+    documents.push({ id: doc.id, data: doc.data() }));
 
   return documents;
 };

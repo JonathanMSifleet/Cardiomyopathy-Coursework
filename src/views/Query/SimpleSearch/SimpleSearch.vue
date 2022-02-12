@@ -137,13 +137,13 @@
           }
         });
 
-        return {data: Object.entries(data), type};
+        return { data: Object.entries(data), type };
       };
 
       const renderGraph = (data, keyName, type) => {
         const chartHelper = GoogleCharts.api.visualization;
         const chartData = chartHelper.arrayToDataTable(data);
-        chartData.sort([{column: 1, asc: true}]);
+        chartData.sort([{ column: 1, asc: true }]);
 
         const divToRenderChart = document.getElementById('chart');
 
@@ -164,7 +164,7 @@
       };
 
       const generateGraph = async (keyName) => {
-        const {data, type} = extractDataFromResults(keyName);
+        const { data, type } = extractDataFromResults(keyName);
         data.unshift(['Test', 'Value']);
 
         data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
