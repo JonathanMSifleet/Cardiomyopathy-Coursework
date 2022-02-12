@@ -2,43 +2,14 @@
   font-size: 2rem;
   color: darkgreen;
   float: left;
-  margin-right: 2%;
 }
 
-.SelectWrapper {
-  height: auto;
-  min-height: 1px;
-  width: fit-content;
+.SwitchWrapper {
+  clear: right;
   float: left;
-
-  .Select {
-    height: 4vh;
-    padding: 1%;
-    width: fit-content;
-  }
-}
-
-.FetchDataButton {
   margin-left: 2%;
-  float: left;
-}
 
-.KeyColumnRow {
-  clear: both;
-}
-
-.Key {
-  color: green;
-  cursor: pointer;
-}
-
-.ChartWrapper {
-  clear: left;
-  height: fit-content;
-  width: fit-content;
-
-  .Chart {
-    height: 25vh;
-    width: auto;
+  .Switch {
+    float: left;
   }
 }

@@ -1,4 +1,4 @@
-<template v-slot:childreb>
+<template>
   <MDBContainer fluid :class="[$style.PageWrapper]">
     <Header />
     <MDBRow :class="[$style.Row]">

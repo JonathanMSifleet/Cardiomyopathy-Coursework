@@ -1,0 +1,46 @@
+.ComponentWrapper {
+  margin-top: 1%;
+}
+
+.SelectWrapper {
+  clear: left;
+  margin-top: 1%;
+  height: fit-content;
+  width: fit-content;
+  float: left;
+
+  .Select {
+    height: 100%;
+    padding: 1%;
+    width: fit-content;
+  }
+}
+
+.FetchDataWrapper {
+  margin-top: 3%;
+
+  .FetchDataButton {
+    margin-left: 2%;
+    float: left;
+  }
+}
+
+.KeyColumnRow {
+  clear: both;
+}
+
+.Key {
+  color: green;
+  cursor: pointer;
+}
+
+.ChartWrapper {
+  clear: left;
+  height: fit-content;
+  width: fit-content;
+
+  .Chart {
+    height: fit-content;
+    width: fit-content;
+  }
+}
