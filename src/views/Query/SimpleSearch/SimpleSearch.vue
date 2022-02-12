@@ -3,8 +3,8 @@
     <div id="v-model-select" :class="[$style.SelectWrapper]">
       <select v-model="selectedGeneMutation" :class="[$style.Select]">
         <option
-          v-for="geneMutation in geneMutations"
-          :key="geneMutation"
+          v-for="(geneMutation, index) in geneMutations"
+          :key="index"
           :disabled="geneMutation === 'Please select' ? true : false"
         >
           {{ geneMutation }}
@@ -54,6 +54,7 @@
   import chunk from 'chunk';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
+  import determineKeys from '../../../utils/determineKeys';
 
   export default {
     name: 'SimpleSearch',
@@ -103,13 +104,7 @@
         hasFetchedKeys.value = true;
       };
 
-      const determineKeys = (data) => {
-        const localKeys = [];
-        data.forEach((curDoc) => Object.keys(curDoc.data).forEach((key) => localKeys.push(key)));
 
-        // remove duplicate keys and insensitive sort:
-        return [...new Set(localKeys)].sort(Intl.Collator().compare);
-      };
 
       const extractDataFromResults = (keyName) => {
         let data = {};

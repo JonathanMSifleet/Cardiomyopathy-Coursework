@@ -24,7 +24,7 @@ module.exports = {
     'max-len': [
       'error',
       {
-        code: 100
+        code: 120
       }
     ],
     'no-trailing-spaces': 'error',
