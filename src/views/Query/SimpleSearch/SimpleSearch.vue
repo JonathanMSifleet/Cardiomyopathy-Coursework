@@ -29,7 +29,7 @@
 
       <MDBCol md="3" v-for="index in chunkedKeys.length" :key="index">
         <ul>
-          <li v-for="key in chunkedKeys[index-1]" :key="key"
+          <li v-for="key in chunkedKeys[--index]" :key="key"
               @click="generateGraph(key)"
               :class="[$style.Key]"
           >
@@ -44,7 +44,7 @@
 <script>
   import generateQuery from '../../../utils/generateQuery';
   import mapGeneName from '../../../utils/mapGeneMutationNameToDBColumnName';
-  import { reactive, ref } from 'vue';
+  import { reactive, ref, watch } from 'vue';
   import chunk from 'chunk';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
@@ -72,9 +72,15 @@
       const queryResults = reactive([]);
       let selectedGeneMutation = ref('Please select');
 
-      const getGeneMutationData = async () => {
-        cleanup();
+      watch([selectedGeneMutation], () => {
+        chunkedKeys.length  = 0;
+        displayChart.value = false;
+        hasFetchedKeys.value = false;
+        keys.length = 0;
+        queryResults.length = 0;
+      });
 
+      const getGeneMutationData = async () => {
         const result = await generateQuery([{
           fieldPath: mapGeneName(selectedGeneMutation.value),
           opStr: '==',
@@ -97,13 +103,6 @@
 
         // remove duplicate keys and insensitive sort:
         return [...new Set(localKeys)].sort(Intl.Collator().compare);
-      };
-
-      const cleanup = () => {
-        chunkedKeys.length  = 0;
-        keys.length = 0;
-        queryResults.length = 0;
-        hasFetchedKeys.value = false;
       };
 
       const extractDataFromResults = (keyName) => {
