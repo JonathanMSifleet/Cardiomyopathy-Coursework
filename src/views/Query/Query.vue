@@ -1,18 +1,19 @@
 <template>
   <PageWrapper>
-    <h1 :class="[$style.Heading]">Gene mutation data</h1>
+    <h1 :class="[$style.Heading]">
+      Gene mutation data
+    </h1>
 
     <div :class="[$style.SwitchWrapper]">
       <MDBSwitch
-        label="Advanced search"
         v-model="advancedSearchMode"
+        label="Advanced search"
         :class="[$style.Switch]"
       />
     </div>
 
-    <SimpleSearch v-if="!advancedSearchMode" />
-    <!-- <AdvancedQuery v-else/> -->
-
+    <AdvancedSearch v-if="advancedSearchMode" />
+    <SimpleSearch v-else />
   </PageWrapper>
 </template>
 
@@ -21,12 +22,12 @@
   import { MDBSwitch } from 'mdb-vue-ui-kit';
   import { ref } from 'vue';
   import SimpleSearch from './SimpleSearch/SimpleSearch.vue';
-  // import AdvancedSearch from './AdvancedSearch/AdvancedSearch.vue';
+  import AdvancedSearch from './AdvancedSearch/AdvancedSearch.vue';
 
   export default {
     name: 'Home',
     components: {
-      MDBSwitch, PageWrapper, SimpleSearch
+      AdvancedSearch, MDBSwitch, PageWrapper, SimpleSearch
     },
     setup() {
       let advancedSearchMode = ref(false);
@@ -37,5 +38,5 @@
 </script>
 
 <style lang="scss" module scoped>
-  @import './Query.module.scss';
+      @import './Query.module.scss';
 </style>

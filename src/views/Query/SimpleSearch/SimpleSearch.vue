@@ -2,24 +2,28 @@
   <div :class="[$style.ComponentWrapper]">
     <div id="v-model-select" :class="[$style.SelectWrapper]">
       <select v-model="selectedGeneMutation" :class="[$style.Select]">
-        <option v-for="geneMutation in geneMutations"
-                :disabled="geneMutation === 'Please select' ? true : false"
-                :key="geneMutation"
+        <option
+          v-for="geneMutation in geneMutations"
+          :key="geneMutation"
+          :disabled="geneMutation === 'Please select' ? true : false"
         >
-          {{geneMutation}}
+          {{ geneMutation }}
         </option>
       </select>
     </div>
 
     <div :class="[$style.FetchDataWrapper]">
-      <MDBBtn @click="getGeneMutationData"
-              color="success" :class="[$style.FetchDataButton]">
+      <MDBBtn
+        color="success"
+        :class="[$style.FetchDataButton]"
+        @click="getGeneMutationData"
+      >
         Get data
       </MDBBtn>
 
       <div v-show="displayChart" :class="[$style.ChartWrapper]">
-        <p>{{queryResults.length}} records were found with this attribute:  </p>
-        <div id="chart" :class="[$style.Chart]"/>
+        <p>{{ queryResults.length }} records were found with this attribute:  </p>
+        <div id="chart" :class="[$style.Chart]" />
       </div>
     </div>
 
@@ -27,13 +31,15 @@
       <p>All associated attributes with gene mutation {{ selectedGeneMutation }}.</p>
       <p>Please click an attribute to view its data:</p>
 
-      <MDBCol md="3" v-for="index in chunkedKeys.length" :key="index">
+      <MDBCol v-for="index in chunkedKeys.length" :key="index" md="3">
         <ul>
-          <li v-for="key in chunkedKeys[--index]" :key="key"
-              @click="generateGraph(key)"
-              :class="[$style.Key]"
+          <li
+            v-for="key in chunkedKeys[--index]"
+            :key="key"
+            :class="[$style.Key]"
+            @click="generateGraph(key)"
           >
-            {{key}}
+            {{ key }}
           </li>
         </ul>
       </MDBCol>

@@ -2,11 +2,11 @@
   <MDBContainer fluid :class="[$style.PageWrapper]">
     <Header />
     <MDBRow :class="[$style.Row]">
-      <MDBCol :class="[$style.SideColumn]" md="2"/>
+      <MDBCol :class="[$style.SideColumn]" md="2" />
       <MDBCol :class="[$style.MainContent]" md="8">
         <slot />
       </MDBCol>
-      <MDBCol :class="[$style.SideColumn]" md="2"/>
+      <MDBCol :class="[$style.SideColumn]" md="2" />
     </MDBRow>
     <Footer />
   </MDBContainer>
