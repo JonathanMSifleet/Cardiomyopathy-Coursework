@@ -1,5 +1,5 @@
+import firebaseDetails from '../constants/firebaseDetails.cjs';
 import csvToJSON from 'csvtojson';
-import firebaseDetails from '../constants/firebaseDetails';
 import path from 'path';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
@@ -53,7 +53,7 @@ const addItemsToDatabase = async (database, data) => {
   }
 };
 
-const insertHcmData = async () => {
+(async () => {
   console.log('Beginning to parse data');
   // relative path needs to be written from the root of the project
   // if being run from package.json script, otherwise path needs
@@ -62,6 +62,4 @@ const insertHcmData = async () => {
 
   console.log('Beginning to add items to database');
   addItemsToDatabase(initialiseDatabase(), data);
-};
-
-export default insertHcmData;
+})()
