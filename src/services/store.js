@@ -1,6 +1,8 @@
-import { createStore } from 'vuex';
+import initDatabase from '../utils/initDatabase';
+import { reactive } from 'vue';
 
-export default createStore({
-  modules: {},
-  strict: true
+const store = reactive({
+  database: (async () => await initDatabase())()
 });
+
+export default store;
