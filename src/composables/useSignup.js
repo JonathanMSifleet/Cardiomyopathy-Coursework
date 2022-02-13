@@ -19,7 +19,9 @@ const signup = async(email, password) => {
     }
     error.value = null;
     isPending.value=false;
-
+    //send email verification of sign up
+    //console.log(auth.currentuser);
+    //await sendEmailVerification(auth.currentUser, actionCodeSettings);
   }
   catch(err){
     console.log(err.message);
