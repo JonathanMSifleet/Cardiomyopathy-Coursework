@@ -21,29 +21,36 @@
 
     <p>Please add a filter:</p>
 
-    <MDBInput
-      v-model="queryInput"
-      label="Attribute"
-      type="text"
-      :class="[$style.Input]"
-    />
+    <div :class="[$style.InputWrapper]">
+      <MDBInput
+        v-model="queryInput"
+        label="Attribute"
+        type="text"
+        :class="[$style.Input]"
+      />
+    </div>
 
-    <select v-model="selectedOperator">
-      <option
-        v-for="operation in queryOperations"
-        :key="operation"
-        :disabled="operation === 'Please select' ? true : false"
-      >
-        {{ operation }}
-      </option>
-    </select>
+    <div :class="[$style.SelectWrapper]">
+      <select v-model="selectedOperator" :class="[$style.Select]">
+        <option
+          v-for="operation in queryOperations"
+          :key="operation"
+          :disabled="operation === 'Please select' ? true : false"
+        >
+          {{ operation }}
+        </option>
+      </select>
+    </div>
 
-    <MDBInput
-      v-model="queryOperand"
-      label="Value"
-      type="text"
-      :class="[$style.Input]"
-    />
+    <div :class="[$style.InputWrapper]">
+      <MDBInput
+        v-model="queryOperand"
+        label="Value"
+        type="text"
+        :class="[$style.Input]"
+      />
+    </div>
+
     <MDBBtn
       color="success"
       @click="addFilter"
@@ -51,7 +58,7 @@
       Add filter
     </MDBBtn>
 
-    <MDBTable responsive>
+    <MDBTable bordered striped responsive>
       <thead>
         <tr>
           <th
@@ -64,9 +71,9 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td v-for="(dataItem,index) in queryResults" :key="index">
-            {{ dataItem.data[tableKeys[index]] }}
+        <tr v-for="(dataItem, index) in queryResults" :key="index">
+          <td v-for="(key, index2) in tableKeys" :key="index2">
+            {{ dataItem.data[key] }}
           </td>
         </tr>
       </tbody>
@@ -143,9 +150,11 @@
       watch(filters, async () => {
         cleanup();
 
+        console.log('filters', filters);
+
         queryResults.value = await generateQuery(filters);
         tableKeys.value = determineKeys(queryResults.value);
-        console.log(queryResults.value);
+        // console.log(queryResults.value);
       });
 
       return { addFilter, deleteFilter, filters, queryOperations, queryInput,

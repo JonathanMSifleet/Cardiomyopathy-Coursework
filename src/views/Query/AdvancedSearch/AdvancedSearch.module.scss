@@ -1,28 +1,38 @@
 .ComponentWrapper {
-  clear: left;
-  margin-top: 2%;
+    clear: left;
+    margin-top: 2%;
 }
 
-.Input {
-  margin-top: 2%;
-  width: 10vw !important;
+.InputWrapper,
+.SelectWrapper {
+    height: 3vh;
+    float: left;
+}
+
+.InputWrapper {
+    width: 10vw;
+    float: left;
+}
+
+.Select {
+    float: left;
+    height: 100%;
 }
 
 .Filter {
-  align-items: center;
-  flex-direction: row;
-  background-color: lightgray;
-  border-radius: 10px;
-  display: flex;
-  font-size: 1rem;
-  margin-bottom: 1%;
-  margin-right: 5%;
-  max-height: 2vh;
-  padding: 0.5%;
-  width: fit-content;
-
-  .DeleteFilter {
-    width: 2%;
-    height: auto;
-  }
+    align-items: center;
+    flex-direction: row;
+    background-color: lightgray;
+    border-radius: 10px;
+    display: flex;
+    font-size: 1rem;
+    margin-bottom: 1%;
+    margin-right: 5%;
+    max-height: 2vh;
+    padding: 0.5%;
+    width: fit-content;
+    .DeleteFilter {
+        width: 2%;
+        height: auto;
+    }
 }
