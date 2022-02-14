@@ -1,0 +1,64 @@
+            .cards {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+                margin: 37px auto 0;
+                width: calc(280px * 4);
+            }
+            
+            .card {
+                box-shadow: 0 3px 10px 0 #aaa;
+                cursor: pointer;
+                height: 100%;
+                position: relative;
+                width: 300px;
+            }
+            
+            .card-body {
+                width: 300px;
+            }
+            
+            h2 {
+                font-size: 14px;
+                font-weight: bold;
+                width: 95%;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                /*
+                display: inline-block; */
+            }
+            
+            .remove-style {
+                all: unset;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            
+            button {
+                font-size: 14px;
+                text-decoration: underline;
+            }
+            
+            .card.visited {
+                box-shadow: 0 3px 10px 2px #444;
+            }
+            
+            @media (max-width: 1100px) {
+                .cards {
+                    grid-template-columns: 1fr 1fr;
+                    width: calc(280px * 2);
+                }
+                .card {
+                    margin: 0 auto 2rem;
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .cards {
+                    display: block;
+                    width: 100vw;
+                }
+                .card {
+                    margin: 0 auto 2rem;
+                }
+            }
