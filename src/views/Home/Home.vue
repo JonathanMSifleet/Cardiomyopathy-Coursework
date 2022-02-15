@@ -1,38 +1,45 @@
+/* eslint-disable max-len */
+
 <template>
-  <PageWrapper> 
-    <div class="home">
-      <title>Home</title>
-      <!-- If Logged In-->
-      <h1 v-if="currentUser">Welcome, {{ name }}</h1>
-    </div>
-    <br /> 
+  <PageWrapper>
+    <h1>{{ homePage.title }}</h1>
+    <HomeComponent :post="Welcome" />
+    <HomeComponent v-for="(post, index) in HCM" :key="index" :post="post" />
   </PageWrapper>
 </template>
 
 <script>
   import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
-  import { ref, onBeforeMount } from 'vue';
-  import getUser from '../composables/getUser';
+  import HomeComponent from '../../components/Home/HomeComponent.vue';
 
   export default {
     name: 'Home',
     components: {
-      PageWrapper
+      PageWrapper,
+      HomeComponent
     },
     setup() {
-      const { currentUser } = getUser();
-      const name = ref('');
-
-      onBeforeMount(() => {
-        if (currentUser.value) {
-          name.value = currentUser.value.displayName;
-        }
-      });
-
+      const homePage = { title: 'Welcome' };
+      return { homePage };
+    },
+    data(){
+      const hcmDesc1 = 'Hypertrophic cardiomyopathy (HCM) is a disease in which the heart muscle ';
+      const hcmDesc2 = 'becomes abnormally thick...';
       return {
-        name,
-        currentUser
+        Welcome: {
+          title: 'COMPANY TITLE',
+          description: 'this will be content to explain a bit about the site',
+          WelcomeSection: true,
+          photo: 'hcm'
+        },
+        HCM: [
+          {
+            title: 'Hypertrophic cardiomyopathy (HCM)',
+            description: hcmDesc1+hcmDesc2,
+            photo: 'hcm'
+          }
+        ]
       };
     }
-  }
+  };
 </script>

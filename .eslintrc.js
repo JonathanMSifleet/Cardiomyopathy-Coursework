@@ -16,7 +16,6 @@ module.exports = {
       'never'
     ],
     'eol-last': [2, 'windows'],
-    'func-style': ['error', 'expression'],
     indent: ['error', 2, { 'SwitchCase': 1 }],
     'linebreak-style': [
       'error',
@@ -25,17 +24,11 @@ module.exports = {
     'max-len': [
       'error',
       {
-        code: 100
+        code: 120
       }
     ],
     'no-trailing-spaces': 'error',
     'object-curly-spacing': ['error', 'always'],
-    'prefer-arrow/prefer-arrow-functions': [
-      'error', {
-        'disallowPrototype': true,
-        'singleReturnOnly': false,
-        'classPropertiesAllowed': false
-      }],
     'quotes': [
       'error',
       'single'
@@ -63,11 +56,7 @@ module.exports = {
     'plugin:vue/vue3-essential',
     'plugin:vue/vue3-strongly-recommended',
     'plugin:vue/vue3-recommended',
-    'eslint:recommended',
-    'plugin:import/recommended'
-  ],
-  "plugins": [
-    "prefer-arrow"
+    'eslint:recommended'
   ],
   overrides: [
     {
