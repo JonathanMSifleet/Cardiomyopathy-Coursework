@@ -15,8 +15,6 @@
     "csvtojson": "^2.0.10",
     "firebase": "^9.6.6",
     "mdb-vue-ui-kit": "^1.9.0",
-    "firebase-admin": "^10.0.2",
-    "style-loader": "^3.3.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vue-style-loader": "^4.1.3",
