@@ -1,27 +1,28 @@
 <template>
-  <div id="newsFeed" v-for="item of items" :key="item.title">
+  <div id="newsFeed">
     <h1>News Feed</h1>
-    <div id="myModal" class="modal" v-bind:style="{ display: isModalActive ? 'block' : 'none' }">
+    <div id="myModal" class="modal" v-if="isModalActive">
       <div class="modal-content">
         <div class="modal-header">
-          <span class="close" @click="toggleModal">&times;</span>
-          <h2>{{ item.title }}</h2>
+          <span class="close" @click="toggleModal()">&times;</span>
+          <h2>{{ modalItem.title }}</h2>
         </div>
         <div class="modal-body">
-          <p>{{ item.description }}</p>
+          <p>{{ modalItem.description }}</p>
         </div>
         <div class="modal-footer">
-          <h3>{{ item.pubDate }}</h3>
+          <h3>{{ modalItem.pubDate }}</h3>
         </div>
       </div>
     </div>
-    <div class="cards">
+    {{modalItem}}
+    <div class="cards" v-for="item of items" :key="item.title">
       <div class="card">
         <img class="card-img-top" v-bind:src="item.enclosure.link" />
         <div class="card-body">
           <h2 class="card-title" v-bind:class="[readMore ? 'remove-style' : '']">
             {{ item.title }}
-            <button id="myBtn" @click="toggleModal">View content</button>
+            <button id="myBtn" @click="toggleModal(item)">View content</button>
           </h2>
           <!-- <p>
             {{ item.description }}
@@ -44,6 +45,7 @@ export default {
     let items = ref([]);
     let readMore = ref(false);
     let isModalActive = ref(false);
+    let modalItem = ref({});
 
     async function getRss() {
       // eslint-disable-next-line max-len
@@ -59,7 +61,8 @@ export default {
       readMore.value = !readMore.value;
     }
 
-    function toggleModal() {
+    function toggleModal(item = {}) {
+      modalItem.value = item;
       isModalActive.value = !isModalActive.value;
     }
 
@@ -95,6 +98,7 @@ export default {
       toggleClass,
       toggleModal,
       isModalActive,
+      modalItem
     };
   },
 };
