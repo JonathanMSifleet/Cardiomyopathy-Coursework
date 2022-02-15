@@ -1,11 +1,10 @@
 const determineKeys = (data) => {
   const localKeys = [];
   data.forEach((curDoc) => {
-    Object.keys(curDoc).forEach((key) => localKeys.push(key));
+    Object.keys(curDoc).forEach((key) => localKeys[key] = false);
   });
 
-  // remove duplicate keys and insensitive sort:
-  return [...new Set(localKeys)].sort(Intl.Collator().compare);
+  return localKeys;
 };
 
 export default determineKeys;

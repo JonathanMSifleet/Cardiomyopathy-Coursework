@@ -63,11 +63,11 @@
     <div :class="[$style.CheckboxWrapper]">
       <p>Selected columns:</p>
       <MDBCheckbox
-        v-for="(key, index) in optionalTableKeys"
+        v-for="(key, index) in Object.keys(optionalTableKeys).sort()"
         :key="index"
         :label="key"
         inline
-        @click="addKey(key)"
+        @change="toggleKey(key)"
       />
     </div>
 
@@ -90,8 +90,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(dataItem, index) in queryResults" :key="index">
-            <td v-for="(key, index2) in activeTableKeys" :key="index2">
+          <tr v-for="(dataItem, outerIndex) in queryResults" :key="outerIndex">
+            <td v-for="(key, innerIndex) in activeTableKeys" :key="innerIndex">
               {{ dataItem[key] }}
             </td>
           </tr>
@@ -124,7 +124,7 @@
         '!=': 'not equal to'
       };
       let filters = reactive([]);
-      let optionalTableKeys = ref([]);
+      let optionalTableKeys = ref();
       let queryInput = ref();
       let queryOperand = ref();
       let queryResults = ref([]);
@@ -147,7 +147,7 @@
         'ApicalHCM',
         'SuddenCardiacDeath',
         'Hypertension',
-        'Diabe',
+        'Diabetes',
         'Myectomy'
       ]);
 
@@ -181,7 +181,9 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const addKey = (key) => activeTableKeys.value.push(key);
+      const toggleKey = (key) => activeTableKeys.value.includes(key)
+        ? activeTableKeys.value.splice(activeTableKeys.value.indexOf(key), 1)
+        : activeTableKeys.value.push(key);
 
       watch(filters, async () => {
         cleanup();
@@ -191,12 +193,8 @@
         queryResults.value = await generateQuery(filters);
       });
 
-      watch(optionalTableKeys, async () => {
-        console.log('🚀 ~ file: AdvancedSearch.vue ~ line 179 ~ watch ~ optionalTableKeys', optionalTableKeys.value);
-      });
-
-      return { addFilter, addKey, deleteFilter, filters, fireStoreOperators, optionalTableKeys,
-               queryInput, queryOperand, queryResults, selectedOperator, activeTableKeys };
+      return { activeTableKeys, addFilter, deleteFilter, filters, fireStoreOperators, optionalTableKeys,
+               queryInput, queryOperand, queryResults, selectedOperator, toggleKey };
     }
   };
 </script>
