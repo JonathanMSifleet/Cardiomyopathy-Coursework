@@ -33,11 +33,11 @@
     <div :class="[$style.SelectWrapper]">
       <select v-model="selectedOperator" :class="[$style.Select]">
         <option
-          v-for="operation in queryOperations"
+          v-for="operation in Object.entries(fireStoreOperators)"
           :key="operation"
           :disabled="operation === 'Please select' ? true : false"
         >
-          {{ operation }}
+          {{ operation[1] }}
         </option>
       </select>
     </div>
@@ -93,14 +93,18 @@
       MDBBtn, MDBInput, MDBTable
     },
     setup() {
+      // const defaultTableKeys=ref([
+      //   ''
+      // ]);
+      const fireStoreOperators = {
+        '<': 'less than',
+        '<=': 'less than or equal to',
+        '==': 'equal to',
+        '>': 'greater than',
+        '>=': 'greater than or equal to',
+        '!=': 'not equal to'
+      };
       let filters = reactive([]);
-      const queryOperations = ['Please select',
-                               'less than',
-                               'less than or equal to',
-                               'equal to',
-                               'greater than',
-                               'greater than or equal to',
-                               'not equal to'];
       let queryInput = ref();
       let queryOperand = ref();
       let queryResults = ref([]);
@@ -113,7 +117,7 @@
 
       const addFilter = () => filters.push({
         fieldPath: queryInput.value,
-        opStr: mapQueryOperationsToFireStoreOperators(selectedOperator.value),
+        opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
         value: convertValueToType(queryOperand.value)
       });
 
@@ -130,23 +134,6 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const mapQueryOperationsToFireStoreOperators = (operator) => {
-        switch (operator) {
-        case 'less than':
-          return '<';
-        case 'less than or equal to':
-          return '<=';
-        case 'equal to':
-          return '==';
-        case 'greater than':
-          return '>';
-        case 'greater than or equal to':
-          return '>=';
-        case 'not equal to':
-          return '!=';
-        }
-      };
-
       watch(filters, async () => {
         cleanup();
 
@@ -154,10 +141,9 @@
 
         queryResults.value = await generateQuery(filters);
         tableKeys.value = determineKeys(queryResults.value);
-        // console.log(queryResults.value);
       });
 
-      return { addFilter, deleteFilter, filters, queryOperations, queryInput,
+      return { addFilter, deleteFilter, filters, fireStoreOperators, queryInput,
                queryOperand, queryResults, selectedOperator, tableKeys };
     }
   };
