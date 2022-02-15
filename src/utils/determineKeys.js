@@ -1,7 +1,7 @@
 const determineKeys = (data) => {
   const localKeys = [];
   data.forEach((curDoc) => {
-    Object.keys(curDoc.data).forEach((key) => localKeys.push(key));
+    Object.keys(curDoc).forEach((key) => localKeys.push(key));
   });
 
   // remove duplicate keys and insensitive sort:
