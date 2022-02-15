@@ -4,7 +4,6 @@
       :class="[$style.Header, 'header']"
       expand="lg"
       light
-      bg="success"
       container
     >
       <MDBNavbarToggler target="#navbarExample01" />
