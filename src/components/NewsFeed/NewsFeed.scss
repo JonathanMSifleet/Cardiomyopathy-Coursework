@@ -1,6 +1,9 @@
 h5 {
     font-size: 14px;
     font-weight: bold;
+}
+
+.add-style {
     width: 95%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -17,4 +20,9 @@ h5 {
 .read-more-link {
     font-size: 14px;
     text-decoration: underline;
+}
+
+.carousel {
+    width: 250px;
+    float: right;
 }

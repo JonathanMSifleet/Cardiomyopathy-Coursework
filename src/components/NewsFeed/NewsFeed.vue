@@ -44,22 +44,22 @@
           </div>
         </div></MDBModalBody
       >
+
       <MDBModalFooter>
-        <MDBBtn color="secondary" @click="newsFeedModal = false">Close</MDBBtn>
-        <p>{{ modalItem.pubDate }}</p>
+        <MDBBtn color="success" @click="newsFeedModal = false">Close</MDBBtn>
       </MDBModalFooter>
     </MDBModal>
     <div
       id="carouselExampleFade"
-      class="carousel slide carousel-fade"
+      class="carousel slide carousel-fade me-5"
       data-bs-ride="carousel"
     >
-      <div class="carousel-inner bg-danger">
+      <div class="carousel-inner">
         <MDBCard
-          class="mb-4 carousel-item" :class="index == activeCarousel && 'active'"
+          class="mb-4 carousel-item"
+          :class="index == activeCarousel && 'active'"
           v-for="(item, index) of items"
           :key="item.title"
-          v-bind:style="{ width: '30%' }"
         >
           <a v-mdb-ripple="{ color: 'light' }">
             <MDBCardImg
@@ -68,22 +68,28 @@
               v-bind:alt="item.title"
             />
           </a>
-          <MDBCardBody>
-            <MDBCardTitle
-              class="card-title"
-              v-bind:class="[readMore ? 'remove-style' : '']"
-            >
-              {{ item.title }}
-              <MDBBtn tag="a" @click="toggleModal(item)"
-                >View content</MDBBtn
-              ></MDBCardTitle
-            ><br />
-            <button
-              class="read-more-link"
-              @click="toggleClass"
-              v-html="readMore ? 'Read less...' : 'Read more...'"
-            ></button>
-          </MDBCardBody>
+
+          <div class="text-center">
+            <MDBCardBody>
+              <MDBCardTitle
+                class="card-title"
+                v-bind:class="[readMore ? 'remove-style' : 'add-style']"
+              >
+                {{ item.title }}
+                <MDBBtn
+                  tag="button"
+                  class="btn-success mt-3"
+                  @click="toggleModal(item)"
+                  >View content</MDBBtn
+                ></MDBCardTitle
+              ><br />
+              <button
+                class="read-more-link mt-3"
+                @click="toggleClass"
+                v-html="readMore ? 'Read less...' : 'Read more...'"
+              ></button>
+            </MDBCardBody>
+          </div>
         </MDBCard>
       </div>
       <button
@@ -95,6 +101,7 @@
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
       </button>
       <button
         class="carousel-control-next"
@@ -170,9 +177,11 @@ export default {
     }
 
     const activeCarousel = computed(() => {
-      if (carouselIndex.value < 0) {carouselIndex.value = items.value.length - 1}
-      return carouselIndex.value % items.value.length
-    })
+      if (carouselIndex.value < 0) {
+        carouselIndex.value = items.value.length - 1;
+      }
+      return carouselIndex.value % items.value.length;
+    });
 
     getRss();
     return {
@@ -184,7 +193,7 @@ export default {
       modalItem,
       newsFeedModal,
       activeCarousel,
-      carouselIndex
+      carouselIndex,
     };
   },
 };
