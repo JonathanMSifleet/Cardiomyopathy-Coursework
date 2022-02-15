@@ -1,52 +1,155 @@
 <template>
   <div id="newsFeed">
     <h1>News Feed</h1>
-    <div id="myModal" class="modal" v-if="isModalActive">
-      <div class="modal-content">
-        <div class="modal-header">
-          <span class="close" @click="toggleModal()">&times;</span>
-          <h2>{{ modalItem.title }}</h2>
-        </div>
-        <div class="modal-body">
-          <p>{{ modalItem.description }}</p>
-        </div>
-        <div class="modal-footer">
-          <h3>{{ modalItem.pubDate }}</h3>
-        </div>
+    <!-- Button trigger modal -->
+
+    <MDBModal
+      id="newsFeedModal"
+      tabindex="-1"
+      labelledby="newsFeedModalLabel"
+      v-model="newsFeedModal"
+    >
+      <MDBModalHeader>
+        <MDBModalTitle
+          id="newsFeedModalLabel"
+          v-bind:style="{ fontWeight: 'bold' }"
+          >{{ modalItem.title }}</MDBModalTitle
+        >
+      </MDBModalHeader>
+      <MDBModalBody
+        ><div class="row">
+          <div class="col-md-6 mb-4">
+            <div
+              class="
+                bg-image
+                hover-overlay
+                ripple
+                shadow-2-strong
+                ripple-surface-light
+              "
+              data-mdb-ripple-color="light"
+              style=""
+            >
+              <img v-bind:src="modalItem.enclosure.link" class="img-fluid" />
+              <a href="#!">
+                <div
+                  class="mask"
+                  style="background-color: rgba(251, 251, 251, 0.15)"
+                ></div>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            {{ modalItem.description }}
+          </div>
+        </div></MDBModalBody
+      >
+      <MDBModalFooter>
+        <MDBBtn color="secondary" @click="newsFeedModal = false">Close</MDBBtn>
+        <p>{{ modalItem.pubDate }}</p>
+      </MDBModalFooter>
+    </MDBModal>
+    <div
+      id="carouselExampleFade"
+      class="carousel slide carousel-fade"
+      data-bs-ride="carousel"
+    >
+      <div class="carousel-inner bg-danger">
+        <MDBCard
+          class="mb-4 carousel-item" :class="index == activeCarousel && 'active'"
+          v-for="(item, index) of items"
+          :key="item.title"
+          v-bind:style="{ width: '30%' }"
+        >
+          <a v-mdb-ripple="{ color: 'light' }">
+            <MDBCardImg
+              v-bind:src="item.enclosure.link"
+              top
+              v-bind:alt="item.title"
+            />
+          </a>
+          <MDBCardBody>
+            <MDBCardTitle
+              class="card-title"
+              v-bind:class="[readMore ? 'remove-style' : '']"
+            >
+              {{ item.title }}
+              <MDBBtn tag="a" @click="toggleModal(item)"
+                >View content</MDBBtn
+              ></MDBCardTitle
+            ><br />
+            <button
+              class="read-more-link"
+              @click="toggleClass"
+              v-html="readMore ? 'Read less...' : 'Read more...'"
+            ></button>
+          </MDBCardBody>
+        </MDBCard>
       </div>
-    </div>
-    {{modalItem}}
-    <div class="cards" v-for="item of items" :key="item.title">
-      <div class="card">
-        <img class="card-img-top" v-bind:src="item.enclosure.link" />
-        <div class="card-body">
-          <h2 class="card-title" v-bind:class="[readMore ? 'remove-style' : '']">
-            {{ item.title }}
-            <button id="myBtn" @click="toggleModal(item)">View content</button>
-          </h2>
-          <!-- <p>
-            {{ item.description }}
-            <a href="#1">Read more...</a>
-          </p>
-          <p>{{ item.pubDate }}</p> -->
-          <br />
-          <button @click="toggleClass" v-html="readMore ? 'Read less...' : 'Read more...'"></button
-          >
-        </div>
-      </div>
+      <button
+        class="carousel-control-prev"
+        type="button"
+        data-bs-target="#carouselExampleFade"
+        data-bs-slide="prev"
+        @click="carouselIndex--"
+      >
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button
+        class="carousel-control-next"
+        type="button"
+        data-bs-target="#carouselExampleFade"
+        data-bs-slide="next"
+        @click="carouselIndex++"
+      >
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import {
+  MDBModal,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardImg,
+  mdbRipple,
+} from "mdb-vue-ui-kit";
+import { ref, computed } from "vue";
 export default {
+  components: {
+    MDBModal,
+    MDBModalHeader,
+    MDBModalTitle,
+    MDBModalBody,
+    MDBModalFooter,
+    MDBBtn,
+    MDBCard,
+    MDBCardBody,
+    MDBCardTitle,
+    MDBCardText,
+    MDBCardImg,
+  },
+  directives: {
+    mdbRipple,
+  },
   setup() {
     let items = ref([]);
     let readMore = ref(false);
     let isModalActive = ref(false);
     let modalItem = ref({});
-
+    let carouselIndex = ref(0);
+    const newsFeedModal = ref(false);
     async function getRss() {
       // eslint-disable-next-line max-len
       const res = await fetch(
@@ -63,34 +166,14 @@ export default {
 
     function toggleModal(item = {}) {
       modalItem.value = item;
-      isModalActive.value = !isModalActive.value;
+      newsFeedModal.value = !newsFeedModal.value;
     }
 
-    // // Get the modal
-    // var modal = document.getElementById("myModal");
+    const activeCarousel = computed(() => {
+      if (carouselIndex.value < 0) {carouselIndex.value = items.value.length - 1}
+      return carouselIndex.value % items.value.length
+    })
 
-    // // Get the button that opens the modal
-    // var btn = document.getElementById("myBtn");
-
-    // // Get the <span> element that closes the modal
-    // var span = document.getElementsByClassName("close")[0];
-
-    // // When the user clicks on the button, open the modal
-    // btn.onclick = function () {
-    //   modal.style.display = "block";
-    // };
-
-    // // When the user clicks on <span> (x), close the modal
-    // span.onclick = function () {
-    //   modal.style.display = "none";
-    // };
-
-    // // When the user clicks anywhere outside of the modal, close it
-    // window.onclick = function (event) {
-    //   if (event.target == modal) {
-    //     modal.style.display = "none";
-    //   }
-    // };
     getRss();
     return {
       items,
@@ -98,7 +181,10 @@ export default {
       toggleClass,
       toggleModal,
       isModalActive,
-      modalItem
+      modalItem,
+      newsFeedModal,
+      activeCarousel,
+      carouselIndex
     };
   },
 };
