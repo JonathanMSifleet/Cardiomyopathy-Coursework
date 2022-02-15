@@ -73,7 +73,7 @@
       <tbody>
         <tr v-for="(dataItem, index) in queryResults" :key="index">
           <td v-for="(key, index2) in tableKeys" :key="index2">
-            {{ dataItem.data[key] }}
+            {{ dataItem[key] }}
           </td>
         </tr>
       </tbody>
@@ -82,10 +82,11 @@
 </template>
 
 <script>
-  import { MDBBtn, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
-  import { reactive, ref, watch } from 'vue';
   import generateQuery from '../../../utils/generateQuery';
-  import determineKeys from '../../../utils/determineKeys';
+  import store from '../../../services/store';
+  import { MDBBtn, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
+  import { collection, getDocs } from 'firebase/firestore';
+  import { reactive, ref, watch } from 'vue';
 
   export default {
     name: 'Home',
@@ -93,9 +94,6 @@
       MDBBtn, MDBInput, MDBTable
     },
     setup() {
-      // const defaultTableKeys=ref([
-      //   ''
-      // ]);
       const fireStoreOperators = {
         '<': 'less than',
         '<=': 'less than or equal to',
@@ -109,7 +107,32 @@
       let queryOperand = ref();
       let queryResults = ref([]);
       let selectedOperator = ref();
-      let tableKeys = ref([]);
+      const tableKeys = ref([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'rvmass',
+        'lsv',
+        'rsv',
+        'scar',
+        'female',
+        'male',
+        'AgeatMRI',
+        'ApicalHCM',
+        'SuddenCardiacDeath',
+        'Hypertension',
+        'Diabe',
+        'Myectomy'
+      ]);
+
+      (async () => {
+        const results = await getDocs(collection(await store.database, 'hcmData'));
+        results.forEach(doc => queryResults.value.push(doc.data()));
+      })();
 
       const cleanup = () => {
         queryResults.value = [];
@@ -140,7 +163,6 @@
         console.log('filters', filters);
 
         queryResults.value = await generateQuery(filters);
-        tableKeys.value = determineKeys(queryResults.value);
       });
 
       return { addFilter, deleteFilter, filters, fireStoreOperators, queryInput,

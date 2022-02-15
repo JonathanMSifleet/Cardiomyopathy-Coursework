@@ -16,8 +16,7 @@ const executeQuery = async(db, whereClauses) => await getDocs(
 
 const extractResults = (results) => {
   const documents = [];
-  results.forEach((doc) =>
-    documents.push({ id: doc.id, data: doc.data() }));
+  results.forEach((doc) => documents.push({ data: doc.data() }));
 
   return documents;
 };
