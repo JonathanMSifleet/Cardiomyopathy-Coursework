@@ -21,6 +21,7 @@
       const {error, passReset} = usePassReset();
       
       const handleSubmit = async ()=> {
+        //attempt to send reset email
         await passReset(email.value);
         if (!error.value){//success
           alert('Password reset email sent');

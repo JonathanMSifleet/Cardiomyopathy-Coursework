@@ -1,4 +1,3 @@
-/* eslint-disable vue/script-indent */ /* eslint-disable vue/script-indent */
 <template>
   <login-component />
 </template>

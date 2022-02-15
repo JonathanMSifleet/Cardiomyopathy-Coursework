@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <h1>Login</h1>
+    <h2>Login</h2>
     <form @submit.prevent="Login">
       <input type="text" placeholder="Email" v-model="email" />
       <input type="password" placeholder="Password" v-model="password" />
@@ -14,11 +14,9 @@
 
 <script>
   import { ref } from 'vue';
-  //import firebase from 'firebase/compat/app';
   import { getAuth } from 'firebase/auth';
-  import {signInWithEmailAndPassword} from 'firebase/auth';
+  import { signInWithEmailAndPassword } from 'firebase/auth';
   import { useRouter } from 'vue-router';
-  //import { auth } from '../firebase/config';
   export default {
     name: 'Login',
     setup() {
@@ -30,12 +28,11 @@
 
       const Login = () => {
         signInWithEmailAndPassword(auth, email.value, password.value)
-          .then((data) => {
-            console.log(data);
+          .then(() => {
             router.push('/');
-            //const user = data.user;
           })
           .catch((error) => {
+            //custom error messages
             switch (error.code) {
             case 'auth/invalid-email':
               errorMessage.value = 'Invalid email';

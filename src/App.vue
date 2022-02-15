@@ -1,34 +1,36 @@
 <template>
   <div id="nav">
     <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/login">Login</router-link> |
-    <router-link to="/register">Register</router-link> |
-    <router-link to="/reset">Password Reset</router-link>
+    <router-link to="/about">About</router-link>  
+
+    <!--Show when signed out-->
+    | <router-link to="/login" v-if="!currentUser">Login</router-link> 
+
+    <!-- Show when signed in-->
+    <button v-if="currentUser" class="logout" @click="logout">Logout</button>
+    
   </div>
   <router-view />
 </template>
 
 <script>
-  import { onBeforeMount } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import  { getAuth }  from 'firebase/auth';
-  import {onAuthStateChanged } from 'firebase/auth';
+  import { useRouter } from 'vue-router';
+  import { getAuth, signOut }  from 'firebase/auth';
+  import getUser from './composables/getUser';
   export default {
     setup () {
       const router = useRouter();
-      const route = useRoute();
       const auth = getAuth();
-
-      onBeforeMount(() => {
-        onAuthStateChanged(auth, (user) => {
-          if(!user) {
-            router.replace('/login');
-          } else if (route.path == '/login') {
-            router.replace('/');
-          }
-        })
-      });
+      const { currentUser } = getUser();
+      
+      //nav bar logout
+      const logout = () => {
+        signOut(auth)
+          .then(() => console.log('Signed out'))
+          .then(()=> router.push('/login'))
+          .catch((err) => alert(err.message));
+      };
+      return {currentUser, logout};
     }
   };
 </script>

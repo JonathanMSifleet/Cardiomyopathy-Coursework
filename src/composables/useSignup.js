@@ -1,38 +1,34 @@
-import {ref} from 'vue';
+import { ref } from 'vue';
 import 'regenerator-runtime/runtime';
-
 //firebase
-import {auth} from '../firebase/config'
+import { auth } from '../firebase/config'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import 'regenerator-runtime/runtime';//needed for async 
-const error =ref(null);
-const isPending = ref(false);
+const signupError = ref(null);
+const pending = ref(false);
 
+//creates firebase user email/pass auth entry
 const signup = async(email, password) => {
-  error.value=null;
-  isPending.value = true;
+  signupError.value = null;
+  pending.value = true;
 
   try{
     const res = await createUserWithEmailAndPassword(auth, email, password);
     if(!res){
       throw new Error('Sign Up Unsuccessful')
     }
-    error.value = null;
-    isPending.value=false;
-    //send email verification of sign up
-    //console.log(auth.currentuser);
-    //await sendEmailVerification(auth.currentUser, actionCodeSettings);
+    signupError.value = null;
+    pending.value=false;
   }
   catch(err){
     console.log(err.message);
-    error.value = err.message;
-    isPending.value = false;
+    signupError.value = err.message;
+    pending.value = false;
   }
 }
 
 //composable function
 const useSignup = ()=>{
-  return {signup, error, isPending}
+  return {signup, signupError, pending}
 }
 
 export default useSignup;
