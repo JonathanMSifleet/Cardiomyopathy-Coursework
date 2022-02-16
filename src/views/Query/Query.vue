@@ -5,8 +5,9 @@
     - Update chart when filter is changed
     - Double scroll on table
     - Paginate table
-    - Update existing filter rather than add duplicate
+    - Allow duplicat filters to sinulate range
   -->
+
   <PageWrapper>
     <h1 :class="[$style.Heading]">
       Gene mutation data
@@ -188,11 +189,17 @@
         isLoading.value = false;
       })();
 
-      const addFilter = () => filters.push({
-        fieldPath: queryInput.value,
-        opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
-        value: convertValueToType(queryOperand.value)
-      });
+      const addFilter = () => {
+        // if filter contains object containing queryInput.value remove object
+        const filter = filters.find(filter => filter.fieldPath === queryInput.value);
+        if (filter) filters.splice(filters.indexOf(filter), 1);
+
+        filters.push({
+          fieldPath: queryInput.value,
+          opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
+          value: convertValueToType(queryOperand.value)
+        });
+      };
 
       const convertValueToType = (value) => {
         switch(true) {
