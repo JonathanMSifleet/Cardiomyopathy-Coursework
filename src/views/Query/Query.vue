@@ -7,7 +7,9 @@
     <h1 :class="[$style.Heading]">
       Gene mutation data
     </h1>
-    <div :class="[$style.ComponentWrapper]">
+
+    <Spinner v-if="isLoading === true" />
+    <div v-else :class="[$style.ComponentWrapper]">
       <div v-if="filters.length !== 0" :class="[$style.FiltersWrapper]">
         <p> Filters: </p>
         <ul>
@@ -68,10 +70,8 @@
         <p>
           Click a table header to view a graph on the data
         </p>
-        <Spinner v-if="isLoading === true" />
         <MDBCheckbox
           v-for="(key, index) in Object.keys(optionalTableKeys).sort()"
-          v-else
           :key="index"
           v-model="activeTableKeys[key]"
           :label="key"
@@ -87,9 +87,7 @@
           <div id="chart" :class="[$style.Chart]" />
         </div>
 
-        <Spinner v-if="isLoading === true" />
         <MDBTable
-          v-else
           bordered
           striped
           responsive
