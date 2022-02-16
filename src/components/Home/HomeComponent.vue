@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 <template>
   <div class="information-wrapper">
     <div class="information-content" />
@@ -23,9 +21,6 @@
         Read More
       </router-link>
     </div>
-    <div class="bg-photo">
-      <img :src="require('../../assets/imgs/' + post.photo + '.jpg').default">
-    </div>
   </div>
 </template>
 
@@ -37,5 +32,5 @@
 </script>
 
 <style lang="scss" module scoped>
-@import "./HomeComponent.module.scss";
+  @import "./HomeComponent.module.scss";
 </style>

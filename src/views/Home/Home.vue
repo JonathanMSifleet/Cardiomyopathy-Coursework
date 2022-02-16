@@ -1,42 +1,40 @@
 <template>
   <PageWrapper>
     <div class="home">
-      <title>Home</title>
-      <!-- If Logged In-->
+      <!-- <h1>{{ homePage.title }}</h1> -->
+
       <h1 v-if="currentUser">
         Welcome, {{ name }}
       </h1>
     </div>
-    <br>
+    <NewsFeed />
   </PageWrapper>
 </template>
 
 <script>
   import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
-  import { ref, onBeforeMount } from 'vue';
-  import getUser from '../composables/getUser';
+  import NewsFeed from '../../components/NewsFeed/NewsFeed';
 
   export default {
     name: 'Home',
     components: {
       PageWrapper,
-      NewsFeed,
-      HomeComponent
+      NewsFeed
     },
     setup() {
-      const { currentUser } = getUser();
-      const name = ref('');
+      // const { currentUser } = getUser();
+      // const name = ref('');
 
-      onBeforeMount(() => {
-        if (currentUser.value) {
-          name.value = currentUser.value.displayName;
-        }
-      });
+      // onBeforeMount(() => {
+      //   if (currentUser.value) {
+      //     name.value = currentUser.value.displayName;
+      //   }
+      // });
 
-      return {
-        name,
-        currentUser
-      };
+      // return {
+      //   name,
+      //   currentUser
+      // };
     }
   };
 </script>
