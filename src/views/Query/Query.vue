@@ -4,6 +4,7 @@
     - Display message on invalid filter
   -->
   <PageWrapper>
+    <div v-show="displayChart" id="chart" />
     <h1 :class="[$style.Heading]">
       Gene mutation data
     </h1>
@@ -131,6 +132,7 @@
       MDBBtn, MDBCheckbox, MDBInput, MDBTable, PageWrapper, Spinner
     },
     setup() {
+      let displayChart = ref(false);
       const fireStoreOperators = {
         '<': 'less than',
         '<=': 'less than or equal to',
@@ -211,7 +213,7 @@
 
         let counter = 0;
         queryResults.value.forEach((doc) => {
-          const keyValue = doc.data[keyName];
+          const keyValue = doc[keyName];
 
           switch (typeof keyValue) {
           case 'boolean':
@@ -232,6 +234,18 @@
         });
 
         return { data: Object.entries(data), type };
+      };
+
+
+      const generateGraph = async (keyName) => {
+        const { data, type } = extractDataFromResults(keyName);
+        data.unshift(['Test', 'Value']);
+
+        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
+          + curData[0].slice(1).toLowerCase()
+        );
+
+        GoogleCharts.load(() => renderGraph(data, keyName, type));
       };
 
       const renderGraph = (data, keyName, type) => {
@@ -257,17 +271,6 @@
         displayChart.value = true;
       };
 
-      const generateGraph = async (keyName) => {
-        const { data, type } = extractDataFromResults(keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase()
-        );
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
-      };
-
       watch(filters, async () => {
         cleanup();
 
@@ -280,8 +283,9 @@
         console.log('🚀 ~ file: AdvancedSearch.vue ~ line 198 ~ watch ~ optionalTableKeys', optionalTableKeys.value);
       });
 
-      return { activeTableKeys, addFilter, deleteFilter, filters, fireStoreOperators, isLoading,
-               optionalTableKeys, queryInput, queryOperand, queryResults, selectedOperator, toggleKey };
+      return { activeTableKeys, addFilter, deleteFilter, displayChart, filters, fireStoreOperators,
+               generateGraph, isLoading, optionalTableKeys, queryInput, queryOperand, queryResults,
+               selectedOperator, toggleKey };
     }
   };
 </script>
