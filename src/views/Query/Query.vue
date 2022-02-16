@@ -100,7 +100,9 @@
                 scope="col"
                 @click="generateGraph(key[0])"
               >
-                <b>{{ key[0] }}</b>
+                <p :class="[$style.TableHeader]">
+                  {{ key[0] }}
+                </p>
               </th>
             </tr>
           </thead>
