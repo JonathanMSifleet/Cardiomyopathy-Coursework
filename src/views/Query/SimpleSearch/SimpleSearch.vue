@@ -52,7 +52,6 @@
   import mapGeneName from '../../../utils/mapGeneMutationNameToDBColumnName';
   import { reactive, ref, watch } from 'vue';
   import chunk from 'chunk';
-  import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
   import determineKeys from '../../../utils/determineKeys';
 
@@ -102,69 +101,6 @@
         chunkedKeys.push(...chunk(keys, Math.ceil(keys.length/4)));
 
         hasFetchedKeys.value = true;
-      };
-
-      const extractDataFromResults = (keyName) => {
-        let data = {};
-        let type;
-
-        let counter = 0;
-        queryResults.forEach((doc) => {
-          const keyValue = doc.data[keyName];
-
-          switch (typeof keyValue) {
-          case 'boolean':
-            // add key to object if it doesn't exist
-            if (!data[keyValue]) data[keyValue] = [];
-
-            data[`${keyValue}`] = ++data[`${keyValue}`];
-            type = 'pie';
-            break;
-          case 'number':
-            if (!data[counter]) data[counter] = [];
-
-            data[`${counter}`] = keyValue;
-            type = 'bar';
-            counter++;
-            break;
-          }
-        });
-
-        return { data: Object.entries(data), type };
-      };
-
-      const renderGraph = (data, keyName, type) => {
-        const chartHelper = GoogleCharts.api.visualization;
-        const chartData = chartHelper.arrayToDataTable(data);
-        chartData.sort([{ column: 1, asc: true }]);
-
-        const divToRenderChart = document.getElementById('chart');
-
-        const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
-          new chartHelper.ColumnChart(divToRenderChart);
-
-        chart.draw(chartData, {
-          title: `${keyName}`,
-          is3D: true,
-          vAxis: {
-            title: 'Value'
-          },
-          hAxis: {
-            title: 'Record from database'
-          }
-        });
-        displayChart.value = true;
-      };
-
-      const generateGraph = async (keyName) => {
-        const { data, type } = extractDataFromResults(keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase()
-        );
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
       };
 
       return { chunkedKeys, displayChart, generateGraph, getGeneMutationData, geneMutations,
