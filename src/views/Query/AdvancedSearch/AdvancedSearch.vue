@@ -62,8 +62,10 @@
 
     <div :class="[$style.CheckboxWrapper]">
       <p>Selected columns:</p>
+      <Spinner v-if="isLoading === true" />
       <MDBCheckbox
         v-for="(key, index) in Object.keys(optionalTableKeys).sort()"
+        v-else
         :key="index"
         v-model="activeTableKeys[key]"
         :label="key"
@@ -74,7 +76,9 @@
 
     <div :class="[$style.TableWrapper]">
       <p>Results:</p>
+      <Spinner v-if="isLoading === true" />
       <MDBTable
+        v-else
         bordered
         striped
         responsive
@@ -109,11 +113,12 @@
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
   import { collection, getDocs } from 'firebase/firestore';
   import { reactive, ref, watch } from 'vue';
+  import Spinner from '../../../components/Spinner/Spinner';
 
   export default {
     name: 'Home',
     components: {
-      MDBBtn, MDBCheckbox, MDBInput, MDBTable
+      MDBBtn, MDBCheckbox, MDBInput, MDBTable, Spinner
     },
     setup() {
       const fireStoreOperators = {
@@ -125,6 +130,7 @@
         '!=': 'not equal to'
       };
       let filters = reactive([]);
+      let isLoading = ref(false);
       let optionalTableKeys = ref([]);
       let queryInput = ref();
       let queryOperand = ref();
@@ -138,7 +144,6 @@
         'lvef': true,
         'rvef': true,
         'lvmass': true,
-        'rvmass': true,
         'lsv': true,
         'rsv': true,
         'scar': true,
@@ -153,10 +158,14 @@
       });
 
       (async () => {
+        isLoading.value = true;
+
         const results = await getDocs(collection(await store.database, 'hcmData'));
         results.forEach(doc => queryResults.value.push(doc.data()));
 
         optionalTableKeys.value = determineKeys(queryResults.value);
+
+        isLoading.value = false;
       })();
 
       const cleanup = () => {
@@ -198,8 +207,8 @@
         console.log('🚀 ~ file: AdvancedSearch.vue ~ line 198 ~ watch ~ optionalTableKeys', optionalTableKeys.value);
       });
 
-      return { activeTableKeys, addFilter, deleteFilter, filters, fireStoreOperators, optionalTableKeys,
-               queryInput, queryOperand, queryResults, selectedOperator, toggleKey };
+      return { activeTableKeys, addFilter, deleteFilter, filters, fireStoreOperators, isLoading,
+               optionalTableKeys, queryInput, queryOperand, queryResults, selectedOperator, toggleKey };
     }
   };
 </script>
