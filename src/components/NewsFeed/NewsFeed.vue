@@ -10,32 +10,27 @@
       v-model="newsFeedModal"
     >
       <MDBModalHeader>
-        <MDBModalTitle
-          id="newsFeedModalLabel"
-          v-bind:style="{ fontWeight: 'bold' }"
-          >{{ modalItem.title }}</MDBModalTitle
-        >
+        <div>
+          <MDBModalTitle id="newsFeedModalLabel" v-bind:style="{ fontWeight: 'bold' }">{{
+            modalItem.title
+          }}</MDBModalTitle>
+          <h4 class="text-muted mt-2">Published: {{ dateTime(modalItem.pubDate) }}</h4>
+        </div>
+        <!-- <MDBModalTitle id="newsFeedModalLabel" v-bind:style="{ fontWeight: 'bold' }">{{
+          modalItem.title
+        }}</MDBModalTitle> -->
       </MDBModalHeader>
       <MDBModalBody
         ><div class="row">
           <div class="col-md-6 mb-4">
             <div
-              class="
-                bg-image
-                hover-overlay
-                ripple
-                shadow-2-strong
-                ripple-surface-light
-              "
+              class="bg-image hover-overlay ripple shadow-2-strong ripple-surface-light"
               data-mdb-ripple-color="light"
               style=""
             >
               <img v-bind:src="modalItem.enclosure.link" class="img-fluid" />
               <a href="#!">
-                <div
-                  class="mask"
-                  style="background-color: rgba(251, 251, 251, 0.15)"
-                ></div>
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
               </a>
             </div>
           </div>
@@ -49,11 +44,7 @@
         <MDBBtn color="success" @click="newsFeedModal = false">Close</MDBBtn>
       </MDBModalFooter>
     </MDBModal>
-    <div
-      id="carouselExampleFade"
-      class="carousel slide carousel-fade me-5"
-      data-bs-ride="carousel"
-    >
+    <div id="carouselExampleFade" class="carousel slide carousel-fade me-5" data-bs-ride="carousel">
       <div class="carousel-inner">
         <MDBCard
           class="mb-4 carousel-item"
@@ -62,11 +53,7 @@
           :key="item.title"
         >
           <a v-mdb-ripple="{ color: 'light' }">
-            <MDBCardImg
-              v-bind:src="item.enclosure.link"
-              top
-              v-bind:alt="item.title"
-            />
+            <MDBCardImg v-bind:src="item.enclosure.link" top v-bind:alt="item.title" />
           </a>
 
           <div class="text-center">
@@ -76,10 +63,8 @@
                 v-bind:class="[readMore ? 'remove-style' : 'add-style']"
               >
                 {{ item.title }}
-                <MDBBtn
-                  tag="button"
-                  class="btn-success mt-3"
-                  @click="toggleModal(item)"
+                <br />
+                <MDBBtn tag="button" class="btn-success mt-3" @click="toggleModal(item)"
                   >View content</MDBBtn
                 ></MDBCardTitle
               ><br />
@@ -92,27 +77,24 @@
           </div>
         </MDBCard>
       </div>
-      <button
+      <!-- <button
         class="carousel-control-prev"
         type="button"
         data-bs-target="#carouselExampleFade"
         data-bs-slide="prev"
-        @click="carouselIndex--"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
-        <font-awesome-icon icon="fa-solid fa-angle-right" />
       </button>
       <button
         class="carousel-control-next"
         type="button"
         data-bs-target="#carouselExampleFade"
         data-bs-slide="next"
-        @click="carouselIndex++"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
-      </button>
+      </button> -->
     </div>
   </div>
 </template>
@@ -133,6 +115,7 @@ import {
   mdbRipple,
 } from "mdb-vue-ui-kit";
 import { ref, computed } from "vue";
+import moment from "moment";
 export default {
   components: {
     MDBModal,
@@ -176,6 +159,10 @@ export default {
       newsFeedModal.value = !newsFeedModal.value;
     }
 
+    function dateTime(value) {
+      return moment(value).format("Do MMMM YYYY");
+    }
+
     const activeCarousel = computed(() => {
       if (carouselIndex.value < 0) {
         carouselIndex.value = items.value.length - 1;
@@ -192,8 +179,8 @@ export default {
       isModalActive,
       modalItem,
       newsFeedModal,
+      dateTime,
       activeCarousel,
-      carouselIndex,
     };
   },
 };
