@@ -65,6 +65,7 @@
       <MDBCheckbox
         v-for="(key, index) in Object.keys(optionalTableKeys).sort()"
         :key="index"
+        v-model="activeTableKeys[key]"
         :label="key"
         inline
         @change="toggleKey(key)"
@@ -81,18 +82,18 @@
         <thead>
           <tr>
             <th
-              v-for="(key, index) in activeTableKeys"
+              v-for="(key, index) in Object.entries(activeTableKeys)"
               :key="index"
               scope="col"
             >
-              <b>{{ key }}</b>
+              <b>{{ key[0] }}</b>
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(dataItem, outerIndex) in queryResults" :key="outerIndex">
-            <td v-for="(key, innerIndex) in activeTableKeys" :key="innerIndex">
-              {{ dataItem[key] }}
+            <td v-for="(key, innerIndex) in Object.entries(activeTableKeys)" :key="innerIndex">
+              {{ dataItem[key[0]] }}
             </td>
           </tr>
         </tbody>
@@ -102,12 +103,12 @@
 </template>
 
 <script>
+  import determineKeys from '../../../utils/determineKeys';
   import generateQuery from '../../../utils/generateQuery';
   import store from '../../../services/store';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
   import { collection, getDocs } from 'firebase/firestore';
   import { reactive, ref, watch } from 'vue';
-  import determineKeys from '../../../utils/determineKeys';
 
   export default {
     name: 'Home',
@@ -124,32 +125,32 @@
         '!=': 'not equal to'
       };
       let filters = reactive([]);
-      let optionalTableKeys = ref();
+      let optionalTableKeys = ref([]);
       let queryInput = ref();
       let queryOperand = ref();
       let queryResults = ref([]);
       let selectedOperator = ref();
-      const activeTableKeys = ref([
-        'ledv',
-        'redv',
-        'lesv',
-        'resv',
-        'lvef',
-        'rvef',
-        'lvmass',
-        'rvmass',
-        'lsv',
-        'rsv',
-        'scar',
-        'female',
-        'male',
-        'AgeatMRI',
-        'ApicalHCM',
-        'SuddenCardiacDeath',
-        'Hypertension',
-        'Diabetes',
-        'Myectomy'
-      ]);
+      const activeTableKeys = ref({
+        'ledv': true,
+        'redv': true,
+        'lesv': true,
+        'resv': true,
+        'lvef': true,
+        'rvef': true,
+        'lvmass': true,
+        'rvmass': true,
+        'lsv': true,
+        'rsv': true,
+        'scar': true,
+        'female': true,
+        'male': true,
+        'AgeatMRI': true,
+        'ApicalHCM': true,
+        'SuddenCardiacDeath': true,
+        'Hypertension': true,
+        'Diabetes': true,
+        'Myectomy': true
+      });
 
       (async () => {
         const results = await getDocs(collection(await store.database, 'hcmData'));
@@ -181,9 +182,9 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const toggleKey = (key) => activeTableKeys.value.includes(key)
-        ? activeTableKeys.value.splice(activeTableKeys.value.indexOf(key), 1)
-        : activeTableKeys.value.push(key);
+      const toggleKey = (key) => activeTableKeys.value[key]
+        ? activeTableKeys.value[key].delete
+        : activeTableKeys.value[key] = true;
 
       watch(filters, async () => {
         cleanup();
@@ -191,6 +192,10 @@
         console.log('filters', filters);
 
         queryResults.value = await generateQuery(filters);
+      });
+
+      watch(optionalTableKeys, async () => {
+        console.log('🚀 ~ file: AdvancedSearch.vue ~ line 198 ~ watch ~ optionalTableKeys', optionalTableKeys.value);
       });
 
       return { activeTableKeys, addFilter, deleteFilter, filters, fireStoreOperators, optionalTableKeys,
