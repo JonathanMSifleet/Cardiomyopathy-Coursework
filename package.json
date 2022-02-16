@@ -8,13 +8,13 @@
     "forceUpdate": "ncu -u",
     "insertHCMData": "node --trace-warnings ./src/functions/insertHcmDataToDatabase.js"
   },
-  "type": "module",
   "dependencies": {
     "axios": "^0.25.0",
     "core-js": "^3.21.0",
     "csvtojson": "^2.0.10",
     "firebase": "^9.6.6",
     "mdb-vue-ui-kit": "^1.9.0",
+    "moment": "^2.29.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vue-style-loader": "^4.1.3",
