@@ -1,6 +1,6 @@
 <template>
   <div id="nav" :class="[$style.nav]">
-    <router-link :to="{name: 'Home'}" />
+    <router-link to="/" />
   </div>
   <router-view />
 </template>
