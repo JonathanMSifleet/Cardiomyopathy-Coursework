@@ -105,7 +105,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(dataItem, outerIndex) in queryResults" :key="outerIndex">
+            <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
               <td v-for="(key, innerIndex) in Object.entries(activeTableKeys)" :key="innerIndex">
                 {{ dataItem[key[0]] }}
               </td>
@@ -121,12 +121,10 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner';
   import determineKeys from '../../utils/determineKeys';
-  import generateQuery from '../../utils/generateQuery';
-  import store from '../../services/store';
+  import fetchData from '../../utils/fetchData';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
-  import { collection, getDocs } from 'firebase/firestore';
-  import { reactive, ref, watch } from 'vue';
+  import { reactive, ref, render, watch } from 'vue';
 
   export default {
     name: 'Query',
@@ -134,6 +132,7 @@
       MDBBtn, MDBCheckbox, MDBInput, MDBTable, PageWrapper, Spinner
     },
     setup() {
+      const allDocuments = []; // do not edit the value of this variable
       let displayChart = ref(false);
       const fireStoreOperators = {
         '<': 'less than',
@@ -148,7 +147,7 @@
       let optionalTableKeys = ref([]);
       let queryInput = ref();
       let queryOperand = ref();
-      let queryResults = ref([]);
+      let renderableResults = ref([]);
       let selectedOperator = ref();
       const activeTableKeys = ref({
         'ledv': true,
@@ -174,17 +173,14 @@
       (async () => {
         isLoading.value = true;
 
-        const results = await getDocs(collection(await store.database, 'hcmData'));
-        results.forEach(doc => queryResults.value.push(doc.data()));
+        const results = await fetchData();
+        results.forEach(doc => allDocuments.push(doc));
+        renderableResults.value = allDocuments;
 
-        optionalTableKeys.value = determineKeys(queryResults.value);
+        optionalTableKeys.value = determineKeys(allDocuments);
 
         isLoading.value = false;
       })();
-
-      const cleanup = () => {
-        queryResults.value = [];
-      };
 
       const addFilter = () => filters.push({
         fieldPath: queryInput.value,
@@ -214,7 +210,7 @@
         let type;
 
         let counter = 0;
-        queryResults.value.forEach((doc) => {
+        renderableResults.value.forEach((doc) => {
           const keyValue = doc[keyName];
 
           switch (typeof keyValue) {
@@ -237,7 +233,6 @@
 
         return { data: Object.entries(data), type };
       };
-
 
       const generateGraph = async (keyName) => {
         const { data, type } = extractDataFromResults(keyName);
@@ -274,19 +269,34 @@
       };
 
       watch(filters, async () => {
-        cleanup();
+        let intermediateResults = allDocuments;
+        filters.forEach(filter => {
+          intermediateResults = intermediateResults.filter(doc => {
+            const value = doc[filter.fieldPath];
+            const operator = filter.opStr;
 
-        console.log('filters', filters);
+            switch (operator) {
+            case '<':
+              return value < filter.value;
+            case '<=':
+              return value <= filter.value;
+            case '==':
+              return value === filter.value;
+            case '>':
+              return value > filter.value;
+            case '>=':
+              return value >= filter.value;
+            case '!=':
+              return value !== filter.value;
+            }
+          });
+        });
 
-        queryResults.value = await generateQuery(filters);
-      });
-
-      watch(optionalTableKeys, async () => {
-        console.log('🚀 ~ file: AdvancedSearch.vue ~ line 198 ~ watch ~ optionalTableKeys', optionalTableKeys.value);
+        renderableResults.value = intermediateResults;
       });
 
       return { activeTableKeys, addFilter, deleteFilter, displayChart, filters, fireStoreOperators,
-               generateGraph, isLoading, optionalTableKeys, queryInput, queryOperand, queryResults,
+               generateGraph, isLoading, optionalTableKeys, queryInput, queryOperand, renderableResults,
                selectedOperator, toggleKey };
     }
   };
