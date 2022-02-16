@@ -2,6 +2,10 @@
   <!-- To do:
     - Validate user input
     - Display message on invalid filter
+    - Update chart when filter is changed
+    - Double scroll on table
+    - Paginate table
+    - Update existing filter rather than add duplicate
   -->
   <PageWrapper>
     <h1 :class="[$style.Heading]">
@@ -19,7 +23,8 @@
             :class="[$style.FilterListItem]"
             @click="deleteFilter(index)"
           >
-            {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }} x
+            {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
+            <span :class="[$style.DeleteFilterSpan]">x</span>
           </li>
         </ul>
       </div>
@@ -83,9 +88,7 @@
       <div :class="[$style.TableWrapper]">
         <p>Results:</p>
 
-        <div :class="[$style.ChartWrapper]">
-          <div id="chart" :class="[$style.Chart]" />
-        </div>
+        <div id="chart" />
 
         <MDBTable
           bordered
@@ -98,7 +101,7 @@
                 v-for="(key, index) in Object.entries(activeTableKeys)"
                 :key="index"
                 scope="col"
-                @click="generateGraph(key[0])"
+                @click="selectGraphKey(key[0])"
               >
                 <p :class="[$style.TableHeader]">
                   {{ key[0] }}
@@ -126,7 +129,7 @@
   import fetchData from '../../utils/fetchData';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
-  import { reactive, ref, render, watch } from 'vue';
+  import { reactive, ref, watch } from 'vue';
 
   export default {
     name: 'Query',
@@ -150,6 +153,7 @@
       let queryInput = ref();
       let queryOperand = ref();
       let renderableResults = ref([]);
+      let selectedGraphKey = ref();
       let selectedOperator = ref();
       const activeTableKeys = ref({
         'ledv': true,
@@ -236,7 +240,11 @@
         return { data: Object.entries(data), type };
       };
 
-      const generateGraph = async (keyName) => {
+      const selectGraphKey = (key) => selectedGraphKey.value = key;
+
+      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+
+      const generateGraph = (keyName) => {
         const { data, type } = extractDataFromResults(keyName);
         data.unshift(['Test', 'Value']);
 
@@ -265,7 +273,8 @@
           },
           hAxis: {
             title: 'Record from database'
-          }
+          },
+          chartArea: { width: '100%', height: '80%' }
         });
         displayChart.value = true;
       };
@@ -295,11 +304,13 @@
         });
 
         renderableResults.value = intermediateResults;
+
+        if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
 
       return { activeTableKeys, addFilter, deleteFilter, displayChart, filters, fireStoreOperators,
                generateGraph, isLoading, optionalTableKeys, queryInput, queryOperand, renderableResults,
-               selectedOperator, toggleKey };
+               selectedOperator, selectGraphKey, toggleKey };
     }
   };
 </script>

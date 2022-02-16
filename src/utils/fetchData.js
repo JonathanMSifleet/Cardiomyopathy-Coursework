@@ -11,8 +11,6 @@ const extractResults = (results) => {
   const documents = [];
   results.forEach((doc) => documents.push(doc.data()));
 
-  console.log('🚀 ~ file: fetchData.js ~ line 16 ~ extractResults ~ documents', documents);
-
   return documents;
 };
 
