@@ -104,8 +104,6 @@
         hasFetchedKeys.value = true;
       };
 
-
-
       const extractDataFromResults = (keyName) => {
         let data = {};
         let type;
