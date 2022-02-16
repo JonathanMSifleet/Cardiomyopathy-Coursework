@@ -16,7 +16,7 @@ module.exports = {
       'never'
     ],
     'eol-last': [2, 'windows'],
-    indent: ['error', 2, { "SwitchCase": 1 }],
+    indent: ['error', 2, { 'SwitchCase': 1 }],
     'linebreak-style': [
       'error',
       'windows'
@@ -24,17 +24,26 @@ module.exports = {
     'max-len': [
       'error',
       {
-        code: 100
+        code: 120
       }
     ],
     'no-trailing-spaces': 'error',
-    "quotes": [
+    'object-curly-spacing': ['error', 'always'],
+    'quotes': [
       'error',
       'single'
     ],
     semi: ['error', 'always'],
     'vue/html-indent': ['error', 2, {
       baseIndent: 1
+    }],
+    'vue/max-attributes-per-line': ['error', {
+      'singleline': {
+        'max': 3
+      },
+      'multiline': {
+        'max': 1
+      }
     }],
     'vue/script-indent': [
       'error',
@@ -43,7 +52,10 @@ module.exports = {
     ]
   },
   extends: [
+    'plugin:vue/base',
     'plugin:vue/vue3-essential',
+    'plugin:vue/vue3-strongly-recommended',
+    'plugin:vue/vue3-recommended',
     'eslint:recommended'
   ],
   overrides: [

@@ -1,9 +1,16 @@
 <template>
   <header>
-    <MDBNavbar :class="[$style.Header, 'header']" expand="lg" light bg="success" container>
+    <MDBNavbar
+      :class="[$style.Header, 'header']"
+      expand="lg"
+      light
+      container
+    >
       <MDBNavbarToggler target="#navbarExample01" />
       <MDBNavbarNav collapse="navbarExample01" class="mb-2 mb-lg-0">
-        <MDBNavbarItem :to="{ name: 'Home' }" active> Home </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'Home' }" active>
+          Home
+        </MDBNavbarItem>
       </MDBNavbarNav>
     </MDBNavbar>
   </header>
