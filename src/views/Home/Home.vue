@@ -1,18 +1,20 @@
 <template>
-  <PageWrapper> <NewsFeed /> </PageWrapper>
-
-<template>
   <PageWrapper>
-    <h1>{{ homePage.title }}</h1>
-    <HomeComponent :post="Welcome" />
-    <HomeComponent v-for="(post, index) in HCM" :key="index" :post="post" />
+    <div class="home">
+      <title>Home</title>
+      <!-- If Logged In-->
+      <h1 v-if="currentUser">
+        Welcome, {{ name }}
+      </h1>
+    </div>
+    <br>
   </PageWrapper>
 </template>
 
 <script>
   import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
-  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
-  import HomeComponent from '../../components/Home/HomeComponent.vue';
+  import { ref, onBeforeMount } from 'vue';
+  import getUser from '../composables/getUser';
 
   export default {
     name: 'Home',
@@ -22,26 +24,18 @@
       HomeComponent
     },
     setup() {
-      const homePage = { title: 'Welcome' };
-      return { homePage };
-    },
-    data(){
-      const hcmDesc1 = 'Hypertrophic cardiomyopathy (HCM) is a disease in which the heart muscle ';
-      const hcmDesc2 = 'becomes abnormally thick...';
+      const { currentUser } = getUser();
+      const name = ref('');
+
+      onBeforeMount(() => {
+        if (currentUser.value) {
+          name.value = currentUser.value.displayName;
+        }
+      });
+
       return {
-        Welcome: {
-          title: 'COMPANY TITLE',
-          description: 'this will be content to explain a bit about the site',
-          WelcomeSection: true,
-          photo: 'hcm'
-        },
-        HCM: [
-          {
-            title: 'Hypertrophic cardiomyopathy (HCM)',
-            description: hcmDesc1+hcmDesc2,
-            photo: 'hcm'
-          }
-        ]
+        name,
+        currentUser
       };
     }
   };
