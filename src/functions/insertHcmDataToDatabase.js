@@ -1,5 +1,5 @@
 import csvToJSON from 'csvtojson';
-import firebaseDetails from '../constants/firebaseDetails';
+import firebaseDetails from '../constants/firebaseDetails.js';
 import path from 'path';
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';

@@ -1,21 +1,19 @@
 /* eslint-disable max-len */
 
 <template>
-  <PageWrapper>
     <h1>{{homePage.title}}</h1>
-    <HomeComponent :post="Welcome"/>
+    <HomeComponent :post="Welcome" />
     <HomeComponent :post="post" v-for="(post, index) in HCM" :key="index"/>
-  </PageWrapper>
 </template>
 
 <script>
-  import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
   import HomeComponent from '../../components/Home/HomeComponent.vue';
+  import { onBeforeMount } from 'vue';
+  import getUser from '../../composables/getUser.js';
 
   export default {
     name: 'Home',
     components: {
-      PageWrapper,
       HomeComponent
     },
     data(){
@@ -34,12 +32,26 @@
             description: hcmDesc1+hcmDesc2,
             photo: 'hcm'
           }
-        ]
+        ],
+        user: this.currentUser
       };
     },
     setup() {
+      const { currentUser } = getUser();
+      let user = null;
       const homePage = { title: 'Welcome' };
-      return { homePage };
+
+      onBeforeMount(() => {
+        if (currentUser.value) {
+          user = true;
+        } 
+      });
+
+      return {
+        user,
+        currentUser,
+        homePage
+      };
     }
   };
 </script>

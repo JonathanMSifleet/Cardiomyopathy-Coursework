@@ -6,8 +6,8 @@
       <input type="password" placeholder="Password" v-model="password" />
       <input type="submit" value="Login" />
       <p v-if="errorMessage">{{ errorMessage }}</p>
-      <p><router-link to="/reset">Forgotten password?</router-link></p>
-      <p>Need an account? <router-link to="/register">Register here</router-link></p>
+      <p><router-link :to="{name: 'PasswordReset'}">Forgotten password?</router-link></p>
+      <p>Need an account? <router-link :to="{name: 'Register'}">Register here</router-link></p>
     </form>
   </div>
 </template>

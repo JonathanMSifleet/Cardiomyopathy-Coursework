@@ -3,18 +3,19 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 //firebase firestore
 import {getFirestore} from 'firebase/firestore';
+// import { data } from '../../.env';
 
 //Firebase configuration
-//details currently stored in .env, 
+//details currently stored in .env,
 //change to .env.local file for .gitignore to work
 const firebaseConfig = {
-  apiKey: process.env.VUE_APP_API_KEY,
-  authDomain: process.env.VUE_APP_AUTH_DOMAIN,
-  projectId: process.env.VUE_APP_PROJECT_ID,
-  storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
-  messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
-  appId: process.env.VUE_APP_APP_ID
-}
+  apiKey: 'AIzaSyAbdO1kL8ot43XdNmQgdrTCHyijn9-j-Fw',
+  appId: '1:561426653443:web:69fda27182fad45f2e0936',
+  authDomain: 'cardiomyopathy-mmu.firebaseapp.com',
+  messagingSenderId: '561426653443',
+  projectId: 'cardiomyopathy-mmu',
+  storageBucket: 'cardiomyopathy-mmu.appspot.com'
+};
 
 //HUMZAHS FIREBASE INFO - replace info in .env file to use this
 //firebase.initializeApp({

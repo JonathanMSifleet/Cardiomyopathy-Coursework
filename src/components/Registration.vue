@@ -2,8 +2,8 @@
   <div class="register">
     <form class="register" @submit.prevent="handleSubmit">
       <h2>User Registration</h2>
-      <input 
-        type="email" 
+      <input
+        type="email"
         placeholder="Email Address"
         v-model="email"
         required
@@ -59,13 +59,13 @@
 <script>
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { auth, db} from '../firebase/config'
-  import { sendEmailVerification, signOut, 
+  import { auth, db} from '../firebase/config.js';
+  import { sendEmailVerification, signOut,
            updateProfile } from 'firebase/auth';
-  import { doc, setDoc } from 'firebase/firestore'; 
+  import { doc, setDoc } from 'firebase/firestore';
   import useSignup from '../composables/useSignup';
   import getUser from '../composables/getUser';
-  
+
 
   export default {
     name: 'Register',
@@ -80,15 +80,15 @@
       const address = ref('');
       const { signupError, signup } = useSignup();
       const passMatchErr = ref('');
-      
+
       //in firebase firestore, create collection called users
       //change db rules to: write: if request.auth != null;
       //for this to work (if not in test mode)
       const addUserInfo = async (userObj) =>{
         //create new user doc in user collection
         await setDoc(doc(db, 'users', userObj.uid), userObj);
-      }
-     
+      };
+
       //compare the 2 password inputs
       const passwordsMatch = () =>{
         if(
@@ -97,14 +97,14 @@
           passConfirm.value !== ''
         ){
           passMatchErr.value = 'Your passwords do not match! ' +
-            'Please try again.'
+            'Please try again.';
           return false;
         }
         else{
           passMatchErr.value = null;
           return true;
         }};
-      
+
       //submit registration data and create account
       const handleSubmit = async ()=> {
         //exit function if password confirmation does not match
@@ -113,16 +113,16 @@
         }
         //create user acc
         await signup(email.value, password.value);
-        
+
         if (!signupError.value){//success
-          
+
           //send email for the user to verify email
           await sendEmailVerification(auth.currentUser);
           alert('Verification email sent.');
-         
+
           //get currently signed in user
           const {currentUser} = getUser();
-          
+
           //create user info object
           let user = {
             uid: currentUser.value.uid,
@@ -131,10 +131,10 @@
             address: address.value,
             email: email.value,
             phone: phone.value
-          }
+          };
           //add user info to firestore db
           await addUserInfo(user);
-          
+
           //set user display name
           updateProfile(auth.currentUser, {
             displayName: firstName.value
@@ -153,8 +153,8 @@
           //redirect to login
           router.push('/');
         }
-      }
-      return {email, password, handleSubmit, signupError, 
+      };
+      return {email, password, handleSubmit, signupError,
               phone, address, firstName, lastName, passMatchErr, passConfirm};
     }
   };

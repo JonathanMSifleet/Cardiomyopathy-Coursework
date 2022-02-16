@@ -4,6 +4,7 @@ import './assets/styles/global.scss';
 import App from './App.vue';
 import router from './hoc/router/router.js';
 import store from './hoc/store/store.js';
+import Vuex from 'vuex';
 import { auth } from './firebase/config.js';
 import { onAuthStateChanged } from 'firebase/auth';
 import { createApp } from 'vue';
@@ -14,6 +15,7 @@ onAuthStateChanged(auth, ()=>{
   if (app == null){
     app = createApp(App)
       .use(store)
+      .use(Vuex)
       .use(router)
       .mount('#app');
   }

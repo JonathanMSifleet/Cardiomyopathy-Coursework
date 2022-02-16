@@ -1,38 +1,30 @@
 <template>
-  <div id="nav" :class="[$style.nav]">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-
-    <!--Show when signed out-->
-    | <router-link to="/login" v-if="!currentUser">Login</router-link>
-
-    <!-- Show when signed in-->
-    <button v-if="currentUser" class="logout" @click="logout">Logout</button>
-  </div>
-  <router-view />
+  <PageWrapper>
+    <router-view />
+  </PageWrapper>
 </template>
 
 
 <script>
-  import { useRouter } from 'vue-router';
-  import { getAuth, signOut }  from 'firebase/auth';
-  import getUser from './composables/getUser';
-  export default {
-    setup () {
-      const router = useRouter();
-      const auth = getAuth();
-      const { currentUser } = getUser();
-      //nav bar logout
-      const logout = () => {
-        signOut(auth)
-          .then(() => console.log('Signed out'))
-          .then(()=> router.push('/login'))
-          .catch((err) => alert(err.message));
-      };
-      return {currentUser, logout};
+import PageWrapper from './hoc/PageWrapper/PageWrapper.vue';
+import getUser from './composables/getUser.js';
+  
+
+export default {
+  components: {PageWrapper},
+  created(){
+    const { currentUser } = getUser();
+    const user = currentUser.value.uid;
+    
+    this.$store.commit("updateUser", user);
+    if(user){
+      console.log()
+      this.$store.dispatch("getCurrentUser")
     }
-  };
-</script>
+    
+  }
+}
+</script> 
 
 <style lang="scss" module scoped>
   @import './App.module.scss';
