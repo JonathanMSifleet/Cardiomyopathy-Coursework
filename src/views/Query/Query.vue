@@ -4,7 +4,6 @@
     - Display message on invalid filter
   -->
   <PageWrapper>
-    <div v-show="displayChart" id="chart" />
     <h1 :class="[$style.Heading]">
       Gene mutation data
     </h1>
@@ -83,6 +82,11 @@
 
       <div :class="[$style.TableWrapper]">
         <p>Results:</p>
+
+        <div :class="[$style.ChartWrapper]">
+          <div id="chart" :class="[$style.Chart]" />
+        </div>
+
         <Spinner v-if="isLoading === true" />
         <MDBTable
           v-else
