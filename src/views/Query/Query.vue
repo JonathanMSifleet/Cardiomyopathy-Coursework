@@ -14,10 +14,10 @@
           <li
             v-for="(filter, index) in filters"
             :key="index"
-            :class="[$style.Filter]"
+            :class="[$style.FilterListItem]"
+            @click="deleteFilter(index)"
           >
-            {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
-            <img src="../../assets/svg/Cross.svg" :class="[$style.DeleteFilter]" @click="deleteFilter(index)">
+            {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }} x
           </li>
         </ul>
       </div>
