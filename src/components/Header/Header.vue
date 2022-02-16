@@ -6,6 +6,7 @@
       light
       bg="success"
       container
+      position="sticky"
     >
       <MDBNavbarToggler target="#navbarExample01" />
       <MDBNavbarNav collapse="navbarExample01" class="mb-2 mb-lg-0">
