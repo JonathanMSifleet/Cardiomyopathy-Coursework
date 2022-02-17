@@ -123,7 +123,7 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import Spinner from '../../components/Spinner/Spinner';
+  import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
   import { GoogleCharts } from 'google-charts';
