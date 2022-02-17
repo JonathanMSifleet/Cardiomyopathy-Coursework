@@ -1,9 +1,18 @@
 <template>
-  <PageWrapper> {{ homePage.title }} </PageWrapper>
+  <PageWrapper> 
+    <div class="home">
+      <title>Home</title>
+      <!-- If Logged In-->
+      <h1 v-if="currentUser">Welcome, {{ name }}</h1>
+    </div>
+    <br /> 
+  </PageWrapper>
 </template>
 
 <script>
-  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
+  import { ref, onBeforeMount } from 'vue';
+  import getUser from '../composables/getUser';
 
   export default {
     name: 'Home',
@@ -11,9 +20,19 @@
       PageWrapper
     },
     setup() {
-      const homePage = { title: 'Welcome' };
+      const { currentUser } = getUser();
+      const name = ref('');
 
-      return { homePage };
+      onBeforeMount(() => {
+        if (currentUser.value) {
+          name.value = currentUser.value.displayName;
+        }
+      });
+
+      return {
+        name,
+        currentUser
+      };
     }
-  };
+  }
 </script>
