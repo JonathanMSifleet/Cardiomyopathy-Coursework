@@ -1,13 +1,16 @@
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import webpack from 'webpack';
-import { CleanWebpackPlugin }from 'clean-webpack-plugin';
-import { VueLoaderPlugin } from 'vue-loader';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
-export default {
+module.exports = {
   mode: 'development',
   entry: './src/main.js',
+  devtool: 'eval-source-map',
   output: {
-    filename: 'index.js'
+    filename: 'index.js',
+    path: path.resolve(__dirname, 'build')
   },
   resolve: {
     extensions: ['.js', '.vue']
@@ -41,6 +44,10 @@ export default {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        type: 'asset/inline'
       }
     ]
   },
@@ -50,6 +57,7 @@ export default {
       template: './public/index.html'
     }),
     new VueLoaderPlugin(),
+    // define process variables here:
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false

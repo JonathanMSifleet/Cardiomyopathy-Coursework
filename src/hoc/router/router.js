@@ -1,17 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { auth } from '../firebase/config'
 
 const requireSignedOut = (to, from, next) =>{
   let user = auth.currentUser;
-  if (user){
-    //redirect to home
-    next({ name: 'Home'})
-  }
-  else{
-    //continue to original route
-    next()
-  }
-}
+
+  // if logged in redirect to home, else continue to original route:
+  user ? next({ name: 'Home' }) : next();
+};
 
 // const requireSignedIn = (to, from, next) =>{
 //   let user = auth.currentUser;
@@ -36,27 +30,27 @@ const routes = [
     name: 'Query',
     component: () => import('../../views/Home/Home.vue')
   },
-  {
-    path: '/register',
-    name: 'Registration',
-    component: () =>
-      import(/* webpackChunkName: "register" */ '../components/Registration.vue'),
-    beforeEnter: requireSignedOut
-  },
-  {
-    path: '/reset',
-    name: 'Password Reset',
-    component: () =>
-      import(/* webpackChunkName: "reset" */ '../components/PassReset.vue'),
-    beforeEnter: requireSignedOut
-      
-  },
-  {
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/Login.vue'),
-    beforeEnter: requireSignedOut
-  },
+  // {
+  //   path: '/register',
+  //   name: 'Registration',
+  //   component: () =>
+  //     import(/* webpackChunkName: "register" */ '../components/Registration.vue'),
+  //   beforeEnter: requireSignedOut
+  // },
+  // {
+  //   path: '/reset',
+  //   name: 'Password Reset',
+  //   component: () =>
+  //     import(/* webpackChunkName: "reset" */ '../components/PassReset.vue'),
+  //   beforeEnter: requireSignedOut
+
+  // },
+  // {
+  //   path: '/login',
+  //   name: 'Login',
+  //   component: () => import('../views/Login.vue'),
+  //   beforeEnter: requireSignedOut
+  // },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
