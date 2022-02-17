@@ -1,5 +1,5 @@
-<template v-slot:childreb>
-  <MDBContainer fluid :class="[$style.PageWrapper]"> 
+<template>
+  <MDBContainer fluid :class="[$style.PageWrapper]">
     <Header />
     <MDBRow :class="[$style.Row]">
       <MDBCol :class="[$style.SideColumn]" md="2" />

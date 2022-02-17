@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-const requireSignedOut = (to, from, next) =>{
-  let user = auth.currentUser;
+// const requireSignedOut = (to, from, next) =>{
+//   let user = auth.currentUser;
 
-  // if logged in redirect to home, else continue to original route:
-  user ? next({ name: 'Home' }) : next();
-};
+//   // if logged in redirect to home, else continue to original route:
+//   user ? next({ name: 'Home' }) : next();
+// };
 
 // const requireSignedIn = (to, from, next) =>{
 //   let user = auth.currentUser;
@@ -56,7 +56,6 @@ const routes = [
     path: '/:pathMatch(.*)*',
     redirect: '/'
   }
-
 ];
 
 const router = createRouter({
