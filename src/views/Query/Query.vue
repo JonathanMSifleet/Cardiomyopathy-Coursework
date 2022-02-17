@@ -42,7 +42,7 @@
             <option
               v-for="operation in Object.entries(fireStoreOperators)"
               :key="operation"
-              :disabled="operation === 'Please select' ? true : false"
+              :disabled="operation === 'Please select'"
             >
               {{ operation[1] }}
             </option>
@@ -60,6 +60,7 @@
 
         <MDBBtn
           color="success"
+          :disabled="!canSubmitFilter"
           @click="addFilter"
         >
           Add filter
@@ -126,6 +127,7 @@
   import fetchData from '../../utils/fetchData';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
+  import { isValid, isNotEmpty } from '../../utils/validationFunctions';
   import { reactive, ref, watch } from 'vue';
 
   export default {
@@ -146,12 +148,13 @@
       };
       let filters = reactive([]);
       let isLoading = ref(false);
+      let canSubmitFilter = ref(false);
       let optionalTableKeys = ref([]);
-      let queryInput = ref();
-      let queryOperand = ref();
+      let queryInput = ref('');
+      let queryOperand = ref('');
       let renderableResults = ref([]);
       let selectedGraphKey = ref();
-      let selectedOperator = ref();
+      let selectedOperator = ref('Please select');
       const activeTableKeys = ref({
         'ledv': true,
         'redv': true,
@@ -184,11 +187,20 @@
         isLoading.value = false;
       })();
 
-      const addFilter = () => filters.push({
-        fieldPath: queryInput.value,
-        opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
-        value: convertValueToType(queryOperand.value)
-      });
+      const addFilter = () => {
+        if (!optionalTableKeys.value.includes(queryInput.value)) {
+          alert('Attribute does not exist in database');
+          return;
+        }
+
+        if (isNotEmpty(queryInput.value) !== null) alert ('Attribute must not be empty');
+
+        filters.push({
+          fieldPath: queryInput.value,
+          opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
+          value: convertValueToType(queryOperand.value)
+        });
+      };
 
       const convertValueToType = (value) => {
         switch(true) {
@@ -309,40 +321,39 @@
       };
 
       watch(filters, async () => {
-        if (filters[filters.length - 1] && !optionalTableKeys.value.includes(filters[filters.length - 1].fieldPath)) {
-          alert('Attribute does not exist in database');
-          filters.pop();
-        } else {
-          let intermediateResults = allDocuments;
-          filters.forEach(filter => {
-            intermediateResults = intermediateResults.filter(doc => {
-              const value = doc[filter.fieldPath];
-              const operator = filter.opStr;
+        let intermediateResults = allDocuments;
+        filters.forEach(filter => {
+          intermediateResults = intermediateResults.filter(doc => {
+            const value = doc[filter.fieldPath];
+            const operator = filter.opStr;
 
-              switch (operator) {
-              case '<':
-                return value < filter.value;
-              case '<=':
-                return value <= filter.value;
-              case '==':
-                return value === filter.value;
-              case '>':
-                return value > filter.value;
-              case '>=':
-                return value >= filter.value;
-              case '!=':
-                return value !== filter.value;
-              }
-            });
+            switch (operator) {
+            case '<':
+              return value < filter.value;
+            case '<=':
+              return value <= filter.value;
+            case '==':
+              return value === filter.value;
+            case '>':
+              return value > filter.value;
+            case '>=':
+              return value >= filter.value;
+            case '!=':
+              return value !== filter.value;
+            }
           });
+        });
 
-          renderableResults.value = intermediateResults;
+        renderableResults.value = intermediateResults;
 
-          if (displayChart.value) generateGraph(selectedGraphKey.value);
-        }
+        if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
 
-      return { activeTableKeys, addFilter, deleteFilter, displayChart, filters, fireStoreOperators,
+      watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
+        (queryInput.value !== '' && selectedOperator.value !== 'Please select' && queryOperand.value !== '')
+      );
+
+      return { activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, filters, fireStoreOperators,
                generateGraph, isLoading, mapKeyNameToWords, optionalTableKeys, queryInput, queryOperand,
                renderableResults, selectedOperator, selectGraphKey, toggleKey };
     }
