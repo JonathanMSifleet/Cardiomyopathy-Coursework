@@ -1,8 +1,4 @@
 <template>
-  <!-- To do:
-    - Validate user input
-    - Display message on invalid filter
-  -->
   <PageWrapper>
     <h1 :class="[$style.Heading]">
       Gene mutation data
@@ -127,7 +123,7 @@
   import fetchData from '../../utils/fetchData';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
-  import { isValid, isNotEmpty } from '../../utils/validationFunctions';
+  import { isValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch } from 'vue';
 
   export default {
@@ -136,25 +132,6 @@
       MDBBtn, MDBCheckbox, MDBInput, MDBTable, PageWrapper, Spinner
     },
     setup() {
-      const allDocuments = []; // do not edit the value of this variable
-      let displayChart = ref(false);
-      const fireStoreOperators = {
-        '<': 'less than',
-        '<=': 'less than or equal to',
-        '==': 'equal to',
-        '>': 'greater than',
-        '>=': 'greater than or equal to',
-        '!=': 'not equal to'
-      };
-      let filters = reactive([]);
-      let isLoading = ref(false);
-      let canSubmitFilter = ref(false);
-      let optionalTableKeys = ref([]);
-      let queryInput = ref('');
-      let queryOperand = ref('');
-      let renderableResults = ref([]);
-      let selectedGraphKey = ref();
-      let selectedOperator = ref('Please select');
       const activeTableKeys = ref({
         'ledv': true,
         'redv': true,
@@ -174,6 +151,26 @@
         'Diabetes': true,
         'Myectomy': true
       });
+      const allDocuments = []; // do not edit the value of this variable
+      let displayChart = ref(false);
+      const fireStoreOperators = {
+        '<': 'less than',
+        '<=': 'less than or equal to',
+        '==': 'equal to',
+        '>': 'greater than',
+        '>=': 'greater than or equal to',
+        '!=': 'not equal to'
+      };
+      let filters = reactive([]);
+      let isLoading = ref(false);
+      let canSubmitFilter = ref(false);
+      let optionalTableKeys = ref([]);
+      let queryInput = ref('');
+      let queryOperand = ref('');
+      let renderableResults = ref([]);
+      let selectedGraphKey = ref();
+      let selectedOperator = ref('Please select');
+      let textOnlyTableKeys = [];
 
       (async () => {
         isLoading.value = true;
@@ -183,17 +180,20 @@
         renderableResults.value = allDocuments;
 
         optionalTableKeys.value = determineKeys(allDocuments);
+        textOnlyTableKeys = Object.entries(optionalTableKeys.value).map(key => key[0]);
 
         isLoading.value = false;
       })();
 
       const addFilter = () => {
-        if (!optionalTableKeys.value.includes(queryInput.value)) {
-          alert('Attribute does not exist in database');
-          return;
+        if(!textOnlyTableKeys.includes(queryInput.value)) {
+          alert('Attribute not found in database'); return;
         }
 
-        if (isNotEmpty(queryInput.value) !== null) alert ('Attribute must not be empty');
+        const operandValidationMessage = isValid(queryOperand.value);
+        if (!operandValidationMessage) {
+          alert('Input must be a number or equal to true or false'); return;
+        }
 
         filters.push({
           fieldPath: queryInput.value,
