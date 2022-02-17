@@ -97,10 +97,11 @@
                 v-for="(key, index) in Object.entries(activeTableKeys)"
                 :key="index"
                 scope="col"
+                :class="[$style.TableHeaderCell]"
                 @click="selectGraphKey(key[0])"
               >
-                <p :class="[$style.TableHeader]">
-                  {{ key[0] }}
+                <p :class="[$style.TableHeaderText]">
+                  {{ mapKeyNameToWords(key[0]) }}
                 </p>
               </th>
             </tr>
@@ -108,7 +109,7 @@
           <tbody>
             <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
               <td v-for="(key, innerIndex) in Object.entries(activeTableKeys)" :key="innerIndex">
-                {{ dataItem[key[0]] }}
+                {{ key[0] === "female" ? (dataItem[key[0]] ? 'Female' : 'Male') : dataItem[key[0]] }}
               </td>
             </tr>
           </tbody>
@@ -163,7 +164,6 @@
         'rsv': true,
         'scar': true,
         'female': true,
-        'male': true,
         'AgeatMRI': true,
         'ApicalHCM': true,
         'SuddenCardiacDeath': true,
@@ -206,6 +206,39 @@
       const toggleKey = (key) => activeTableKeys.value[key]
         ? activeTableKeys.value[key].delete
         : activeTableKeys.value[key] = true;
+
+      const mapKeyNameToWords = (key) => {
+        switch(key) {
+        case 'ledv':
+          return 'Left ventricular end diastolic volume';
+        case 'redv':
+          return 'Right ventricular end diastolic volume';
+        case 'lesv':
+          return 'Left ventricular end systolic volume';
+        case 'resv':
+          return 'Right ventricular end systolic volume';
+        case 'lvef':
+          return 'Left ventricular ejection fraction';
+        case 'rvef':
+          return 'Right ventricular ejection fraction';
+        case 'lvmass':
+          return 'Left ventricular mass';
+        case 'lsv':
+          return 'Left ventricular systolic volume';
+        case 'rsv':
+          return 'Right ventricular systolic volume';
+        case 'scar':
+          return 'Fibrosis/scarring';
+        case 'female':
+          return 'Gender';
+        case 'ApicalHCM':
+          return 'Apical Heart Cath';
+        case 'SuddenCardiacDeath':
+          return 'Sudden Cardiac Death';
+        default:
+          return key;
+        }
+      };
 
       const extractDataFromResults = (keyName) => {
         let data = {};
@@ -276,37 +309,42 @@
       };
 
       watch(filters, async () => {
-        let intermediateResults = allDocuments;
-        filters.forEach(filter => {
-          intermediateResults = intermediateResults.filter(doc => {
-            const value = doc[filter.fieldPath];
-            const operator = filter.opStr;
+        if (filters[filters.length - 1] && !optionalTableKeys.value.includes(filters[filters.length - 1].fieldPath)) {
+          alert('Attribute does not exist in database');
+          filters.pop();
+        } else {
+          let intermediateResults = allDocuments;
+          filters.forEach(filter => {
+            intermediateResults = intermediateResults.filter(doc => {
+              const value = doc[filter.fieldPath];
+              const operator = filter.opStr;
 
-            switch (operator) {
-            case '<':
-              return value < filter.value;
-            case '<=':
-              return value <= filter.value;
-            case '==':
-              return value === filter.value;
-            case '>':
-              return value > filter.value;
-            case '>=':
-              return value >= filter.value;
-            case '!=':
-              return value !== filter.value;
-            }
+              switch (operator) {
+              case '<':
+                return value < filter.value;
+              case '<=':
+                return value <= filter.value;
+              case '==':
+                return value === filter.value;
+              case '>':
+                return value > filter.value;
+              case '>=':
+                return value >= filter.value;
+              case '!=':
+                return value !== filter.value;
+              }
+            });
           });
-        });
 
-        renderableResults.value = intermediateResults;
+          renderableResults.value = intermediateResults;
 
-        if (displayChart.value) generateGraph(selectedGraphKey.value);
+          if (displayChart.value) generateGraph(selectedGraphKey.value);
+        }
       });
 
       return { activeTableKeys, addFilter, deleteFilter, displayChart, filters, fireStoreOperators,
-               generateGraph, isLoading, optionalTableKeys, queryInput, queryOperand, renderableResults,
-               selectedOperator, selectGraphKey, toggleKey };
+               generateGraph, isLoading, mapKeyNameToWords, optionalTableKeys, queryInput, queryOperand,
+               renderableResults, selectedOperator, selectGraphKey, toggleKey };
     }
   };
 </script>

@@ -66,8 +66,9 @@
     overflow-x: scroll;
 }
 
-.TableHeader {
+.TableHeaderText {
     color: green;
     cursor: pointer;
-    font-weight: bold;
+    font-size: 1vw;
+    line-height: 0.75rem;
 }
