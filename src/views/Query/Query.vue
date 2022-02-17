@@ -21,7 +21,10 @@
         </ul>
       </div>
 
-      <p>Please add a filter:</p>
+      <p>
+        Please add a filter
+        <span :class="[$style.FilterInstruction]">(using text in brackets if it is a default column)</span>:
+      </p>
 
       <div :class="[$style.FilterWrapper]">
         <div :class="[$style.InputWrapper]">
@@ -65,9 +68,6 @@
 
       <div :class="[$style.CheckboxWrapper]">
         <p>Selected columns:</p>
-        <p>
-          Click a table header to view a graph on the data
-        </p>
         <MDBCheckbox
           v-for="(key, index) in Object.keys(optionalTableKeys).sort()"
           :key="index"
@@ -78,8 +78,11 @@
         />
       </div>
 
+      <p :class="[$style.GraphPrompt]">
+        Click a table header to view a graph on the data
+      </p>
       <div :class="[$style.TableWrapper]">
-        <p>Results:</p>
+        <p>Results ({{ renderableResults.length }}):</p>
 
         <div id="chart" />
 
@@ -99,6 +102,7 @@
               >
                 <p :class="[$style.TableHeaderText]">
                   {{ mapKeyNameToWords(key[0]) }}
+                  {{ key[0] !== mapKeyNameToWords(key[0]) ? '(' + key[0] + ')' : null }}
                 </p>
               </th>
             </tr>

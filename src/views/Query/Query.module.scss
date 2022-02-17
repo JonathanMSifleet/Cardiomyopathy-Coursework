@@ -7,6 +7,11 @@
     font-size: 2rem;
     color: darkgreen;
     float: left;
+    margin-bottom: 1%;
+}
+
+.FilterInstruction {
+    font-size: 0.8rem;
 }
 
 .FilterWrapper {
@@ -56,6 +61,11 @@
     height: 15vh;
     overflow-y: scroll;
     min-width: 100%;
+}
+
+.GraphPrompt {
+    clear: both;
+    float: left;
 }
 
 .TableWrapper {
