@@ -1,8 +1,8 @@
-import firebaseDetails from '../constants/firebaseDetails.cjs';
-import csvToJSON from 'csvtojson';
-import path from 'path';
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
+const csvToJSON = require('csvtojson');
+const firebaseDetails = require('../constants/firebaseDetails');
+const path = require('path');
+const { addDoc, collection, getFirestore } = require('firebase/firestore');
+const { initializeApp } = require('firebase/app');
 
 const initialiseDatabase = () => {
   initializeApp(firebaseDetails.details);
@@ -45,7 +45,8 @@ const addItemsToDatabase = async (database, data) => {
   data.forEach((item) => tasks.push(addDoc(collection(database, 'hcmData'), item)));
 
   try {
-    await Promise.all(tasks).then(() => console.log('All items added to database'));
+    await Promise.all(tasks);
+    console.log('All items added to database');
   } catch (error) {
     console.error(error);
   } finally {
@@ -62,4 +63,4 @@ const addItemsToDatabase = async (database, data) => {
 
   console.log('Beginning to add items to database');
   addItemsToDatabase(initialiseDatabase(), data);
-})()
+})();

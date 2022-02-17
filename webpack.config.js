@@ -46,6 +46,11 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       },
       {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader']
+      },
+      {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         type: 'asset/inline'
       }
