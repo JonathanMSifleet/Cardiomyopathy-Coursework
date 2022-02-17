@@ -1,23 +1,18 @@
 <template>
   <PageWrapper>
-    <div class="home">
-      <title>Home</title>
-      <!-- If Logged In-->
-      <!-- <h1 v-if="currentUser">Welcome, {{ name }}</h1> -->
-    </div>
-    <br />
+    <NewsFeed />
   </PageWrapper>
 </template>
 
 <script>
-  import PageWrapper from '../../components/PageWrapper/PageWrapper';
-  // import { ref, onBeforeMount } from 'vue';
-  // import getUser from '../composables/getUser';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
 
   export default {
     name: 'Home',
     components: {
-      PageWrapper
+      PageWrapper,
+      NewsFeed
     },
     setup() {
       // const { currentUser } = getUser();
@@ -29,10 +24,10 @@
       //   }
       // });
 
-      return {
-        // name,
-        // currentUser
-      };
+      // return {
+      //   name,
+      //   currentUser
+      // };
     }
-  }
+  };
 </script>
