@@ -23,8 +23,8 @@
       </MDBModalHeader>
 
       <MDBModalBody>
-        <div class="row">
-          <div class="col-md-6 mb-4">
+        <MDBRow>
+          <MDBCol size="6" class="mb-4">
             <div
               class="bg-image hover-overlay ripple shadow-2-strong ripple-surface-light"
               data-mdb-ripple-color="light"
@@ -35,11 +35,11 @@
                 <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)" />
               </a>
             </div>
-          </div>
-          <div class="col-md-6 mb-4">
+          </MDBCol>
+          <MDBCol size="6" class="mb-4">
             {{ modalItem.description }}
-          </div>
-        </div>
+          </MDBCol>
+        </MDBRow>
       </MDBModalBody>
 
       <MDBModalFooter>
@@ -101,6 +101,8 @@
     MDBCardBody,
     MDBCardTitle,
     MDBCardImg,
+    MDBCol,
+    MDBRow,
     mdbRipple
   } from 'mdb-vue-ui-kit';
   import { ref, computed } from 'vue';
@@ -117,7 +119,9 @@
       MDBCard,
       MDBCardBody,
       MDBCardTitle,
-      MDBCardImg
+      MDBCardImg,
+      MDBCol,
+      MDBRow
     },
     directives: {
       mdbRipple
@@ -162,6 +166,6 @@
   };
 </script>
 
-<style module lang="scss">
-  @import "./NewsFeed.module.scss";
+<style>
+  @import "./NewsFeed.scss";
 </style>
