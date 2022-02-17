@@ -12,9 +12,7 @@
       <MDBModalHeader>
         <div>
           <MDBModalTitle id="newsFeedModalLabel" :style="{ fontWeight: 'bold' }">
-            {{
-              modalItem.title
-            }}
+            {{ modalItem.title }}
           </MDBModalTitle>
           <h4 class="text-muted mt-2">
             Published: {{ dateTime(modalItem.pubDate) }}
@@ -28,7 +26,6 @@
             <div
               class="bg-image hover-overlay ripple shadow-2-strong ripple-surface-light"
               data-mdb-ripple-color="light"
-              style=""
             >
               <img :src="modalItem.enclosure.link" class="img-fluid">
               <a href="#!">
@@ -48,7 +45,7 @@
         </MDBBtn>
       </MDBModalFooter>
     </MDBModal>
-    <div id="carouselExampleFade" class="carousel slide carousel-fade me-5" data-bs-ride="carousel">
+    <div id="carouselExampleFade" :class="[$style.carousel, 'slide', 'carousel-fade', 'me-5']" data-bs-ride="carousel">
       <div class="carousel-inner">
         <MDBCard
           v-for="(item, index) of items"
@@ -64,7 +61,7 @@
             <MDBCardBody>
               <MDBCardTitle
                 class="card-title"
-                :class="[readMore ? 'remove-style' : 'add-style']"
+                :class="[readMore ? $style.remove-style : $style.add-style]"
               >
                 {{ item.title }}
                 <br>
@@ -77,7 +74,7 @@
                 </MDBBtn>
               </MDBCardTitle><br>
               <button
-                class="read-more-link mt-3"
+                :class="[$style.read-more-link, 'mt-3']"
                 @click="toggleClass"
                 v-html="readMore ? 'Read less...' : 'Read more...'"
               />
@@ -141,7 +138,6 @@
         );
         const data = await res.json();
         items.value = data.items;
-        console.log(items);
       })();
 
       const toggleClass = () => readMore.value = !readMore.value;
@@ -159,13 +155,13 @@
         return carouselIndex.value % items.value.length;
       });
 
-      return { activeCarousel, dateTime, isModalActive, items,
-               modalItem, newsFeedModal, readMore, toggleClass, toggleModal
+      return { activeCarousel, dateTime, isModalActive, items, modalItem,
+               newsFeedModal, readMore, toggleClass, toggleModal
       };
     }
   };
 </script>
 
-<style>
-  @import "./NewsFeed.scss";
+<style module lang="scss">
+  @import "./NewsFeed.module.scss";
 </style>
