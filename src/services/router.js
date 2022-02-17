@@ -11,8 +11,7 @@ const routes = [
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import('../views/Query/Query.vue'),
-    params: true
+    component: () => import('../views/Query/Query.vue')
   },
   // no route, route:
   {

@@ -4,7 +4,7 @@
       Gene mutation data
     </h1>
 
-    <Spinner v-if="isLoading === true" />
+    <Spinner v-if="isFetchingData === true" />
     <div v-else :class="[$style.ComponentWrapper]">
       <div v-if="filters.length !== 0" :class="[$style.FiltersWrapper]">
         <p> Filters: </p>
@@ -84,6 +84,7 @@
       <div :class="[$style.TableWrapper]">
         <p>Results ({{ renderableResults.length }}):</p>
 
+        <Spinner v-if="isLoadingGraph" />
         <div id="chart" />
 
         <MDBTable
@@ -124,7 +125,7 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner';
   import determineKeys from '../../utils/determineKeys';
-  import fetchData from '../../utils/fetchData';
+  import fetchDocuments from '../../utils/fetchDocuments';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
@@ -155,7 +156,7 @@
         'Diabetes': true,
         'Myectomy': true
       });
-      const allDocuments = []; // do not edit the value of this variable
+      let allDocuments = []; // do not edit the value of this variable
       let displayChart = ref(false);
       const fireStoreOperators = {
         '<': 'less than',
@@ -166,7 +167,8 @@
         '!=': 'not equal to'
       };
       let filters = reactive([]);
-      let isLoading = ref(false);
+      let isFetchingData = ref(false);
+      let isLoadingGraph = ref(false);
       let canSubmitFilter = ref(false);
       let optionalTableKeys = ref([]);
       let queryInput = ref('');
@@ -177,16 +179,15 @@
       let textOnlyTableKeys = [];
 
       (async () => {
-        isLoading.value = true;
+        isFetchingData.value = true;
 
-        const results = await fetchData();
-        results.forEach(doc => allDocuments.push(doc));
+        allDocuments = await fetchDocuments();
         renderableResults.value = allDocuments;
 
         optionalTableKeys.value = determineKeys(allDocuments);
         textOnlyTableKeys = Object.entries(optionalTableKeys.value).map(key => key[0]);
 
-        isLoading.value = false;
+        isFetchingData.value = false;
       })();
 
       const addFilter = () => {
@@ -256,6 +257,24 @@
         }
       };
 
+      const selectGraphKey = (key) => selectedGraphKey.value = key;
+
+      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+
+      const generateGraph = (keyName) => {
+        isLoadingGraph.value = true;
+
+        const { data, type } = extractDataFromResults(keyName);
+        data.unshift(['Test', 'Value']);
+
+        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
+          + curData[0].slice(1).toLowerCase()
+        );
+
+        GoogleCharts.load(() => renderGraph(data, keyName, type));
+      };
+
+
       const extractDataFromResults = (keyName) => {
         let data = {};
         let type;
@@ -285,21 +304,6 @@
         return { data: Object.entries(data), type };
       };
 
-      const selectGraphKey = (key) => selectedGraphKey.value = key;
-
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
-
-      const generateGraph = (keyName) => {
-        const { data, type } = extractDataFromResults(keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase()
-        );
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
-      };
-
       const renderGraph = (data, keyName, type) => {
         const chartHelper = GoogleCharts.api.visualization;
         const chartData = chartHelper.arrayToDataTable(data);
@@ -321,6 +325,7 @@
           },
           chartArea: { width: '82%', height: '80%' }
         });
+        isLoadingGraph.value = false;
         displayChart.value = true;
       };
 
@@ -358,8 +363,8 @@
       );
 
       return { activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, filters, fireStoreOperators,
-               generateGraph, isLoading, mapKeyNameToWords, optionalTableKeys, queryInput, queryOperand,
-               renderableResults, selectedOperator, selectGraphKey, toggleKey };
+               generateGraph, isFetchingData, isLoadingGraph, mapKeyNameToWords, optionalTableKeys, queryInput,
+               queryOperand, renderableResults, selectedOperator, selectGraphKey, toggleKey };
     }
   };
 </script>

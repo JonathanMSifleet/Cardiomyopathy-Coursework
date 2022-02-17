@@ -45,7 +45,8 @@ const addItemsToDatabase = async (database, data) => {
   data.forEach((item) => tasks.push(addDoc(collection(database, 'hcmData'), item)));
 
   try {
-    await Promise.all(tasks).then(() => console.log('All items added to database'));
+    await Promise.all(tasks);
+    console.log('All items added to database');
   } catch (error) {
     console.error(error);
   } finally {

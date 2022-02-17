@@ -1,11 +1,8 @@
 import { collection, getDocs } from 'firebase/firestore';
 import store from '../services/store';
 
-const fetchData = async () => {
-  const results = await getDocs(collection(await store.database, 'hcmData'));
-
-  return extractResults(results);
-};
+const fetchDocuments = async () =>
+  extractResults(await getDocs(collection(await store.database, 'hcmData')));
 
 const extractResults = (results) => {
   const documents = [];
@@ -14,4 +11,4 @@ const extractResults = (results) => {
   return documents;
 };
 
-export default fetchData;
+export default fetchDocuments;
