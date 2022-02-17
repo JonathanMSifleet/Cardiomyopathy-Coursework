@@ -2,10 +2,6 @@
   <!-- To do:
     - Validate user input
     - Display message on invalid filter
-    - Update chart when filter is changed
-    - Double scroll on table
-    - Paginate table
-    - Update existing filter rather than add duplicate
   -->
   <PageWrapper>
     <h1 :class="[$style.Heading]">
@@ -93,7 +89,7 @@
         <MDBTable
           bordered
           striped
-          responsive
+          :class="[$style.Table]"
         >
           <thead>
             <tr>
@@ -274,7 +270,7 @@
           hAxis: {
             title: 'Record from database'
           },
-          chartArea: { width: '100%', height: '80%' }
+          chartArea: { width: '82%', height: '80%' }
         });
         displayChart.value = true;
       };
