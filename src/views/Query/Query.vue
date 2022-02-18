@@ -37,7 +37,7 @@
         </div>
 
         <div :class="[$style.SelectWrapper]">
-          <select v-model="selectedOperator" :class="[$style.Select]">
+          <select v-model="selectedOperator" :class="[$style.Select, 'form-select']">
             <option
               v-for="operation in Object.entries(fireStoreOperators)"
               :key="operation"
@@ -58,7 +58,7 @@
         </div>
 
         <MDBBtn
-          color="success"
+          color="primary"
           :disabled="!canSubmitFilter"
           @click="addFilter"
         >
