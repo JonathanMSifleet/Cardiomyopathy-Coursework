@@ -1,19 +1,12 @@
 <template>
   <PageWrapper>
-    <div class="home">
-      <!-- <h1>{{ homePage.title }}</h1> -->
-
-      <h1 v-if="currentUser">
-        Welcome, {{ name }}
-      </h1>
-    </div>
     <NewsFeed />
   </PageWrapper>
 </template>
 
 <script>
-  import PageWrapper from '../../hoc/PageWrapper/PageWrapper.vue';
-  import NewsFeed from '../../components/NewsFeed/NewsFeed';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
 
   export default {
     name: 'Home',
