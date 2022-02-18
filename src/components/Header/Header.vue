@@ -4,7 +4,7 @@
       :class="[$style.Header, 'header']"
       expand="lg"
       light
-      bg="success"
+      bg="primary"
       container
       position="sticky"
     >
