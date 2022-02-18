@@ -1,5 +1,5 @@
 export const isValid = (value) => {
-  switch (true) {
+  switch (value) {
     case 'false' || 'False':
       return true;
     case 'true' || 'True':
