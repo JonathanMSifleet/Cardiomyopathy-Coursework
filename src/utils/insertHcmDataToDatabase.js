@@ -1,5 +1,5 @@
 const csvToJSON = require('csvtojson');
-const firebaseDetails = require('../constants/firebaseDetails');
+const firebaseDetails = require('../constants/firebaseDetails.cjs');
 const path = require('path');
 const { addDoc, collection, getFirestore } = require('firebase/firestore');
 const { initializeApp } = require('firebase/app');
@@ -59,7 +59,7 @@ const addItemsToDatabase = async (database, data) => {
   // relative path needs to be written from the root of the project
   // if being run from package.json script, otherwise path needs
   // to be relative to this file being run
-  const data = await parseData('./hcm_data.csv');
+  const data = await parseData('./hccm_data.csv');
 
   console.log('Beginning to add items to database');
   addItemsToDatabase(initialiseDatabase(), data);
