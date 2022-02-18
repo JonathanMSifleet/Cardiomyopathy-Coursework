@@ -4,7 +4,7 @@ import firebaseDetails from '../constants/firebaseDetails';
 
 const getDatabase = async () => {
   const db = getFirestore(initializeApp(firebaseDetails.details));
-  await enableIndexedDbPersistence(db);
+  if (process.env.DEVELOPMENT) await enableIndexedDbPersistence(db);
 
   return db;
 };
