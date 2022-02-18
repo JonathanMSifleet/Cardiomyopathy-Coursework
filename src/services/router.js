@@ -13,6 +13,11 @@ const routes = [
     base: '/',
     component: () => import('../views/Query/Query.vue')
   },
+  {
+    path: '/experimentalData',
+    name: 'ExperimentalData',
+    component: () => import('../views/ExperimentalData/ExperimentalData.vue')
+  },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
