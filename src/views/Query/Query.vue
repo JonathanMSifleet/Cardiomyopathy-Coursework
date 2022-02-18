@@ -69,10 +69,10 @@
       <div :class="[$style.CheckboxWrapper]">
         <p>Selected columns:</p>
         <MDBCheckbox
-          v-for="(key, index) in Object.keys(optionalTableKeys).sort()"
+          v-for="(key, index) in mapKeyNameToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
           :key="index"
           v-model="activeTableKeys[key]"
-          :label="key"
+          :label="mapKeyNameToWords(key)"
           inline
           @change="toggleKey(key)"
         />
@@ -103,7 +103,9 @@
               >
                 <p :class="[$style.TableHeaderText]">
                   {{ mapKeyNameToWords(key[0]) }}
-                  {{ key[0] !== mapKeyNameToWords(key[0]) ? '(' + key[0] + ')' : null }}
+                  {{ key[0] !== mapKeyNameToWords(key[0])
+                    ? key[0] !== 'female' ? '(' + key[0] + ')' : ''
+                    : null }}
                 </p>
               </th>
             </tr>
@@ -111,7 +113,9 @@
           <tbody>
             <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
               <td v-for="(key, innerIndex) in Object.entries(activeTableKeys)" :key="innerIndex">
-                {{ key[0] === "female" ? (dataItem[key[0]] ? 'Female' : 'Male') : dataItem[key[0]] }}
+                {{ key[0] === "female"
+                  ? (dataItem[key[0]] ? 'Female' : 'Male')
+                  : (dataItem[key[0]] ) }}
               </td>
             </tr>
           </tbody>
@@ -159,9 +163,9 @@
       let allDocuments = []; // do not edit the value of this variable
       let displayChart = ref(false);
       const fireStoreOperators = {
+        '==': 'equal to',
         '<': 'less than',
         '<=': 'less than or equal to',
-        '==': 'equal to',
         '>': 'greater than',
         '>=': 'greater than or equal to',
         '!=': 'not equal to'
@@ -220,61 +224,6 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const toggleKey = (key) => activeTableKeys.value[key]
-        ? activeTableKeys.value[key].delete
-        : activeTableKeys.value[key] = true;
-
-      const mapKeyNameToWords = (key) => {
-        switch(key) {
-        case 'ledv':
-          return 'Left ventricular end diastolic volume';
-        case 'redv':
-          return 'Right ventricular end diastolic volume';
-        case 'lesv':
-          return 'Left ventricular end systolic volume';
-        case 'resv':
-          return 'Right ventricular end systolic volume';
-        case 'lvef':
-          return 'Left ventricular ejection fraction';
-        case 'rvef':
-          return 'Right ventricular ejection fraction';
-        case 'lvmass':
-          return 'Left ventricular mass';
-        case 'lsv':
-          return 'Left ventricular systolic volume';
-        case 'rsv':
-          return 'Right ventricular systolic volume';
-        case 'scar':
-          return 'Fibrosis/scarring';
-        case 'female':
-          return 'Gender';
-        case 'ApicalHCM':
-          return 'Apical Heart Cath';
-        case 'SuddenCardiacDeath':
-          return 'Sudden Cardiac Death';
-        default:
-          return key;
-        }
-      };
-
-      const selectGraphKey = (key) => selectedGraphKey.value = key;
-
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
-
-      const generateGraph = (keyName) => {
-        isLoadingGraph.value = true;
-
-        const { data, type } = extractDataFromResults(keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase()
-        );
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
-      };
-
-
       const extractDataFromResults = (keyName) => {
         let data = {};
         let type;
@@ -304,6 +253,54 @@
         return { data: Object.entries(data), type };
       };
 
+      const generateGraph = (keyName) => {
+        isLoadingGraph.value = true;
+
+        const { data, type } = extractDataFromResults(keyName);
+        data.unshift(['Test', 'Value']);
+
+        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
+          + curData[0].slice(1).toLowerCase()
+        );
+
+        GoogleCharts.load(() => renderGraph(data, keyName, type));
+      };
+
+      const mapKeyNameToWords = (key) => {
+        switch(key) {
+        case 'ledv':
+          return 'Left ventricular end diastolic volume';
+        case 'redv':
+          return 'Right ventricular end diastolic volume';
+        case 'lesv':
+          return 'Left ventricular end systolic volume';
+        case 'resv':
+          return 'Right ventricular end systolic volume';
+        case 'lvef':
+          return 'Left ventricular ejection fraction';
+        case 'rvef':
+          return 'Right ventricular ejection fraction';
+        case 'lvmass':
+          return 'Left ventricular mass';
+        case 'lsv':
+          return 'Left ventricular systolic volume';
+        case 'rsv':
+          return 'Right ventricular systolic volume';
+        case 'scar':
+          return 'Fibrosis/scarring';
+        case 'female':
+          return 'Gender';
+        case 'AgeatMRI':
+          return 'Age at MRI';
+        case 'ApicalHCM':
+          return 'Apical Hypertrophic Cardiomyopathy';
+        case 'SuddenCardiacDeath':
+          return 'Sudden Cardiac Death';
+        default:
+          return key;
+        }
+      };
+
       const renderGraph = (data, keyName, type) => {
         const chartHelper = GoogleCharts.api.visualization;
         const chartData = chartHelper.arrayToDataTable(data);
@@ -329,6 +326,14 @@
         displayChart.value = true;
       };
 
+      const selectGraphKey = (key) => selectedGraphKey.value = key;
+
+      const toggleKey = (key) => activeTableKeys.value[key]
+        ? activeTableKeys.value[key].delete
+        : activeTableKeys.value[key] = true;
+
+      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+
       watch(filters, async () => {
         let intermediateResults = allDocuments;
         filters.forEach(filter => {
@@ -337,12 +342,12 @@
             const operator = filter.opStr;
 
             switch (operator) {
+            case '==':
+              return value === filter.value;
             case '<':
               return value < filter.value;
             case '<=':
               return value <= filter.value;
-            case '==':
-              return value === filter.value;
             case '>':
               return value > filter.value;
             case '>=':
