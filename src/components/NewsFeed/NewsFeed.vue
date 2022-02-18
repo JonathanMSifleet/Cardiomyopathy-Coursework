@@ -67,7 +67,7 @@
                 <br>
                 <MDBBtn
                   tag="button"
-                  class="btn-success mt-3"
+                  class="btn-primary mt-3"
                   @click="toggleModal(item)"
                 >
                   View content

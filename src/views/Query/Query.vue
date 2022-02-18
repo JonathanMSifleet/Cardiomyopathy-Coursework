@@ -58,7 +58,7 @@
         </div>
 
         <MDBBtn
-          color="success"
+          color="primary"
           :disabled="!canSubmitFilter"
           @click="addFilter"
         >
