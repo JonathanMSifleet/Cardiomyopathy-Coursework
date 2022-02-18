@@ -13,6 +13,9 @@
         <MDBNavbarItem :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'Query' }" active>
+          Query
+        </MDBNavbarItem>
       </MDBNavbarNav>
     </MDBNavbar>
   </header>
