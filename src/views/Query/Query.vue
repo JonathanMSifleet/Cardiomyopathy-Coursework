@@ -4,7 +4,7 @@
       Gene mutation data
     </h1>
 
-    <Spinner v-if="isFetchingData === true" />
+    <Spinner v-if="isFetchingData" />
     <div v-else :class="[$style.ComponentWrapper]">
       <div v-if="filters.length !== 0" :class="[$style.FiltersWrapper]">
         <p> Filters: </p>
@@ -104,8 +104,9 @@
                 <p :class="[$style.TableHeaderText]">
                   {{ mapKeyNameToWords(key[0]) }}
                   {{ key[0] !== mapKeyNameToWords(key[0])
-                    ? key[0] !== 'female' ? '(' + key[0] + ')' : ''
-                    : null }}
+                    ? '(' + key[0] + ')'
+                    : ''
+                  }}
                 </p>
               </th>
             </tr>
@@ -113,9 +114,7 @@
           <tbody>
             <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
               <td v-for="(key, innerIndex) in Object.entries(activeTableKeys)" :key="innerIndex">
-                {{ key[0] === "female"
-                  ? (dataItem[key[0]] ? 'Female' : 'Male')
-                  : (dataItem[key[0]] ) }}
+                {{ dataItem[key[0]] }}
               </td>
             </tr>
           </tbody>
@@ -152,7 +151,7 @@
         'lsv': true,
         'rsv': true,
         'scar': true,
-        'female': true,
+        'Gender': true,
         'AgeatMRI': true,
         'ApicalHCM': true,
         'SuddenCardiacDeath': true,
@@ -260,8 +259,7 @@
         data.unshift(['Test', 'Value']);
 
         data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase()
-        );
+          + curData[0].slice(1).toLowerCase());
 
         GoogleCharts.load(() => renderGraph(data, keyName, type));
       };
@@ -288,8 +286,6 @@
           return 'Right ventricular systolic volume';
         case 'scar':
           return 'Fibrosis/scarring';
-        case 'female':
-          return 'Gender';
         case 'AgeatMRI':
           return 'Age at MRI';
         case 'ApicalHCM':
@@ -312,7 +308,7 @@
           new chartHelper.ColumnChart(divToRenderChart);
 
         chart.draw(chartData, {
-          title: `${keyName}`,
+          title: `${mapKeyNameToWords(keyName)}`,
           is3D: true,
           vAxis: {
             title: 'Value'
