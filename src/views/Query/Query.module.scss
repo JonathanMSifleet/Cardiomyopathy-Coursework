@@ -45,8 +45,16 @@
 }
 
 .InputWrapper {
-    width: 10vw;
     float: left;
+    height: 3.3vh;
+    width: 10vw;
+}
+
+.SelectWrapper {
+    display: block;
+    height: 3.3vh;
+    position: relative;
+    width: 10vw;
 }
 
 .Select {
