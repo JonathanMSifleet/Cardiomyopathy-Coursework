@@ -264,6 +264,18 @@
         let data = {};
         let type;
 
+        switch(typeof(renderableResults.value[0][keyName])) {
+        case 'boolean':
+          type = 'pie';
+          break;
+        case 'number':
+          type = 'bar';
+          break;
+        case 'string':
+          type = 'pie';
+          break;
+        }
+
         let counter = 0;
         renderableResults.value.forEach((doc) => {
           const keyValue = doc[keyName];
@@ -274,20 +286,17 @@
             if (!data[keyValue]) data[keyValue] = [];
 
             data[`${keyValue}`] = ++data[`${keyValue}`];
-            type = 'pie';
             break;
           case 'number':
             if (!data[counter]) data[counter] = [];
 
             data[`${counter}`] = keyValue;
-            type = 'bar';
             counter++;
             break;
           case 'string':
             if (!data[keyValue]) data[keyValue] = 0;
 
             data[`${keyValue}`] = ++data[`${keyValue}`];
-            type = 'pie';
             break;
           }
         });
