@@ -282,6 +282,12 @@
             type = 'bar';
             counter++;
             break;
+          case 'string':
+            if (!data[keyValue]) data[keyValue] = 0;
+
+            data[`${keyValue}`] = ++data[`${keyValue}`];
+            type = 'pie';
+            break;
           }
         });
 
