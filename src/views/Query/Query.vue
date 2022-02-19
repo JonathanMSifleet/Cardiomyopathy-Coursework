@@ -93,10 +93,10 @@
     <div :class="[$style.CheckboxWrapper]">
       <p>Selected columns:</p>
       <MDBCheckbox
-        v-for="(key, index) in mapKeyNameToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
+        v-for="(key, index) in mapMutationToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
         :key="index"
         v-model="activeTableKeys[key]"
-        :label="mapKeyNameToWords(key)"
+        :label="mapMutationToWords(key)"
         inline
         @change="toggleKey(key)"
       />
@@ -126,8 +126,8 @@
               @click="selectGraphKey(key[0])"
             >
               <p :class="[$style.TableHeaderText]">
-                {{ mapKeyNameToWords(key[0]) }}
-                {{ key[0] !== mapKeyNameToWords(key[0])
+                {{ mapMutationToWords(key[0]) }}
+                {{ key[0] !== mapMutationToWords(key[0])
                   ? '(' + key[0] + ')'
                   : null
                 }}
@@ -151,6 +151,7 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
+  import mapMutationToWords from '../../utils/mapMutationToWords';
   import fetchDocuments from '../../utils/fetchDocuments';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
@@ -306,39 +307,6 @@
         GoogleCharts.load(() => renderGraph(data, keyName, type));
       };
 
-      const mapKeyNameToWords = (key) => {
-        switch(key) {
-        case 'ledv':
-          return 'Left ventricular end diastolic volume';
-        case 'redv':
-          return 'Right ventricular end diastolic volume';
-        case 'lesv':
-          return 'Left ventricular end systolic volume';
-        case 'resv':
-          return 'Right ventricular end systolic volume';
-        case 'lvef':
-          return 'Left ventricular ejection fraction';
-        case 'rvef':
-          return 'Right ventricular ejection fraction';
-        case 'lvmass':
-          return 'Left ventricular mass';
-        case 'lsv':
-          return 'Left ventricular systolic volume';
-        case 'rsv':
-          return 'Right ventricular systolic volume';
-        case 'scar':
-          return 'Fibrosis/scarring';
-        case 'AgeatMRI':
-          return 'Age at MRI';
-        case 'ApicalHCM':
-          return 'Apical Hypertrophic Cardiomyopathy';
-        case 'SuddenCardiacDeath':
-          return 'Sudden Cardiac Death';
-        default:
-          return key;
-        }
-      };
-
       const renderGraph = (data, keyName, type) => {
         const chartHelper = GoogleCharts.api.visualization;
         const chartData = chartHelper.arrayToDataTable(data);
@@ -350,7 +318,7 @@
           new chartHelper.ColumnChart(divToRenderChart);
 
         chart.draw(chartData, {
-          title: `${mapKeyNameToWords(keyName)}`,
+          title: `${mapMutationToWords(keyName)}`,
           is3D: true,
           vAxis: {
             title: 'Value'
@@ -412,7 +380,7 @@
       });
 
       return { activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, filters, fireStoreOperators,
-               geneMutations, generateGraph, isFetchingData, isLoadingGraph, mapKeyNameToWords, optionalTableKeys,
+               geneMutations, generateGraph, isFetchingData, isLoadingGraph, mapMutationToWords, optionalTableKeys,
                queryInput, queryOperand, renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator,
                toggleKey, useAdvancedMode };
     }
