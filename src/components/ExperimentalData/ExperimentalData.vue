@@ -1,9 +1,14 @@
 <template>
   <div class="container">
     <form>
-      <select class="form-select" aria-label="Default select example">
-        <option selected>
-          Select Gene Mutation
+      <select
+        name="gene-mutations"
+        class="form-select"
+        aria-label="Default select example"
+        @change="onChange($event)"
+      >
+        <option value="">
+          ---- Select Gene Mutation ----
         </option>
         <option value="MYH7">
           MYH7
@@ -132,20 +137,21 @@
         >
         <label class="form-label" for="form1Example2">Age at MRI</label>
       </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example2"
-          v-model="gender"
-          type="text"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example2">Gender</label>
-      </div>
 
       <!-- 2 column grid layout for inline styling -->
       <div class="row mb-4">
         <div class="col d-flex justify-content-center">
           <!-- Checkbox -->
+          <div class="form-check">
+            <input
+              id="form1Example3"
+              v-model="female"
+              class="form-check-input"
+              type="checkbox"
+              value=""
+            >
+            <label class="form-check-label" for="form1Example3">Female</label>
+          </div>
           <div class="form-check">
             <input
               id="form1Example3"
@@ -220,10 +226,12 @@
 <script>
   import { ref } from '@vue/reactivity';
   import { doc, setDoc } from 'firebase/firestore';
+  import { v4 as uuid } from 'uuid';
   import store from '../../services/store';
   export default {
     name: 'ExperimentalData',
     setup() {
+      const selectedMutation = ref('');
       const ledv = ref('');
       const redv = ref('');
       const lesv = ref('');
@@ -234,7 +242,7 @@
       const rvmass = ref('');
       const lsv = ref('');
       const rsv = ref('');
-      const gender = ref('');
+      const female = ref(false);
       const fibrosis = ref(false);
       const ageAtMri = ref(false);
       const apicalHcm = ref(false);
@@ -243,8 +251,14 @@
       const diabetes = ref(false);
       const myectomy = ref(false);
 
+      function onChange(e) {
+        console.log(e.target.value);
+        selectedMutation.value = e.target.value;
+      }
+
       async function experimentalData() {
         const info = {
+          geneMutation: selectedMutation.value,
           ledv: ledv.value,
           redv: redv.value,
           lesv: lesv.value,
@@ -255,7 +269,7 @@
           rvmass: rvmass.value,
           lsv: lsv.value,
           rsv: rsv.value,
-          gender: gender.value,
+          female: female.value,
           fibrosis: fibrosis.value,
           ageAtMri: ageAtMri.value,
           apicalHcm: apicalHcm.value,
@@ -264,30 +278,21 @@
           diabetes: diabetes.value,
           myectomy: myectomy.value
         };
-        console.log(info.ledv);
-        console.log(redv);
-        console.log(lesv);
-        console.log(resv);
-        console.log(lvef);
-        console.log(rvef);
-        console.log(lvmass);
-        console.log(rvmass);
-        console.log(lsv);
-        console.log(rsv);
-        console.log(gender);
-        console.log(fibrosis);
-        console.log(ageAtMri);
-        console.log(apicalHcm);
-        console.log(suddenCardiacDeath);
-        console.log(hypertension);
-        console.log(diabetes);
-        console.log(myectomy);
-        await setDoc(doc(await store.database, 'hcmData'),
-                     info);
+
+
+        for(const key in info) {
+          if(info[key] === '' || info[key] === false) {
+            delete info[key];
+          }
+        }
+
+        if (info.geneMutation == '') {
+          alert('Please select a Gene mutation');
+        } else {
+          const result = await setDoc(doc(await store.database, 'hcmData', uuid()), info);
+          console.log(result);
+        }
       }
-
-
-
 
       return {
         ledv,
@@ -300,7 +305,7 @@
         rvmass,
         lsv,
         rsv,
-        gender,
+        female,
         fibrosis,
         ageAtMri,
         apicalHcm,
@@ -308,7 +313,8 @@
         hypertension,
         diabetes,
         myectomy,
-        experimentalData
+        experimentalData,
+        onChange
       };
     }
   };
