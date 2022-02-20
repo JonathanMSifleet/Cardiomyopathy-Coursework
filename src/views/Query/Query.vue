@@ -13,7 +13,7 @@
     </div>
 
     <Spinner v-if="isFetchingData" :class="$style.PageSpinner" />
-    <div v-else>
+    <div v-else-if="errorMessage.length === 0">
       <div v-if="useAdvancedMode">
         <div v-if="!isFetchingData" :class="$style.ComponentWrapper">
           <div v-if="filters.length !== 0" :class="$style.FiltersWrapper">
@@ -84,7 +84,11 @@
         </p>
         <div :class="[$style.SelectWrapper, $style.GeneMutationWrapper]">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
-            <option v-for="geneMutation in geneMutations" :key="geneMutation" :disabled="geneMutation === 'Please select'">
+            <option
+              v-for="geneMutation in geneMutations"
+              :key="geneMutation"
+              :disabled="geneMutation === 'Please select'"
+            >
               {{ geneMutation }}
             </option>
           </select>
@@ -146,6 +150,14 @@
         </MDBTable>
       </div>
     </div>
+    <div v-else>
+      <p :class="$style.ErrorOccuredText">
+        An error occured while fetching data:
+      </p>
+      <p :class="$style.ErrorOccuredText">
+        {{ errorMessage }}
+      </p>
+    </div>
   </PageWrapper>
 </template>
 
@@ -188,6 +200,7 @@
       ]);
       let allDocuments = []; // do not edit the value of this variable
       let displayChart = ref(false);
+      let errorMessage = ref('');
       const fireStoreOperators = {
         '': 'Please select',
         '==': 'equal to',
@@ -224,14 +237,28 @@
 
       (async () => {
         isFetchingData.value = true;
+        try {
 
-        allDocuments = await fetchDocuments();
-        renderableResults.value = allDocuments;
+          allDocuments = await fetchDocuments();
+          renderableResults.value = allDocuments;
 
-        optionalTableKeys.value = determineKeys(allDocuments);
+          optionalTableKeys.value = determineKeys(allDocuments);
 
-        activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
+          activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
 
+        } catch (error) {
+          switch(true) {
+          case error.message.includes('Network Error'):
+            errorMessage.value = 'Firebase details are setup incorrectly';
+            break;
+          case error.message.includes('multi-tab'):
+            errorMessage.value = 'Only one tab can be open at a time in development mode';
+            break;
+          default:
+            console.error(error);
+            errorMessage.value = error.message;
+          }
+        }
         isFetchingData.value = false;
 
       })();
@@ -400,10 +427,10 @@
           .filter(doc => doc[selectedGeneMutation.value]);
       });
 
-      return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, filters,
-               fireStoreOperators, geneMutations, generateGraph, isFetchingData, isLoadingGraph, mapMutationToWords,
-               optionalTableKeys, queryInput, queryOperand, renderableResults, selectedGeneMutation, selectGraphKey,
-               selectedOperator, toggleKey, useAdvancedMode };
+      return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
+               filters, fireStoreOperators, geneMutations, generateGraph, isFetchingData, isLoadingGraph,
+               mapMutationToWords, optionalTableKeys, queryInput, queryOperand, renderableResults, selectedGeneMutation,
+               selectGraphKey, selectedOperator, toggleKey, useAdvancedMode };
     }
   };
 </script>
