@@ -1,148 +1,150 @@
 <template>
   <PageWrapper>
-    <h1 :class="[$style.Heading]">
+    <h1 :class="$style.Heading">
       Gene mutation data
     </h1>
 
-    <div :class="[$style.AdvancedModeSwitchWrapper]">
+    <div :class="$style.AdvancedModeSwitchWrapper">
       <MDBSwitch
         v-model="useAdvancedMode"
-        :class="[$style.AdvancedModeSwitch]"
+        :class="$style.AdvancedModeSwitch"
         label="Advanced search"
       />
     </div>
 
-    <div v-if="useAdvancedMode">
-      <Spinner v-if="isFetchingData" />
-      <div v-else :class="[$style.ComponentWrapper]">
-        <div v-if="filters.length !== 0" :class="[$style.FiltersWrapper]">
-          <p> Filters: </p>
-          <ul>
-            <li
-              v-for="(filter, index) in filters"
-              :key="index"
-              :class="[$style.FilterListItem]"
-              @click="deleteFilter(index)"
-            >
-              {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
-              <span :class="[$style.DeleteFilterSpan]">x</span>
-            </li>
-          </ul>
-        </div>
-
-        <p>
-          Please add a filter
-          <span :class="[$style.FilterInstruction]">(using text in brackets if it is a default column)</span>:
-        </p>
-
-        <div :class="[$style.FilterWrapper]">
-          <div :class="[$style.InputWrapper]">
-            <MDBInput
-              v-model="queryInput"
-              label="Attribute"
-              type="text"
-              :class="[$style.Input]"
-            />
-          </div>
-
-          <div :class="[$style.SelectWrapper]">
-            <select v-model="selectedOperator" :class="[$style.Select, 'form-select']">
-              <option
-                v-for="operation in Object.entries(fireStoreOperators)"
-                :key="operation"
-                :disabled="operation === 'Please select'"
-              >
-                {{ operation[1] }}
-              </option>
-            </select>
-          </div>
-
-          <div :class="[$style.InputWrapper]">
-            <MDBInput
-              v-model="queryOperand"
-              label="Value"
-              type="text"
-              :class="[$style.Input]"
-            />
-          </div>
-
-          <MDBBtn
-            color="primary"
-            :disabled="!canSubmitFilter"
-            @click="addFilter"
-          >
-            Add filter
-          </MDBBtn>
-        </div>
-      </div>
-    </div>
-
+    <Spinner v-if="isFetchingData" :class="$style.PageSpinner" />
     <div v-else>
-      <p :class="[$style.GeneMutationSelection]">
-        Select a gene mutation:
-      </p>
-      <div :class="[$style.SelectWrapper, $style.GeneMutationWrapper]">
-        <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
-          <option v-for="geneMutation in geneMutations" :key="geneMutation">
-            {{ geneMutation }}
-          </option>
-        </select>
-      </div>
-    </div>
+      <div v-if="useAdvancedMode">
+        <div v-if="!isFetchingData" :class="$style.ComponentWrapper">
+          <div v-if="filters.length !== 0" :class="$style.FiltersWrapper">
+            <p> Filters: </p>
+            <ul>
+              <li
+                v-for="(filter, index) in filters"
+                :key="index"
+                :class="$style.FilterListItem"
+                @click="deleteFilter(index)"
+              >
+                {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
+                <span :class="$style.DeleteFilterSpan">x</span>
+              </li>
+            </ul>
+          </div>
 
-    <div :class="[$style.CheckboxWrapper]">
-      <p>Selected columns:</p>
-      <MDBCheckbox
-        v-for="(key, index) in mapMutationToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
-        :key="index"
-        v-model="activeTableKeys[key]"
-        :label="mapMutationToWords(key)"
-        inline
-        @change="toggleKey(key)"
-      />
-    </div>
+          <p>
+            Please add a filter
+            <span :class="$style.FilterInstruction">(using text in brackets if it is a default column)</span>:
+          </p>
 
-    <p :class="[$style.GraphPrompt]">
-      Click a table header to view a graph on the data
-    </p>
-    <div :class="[$style.TableWrapper]">
-      <p>Results ({{ renderableResults.length }}):</p>
+          <div :class="$style.FilterWrapper">
+            <div :class="$style.InputWrapper">
+              <MDBInput
+                v-model="queryInput"
+                label="Attribute"
+                type="text"
+                :class="$style.Input"
+              />
+            </div>
 
-      <Spinner v-if="isLoadingGraph" />
-      <div id="chart" />
+            <div :class="$style.SelectWrapper">
+              <select v-model="selectedOperator" :class="[$style.Select, 'form-select']">
+                <option
+                  v-for="operation in Object.entries(fireStoreOperators)"
+                  :key="operation"
+                  :disabled="operation[1] === 'Please select'"
+                >
+                  {{ operation[1] }}
+                </option>
+              </select>
+            </div>
 
-      <MDBTable
-        bordered
-        striped
-        :class="[$style.Table]"
-      >
-        <thead>
-          <tr>
-            <th
-              v-for="(key, index) in Object.entries(activeTableKeys)"
-              :key="index"
-              scope="col"
-              :class="[$style.TableHeaderCell]"
-              @click="selectGraphKey(key[0])"
+            <div :class="$style.InputWrapper">
+              <MDBInput
+                v-model="queryOperand"
+                label="Value"
+                type="text"
+                :class="$style.Input"
+              />
+            </div>
+
+            <MDBBtn
+              color="primary"
+              :disabled="!canSubmitFilter"
+              @click="addFilter"
             >
-              <p :class="[$style.TableHeaderText]">
-                {{ mapMutationToWords(key[0]) }}
-                {{ key[0] !== mapMutationToWords(key[0])
-                  ? '(' + key[0] + ')'
-                  : null
-                }}
-              </p>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
-            <td v-for="(key, innerIndex) in Object.entries(activeTableKeys)" :key="innerIndex">
-              {{ dataItem[key[0]] }}
-            </td>
-          </tr>
-        </tbody>
-      </MDBTable>
+              Add filter
+            </MDBBtn>
+          </div>
+        </div>
+      </div>
+
+      <div v-else>
+        <p :class="$style.GeneMutationSelection">
+          Select a gene mutation:
+        </p>
+        <div :class="[$style.SelectWrapper, $style.GeneMutationWrapper]">
+          <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
+            <option v-for="geneMutation in geneMutations" :key="geneMutation" :disabled="geneMutation === 'Please select'">
+              {{ geneMutation }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div :class="$style.CheckboxWrapper">
+        <p>Selected columns:</p>
+        <MDBCheckbox
+          v-for="(key, index) in mapMutationToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
+          :key="index"
+          v-model="activeCheckboxes[key]"
+          :label="mapMutationToWords(key)"
+          inline
+          @change="toggleKey(key)"
+        />
+      </div>
+
+      <p :class="$style.GraphPrompt">
+        Click a table header to view a graph on the data
+      </p>
+      <div :class="$style.TableWrapper">
+        <p>Results ({{ renderableResults.length }}):</p>
+
+        <Spinner v-if="isLoadingGraph" />
+        <div id="chart" />
+
+        <MDBTable
+          bordered
+          striped
+          :class="$style.Table"
+        >
+          <thead>
+            <tr>
+              <th
+                v-for="(key, index) in activeTableKeys"
+                :key="index"
+                scope="col"
+                :class="$style.TableHeaderCell"
+                @click="selectGraphKey(key)"
+              >
+                <p :class="$style.TableHeaderText">
+                  {{ mapMutationToWords(key) }}
+                  {{ key[0] !== mapMutationToWords(key)
+                    ? '(' + key + ')'
+                    : null
+                  }}
+                </p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
+              <td v-for="(key, innerIndex) in activeTableKeys" :key="innerIndex">
+                {{ dataItem[key] }}
+              </td>
+            </tr>
+          </tbody>
+        </MDBTable>
+      </div>
     </div>
   </PageWrapper>
 </template>
@@ -164,28 +166,30 @@
       MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner
     },
     setup() {
-      const activeTableKeys = ref({
-        'ledv': true,
-        'redv': true,
-        'lesv': true,
-        'resv': true,
-        'lvef': true,
-        'rvef': true,
-        'lvmass': true,
-        'lsv': true,
-        'rsv': true,
-        'scar': true,
-        'Gender': true,
-        'AgeatMRI': true,
-        'ApicalHCM': true,
-        'SuddenCardiacDeath': true,
-        'Hypertension': true,
-        'Diabetes': true,
-        'Myectomy': true
-      });
+      let activeCheckboxes = ref({});
+      const activeTableKeys = ref([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'scar',
+        'Gender',
+        'AgeatMRI',
+        'ApicalHCM',
+        'SuddenCardiacDeath',
+        'Hypertension',
+        'Diabetes',
+        'Myectomy'
+      ]);
       let allDocuments = []; // do not edit the value of this variable
       let displayChart = ref(false);
       const fireStoreOperators = {
+        '': 'Please select',
         '==': 'equal to',
         '<': 'less than',
         '<=': 'less than or equal to',
@@ -198,6 +202,7 @@
       let isLoadingGraph = ref(false);
       let canSubmitFilter = ref(false);
       const geneMutations = ref([
+        'Please select',
         'MYH7',
         'MYBPC3',
         'TNNT2',
@@ -212,10 +217,9 @@
       let queryInput = ref('');
       let queryOperand = ref('');
       let renderableResults = ref([]);
-      let selectedGeneMutation = ref('');
+      let selectedGeneMutation = ref('Please select');
       let selectedGraphKey = ref();
       let selectedOperator = ref('Please select');
-      let textOnlyTableKeys = [];
       let useAdvancedMode = ref(false);
 
       (async () => {
@@ -225,13 +229,15 @@
         renderableResults.value = allDocuments;
 
         optionalTableKeys.value = determineKeys(allDocuments);
-        textOnlyTableKeys = Object.entries(optionalTableKeys.value).map(key => key[0]);
+
+        activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
 
         isFetchingData.value = false;
+
       })();
 
       const addFilter = () => {
-        if(!textOnlyTableKeys.includes(queryInput.value)) {
+        if(optionalTableKeys.value[queryInput.value] === undefined) {
           alert('Attribute not found in database'); return;
         }
 
@@ -285,18 +291,18 @@
             // add key to object if it doesn't exist
             if (!data[keyValue]) data[keyValue] = [];
 
-            data[`${keyValue}`] = ++data[`${keyValue}`];
+            data[keyValue] = ++data[keyValue];
             break;
           case 'number':
             if (!data[counter]) data[counter] = [];
 
-            data[`${counter}`] = keyValue;
+            data[counter] = keyValue;
             counter++;
             break;
           case 'string':
             if (!data[keyValue]) data[keyValue] = 0;
 
-            data[`${keyValue}`] = ++data[`${keyValue}`];
+            data[keyValue] = ++data[keyValue];
             break;
           }
         });
@@ -327,7 +333,7 @@
           new chartHelper.ColumnChart(divToRenderChart);
 
         chart.draw(chartData, {
-          title: `${mapMutationToWords(keyName)}`,
+          title: mapMutationToWords(keyName),
           is3D: true,
           vAxis: {
             title: 'Value'
@@ -343,11 +349,15 @@
 
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
-      const toggleKey = (key) => activeTableKeys.value[key]
-        ? activeTableKeys.value[key].delete
-        : activeTableKeys.value[key] = true;
-
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+      const toggleKey = (key) => {
+        if(activeTableKeys.value.includes(key)) {
+          activeTableKeys.value.splice(activeTableKeys.value.indexOf(key), 1);
+          delete activeCheckboxes[key];
+        } else {
+          activeTableKeys.value.push(key);
+          activeCheckboxes[key] = true;
+        }
+      };
 
       watch(filters, async () => {
         let intermediateResults = allDocuments;
@@ -378,6 +388,8 @@
         if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
 
+      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+
       watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
         (queryInput.value !== '' && selectedOperator.value !== 'Please select' && queryOperand.value !== '')
       );
@@ -385,13 +397,13 @@
       watch(selectedGeneMutation, () => {
         filters = [];
         renderableResults.value = allDocuments
-          .filter(doc => doc[`${selectedGeneMutation.value}`]);
+          .filter(doc => doc[selectedGeneMutation.value]);
       });
 
-      return { activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, filters, fireStoreOperators,
-               geneMutations, generateGraph, isFetchingData, isLoadingGraph, mapMutationToWords, optionalTableKeys,
-               queryInput, queryOperand, renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator,
-               toggleKey, useAdvancedMode };
+      return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, filters,
+               fireStoreOperators, geneMutations, generateGraph, isFetchingData, isLoadingGraph, mapMutationToWords,
+               optionalTableKeys, queryInput, queryOperand, renderableResults, selectedGeneMutation, selectGraphKey,
+               selectedOperator, toggleKey, useAdvancedMode };
     }
   };
 </script>
