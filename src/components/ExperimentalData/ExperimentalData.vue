@@ -1,323 +1,256 @@
 <template>
   <div class="container">
-    <form>
-      <select
-        name="gene-mutations"
-        class="form-select"
-        aria-label="Default select example"
-        @change="onChange($event)"
-      >
-        <option value="">
-          ---- Select Gene Mutation ----
-        </option>
-        <option value="MYH7">
-          MYH7
-        </option>
-        <option value="MYBPC3">
-          MYBPC3
-        </option>
-        <option value="TNNT2">
-          TNNT2
-        </option>
-        <option value="ACTC">
-          ACTC
-        </option>
-        <option value="TPM1">
-          TPM1
-        </option>
-        <option value="TNNCI">
-          TNNCI
-        </option>
-        <option value="TNNI3">
-          TNNI3
-        </option>
-        <option value="MYL2">
-          MYL2
-        </option>
-        <option value="TTN">
-          TTN
-        </option>
-      </select>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example1"
-          v-model="ledv"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example1">LEDV</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example1"
-          v-model="redv"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example1">REDV</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example2"
-          v-model="lesv"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example2">LESV</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example2"
-          v-model="resv"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example2">RESV</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example1"
-          v-model="lvef"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example1">LVEF</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example1"
-          v-model="rvef"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example1">RVEF</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example2"
-          v-model="lvmass"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example2">LVMASS</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example2"
-          v-model="rvmass"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example2">RVMASS</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example1"
-          v-model="lsv"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example1">LSV</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example1"
-          v-model="rsv"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example1">RSV</label>
-      </div>
-      <div class="form-outline mb-4">
-        <input
-          id="form1Example2"
-          v-model="ageAtMri"
-          type="number"
-          class="form-control"
-        >
-        <label class="form-label" for="form1Example2">Age at MRI</label>
-      </div>
-
-      <!-- 2 column grid layout for inline styling -->
-      <div class="row mb-4">
-        <div class="col d-flex justify-content-center">
-          <!-- Checkbox -->
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="female"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Female</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="fibrosis"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Fibrosis</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="apicalHcm"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Apical HCM</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="suddenCardiacDeath"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Sudden Cardiac Death</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="hypertension"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Hypertension</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="diabetes"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Diabetes</label>
-          </div>
-          <div class="form-check">
-            <input
-              id="form1Example3"
-              v-model="myectomy"
-              class="form-check-input"
-              type="checkbox"
-              value=""
-            >
-            <label class="form-check-label" for="form1Example3">Myectomy</label>
-          </div>
-        </div>
-      </div>
-
-      <!-- Submit button -->
-      <button type="submit" class="btn btn-primary btn-block" @click="experimentalData">
-        Submit
-      </button>
-    </form>
+    <MDBCard text="center" class="mt-5">
+      <MDBCardHeader>Featured</MDBCardHeader>
+      <MDBCardBody>
+        <MDBCardTitle>Gene Mutation Data</MDBCardTitle>
+        <MDBCardText>
+          <form>
+            <MDBRow>
+              <MDBCol md="4">
+                <select
+                  name="gene-mutations"
+                  class="form-select mb-4"
+                  aria-label="Default select example"
+                  v-model="selectedMutation"
+                  required
+                >
+                  <option value="" disabled>Select Gene Mutation</option>
+                  <option value="MYH7">MYH7</option>
+                  <option value="MYBPC3">MYBPC3</option>
+                  <option value="TNNT2">TNNT2</option>
+                  <option value="ACTC">ACTC</option>
+                  <option value="TPM1">TPM1</option>
+                  <option value="TNNCI">TNNCI</option>
+                  <option value="TNNI3">TNNI3</option>
+                  <option value="MYL2">MYL2</option>
+                  <option value="TTN">TTN</option>
+                </select>
+              </MDBCol>
+            </MDBRow>
+            <MDBRow class="mb-3">
+              <MDBCol>
+                <MDBInput
+                  type="number"
+                  label="LEDV"
+                  id="form2Email"
+                  v-model="ledv"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="REDV"
+                  v-model="info.redv"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="LESV"
+                  v-model="info.lesv"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="RESV"
+                  v-model="info.resv"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="LVEF "
+                  v-model="info.lvef"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="RVEF"
+                  v-model="info.rvef"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="LVMASS"
+                  v-model="info.lvmass"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="RVMASS"
+                  v-model="info.rvmass"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="LSV"
+                  v-model="info.lsv"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="RSV"
+                  v-model="info.rsv"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+                <MDBInput
+                  type="number"
+                  label="Age at MRI"
+                  v-model="info.ageAtMri"
+                  wrapperClass="mb-4"
+                  step="0.00000000001"
+                />
+              </MDBCol>
+            </MDBRow>
+            <MDBRow class="mb-4">
+              <MDBCol md="3">
+                <MDBCheckbox
+                  label="Female"
+                  v-model="info.female"
+                  wrapperClass="mb-2"
+                />
+                <MDBCheckbox label="Fibrosis" v-model="info.fibrosis" />
+              </MDBCol>
+              <MDBCol md="4">
+                <MDBCheckbox
+                  label="Apical HCM"
+                  v-model="info.apicalHcm"
+                  wrapperClass="mb-2"
+                />
+                <MDBCheckbox
+                  label="Sudden Cardiac Death"
+                  v-model="info.suddenCardiacDeath"
+                />
+              </MDBCol>
+              <MDBCol md="3">
+                <MDBCheckbox
+                  label="Hypertension"
+                  v-model="info.hypertension"
+                  wrapperClass="mb-2"
+                />
+                <MDBCheckbox label="Diabetes" v-model="info.diabetes" />
+              </MDBCol>
+              <MDBCol md="2">
+                <MDBCheckbox
+                  label="Myectomy"
+                  v-model="info.myectomy"
+                  wrapperClass="mb-2"
+                />
+              </MDBCol>
+            </MDBRow>
+            <MDBCardFooter>
+              <div
+                class="
+                  w-100
+                  p-4
+                  d-flex
+                  align-items-center
+                  justify-content-center
+                "
+              >
+                <MDBBtn type="submit" @click="experimentalData" color="success">
+                  Submit
+                </MDBBtn>
+              </div>
+            </MDBCardFooter>
+          </form>
+        </MDBCardText>
+      </MDBCardBody>
+    </MDBCard>
   </div>
 </template>
 
 <script>
-  import { ref } from '@vue/reactivity';
-  import { doc, setDoc } from 'firebase/firestore';
-  import { v4 as uuid } from 'uuid';
-  import store from '../../services/store';
-  export default {
-    name: 'ExperimentalData',
-    setup() {
-      const selectedMutation = ref('');
-      const ledv = ref('');
-      const redv = ref('');
-      const lesv = ref('');
-      const resv = ref('');
-      const lvef = ref('');
-      const rvef = ref('');
-      const lvmass = ref('');
-      const rvmass = ref('');
-      const lsv = ref('');
-      const rsv = ref('');
-      const female = ref(false);
-      const fibrosis = ref(false);
-      const ageAtMri = ref(false);
-      const apicalHcm = ref(false);
-      const suddenCardiacDeath = ref(false);
-      const hypertension = ref(false);
-      const diabetes = ref(false);
-      const myectomy = ref(false);
+import { ref, reactive } from "@vue/reactivity";
+import { doc, setDoc } from "firebase/firestore";
+import { v4 as uuid } from "uuid";
+import store from "../../services/store";
+import {
+  MDBRow,
+  MDBCol,
+  MDBInput,
+  MDBCheckbox,
+  MDBBtn,
+  MDBIcon,
+  MDBCard,
+  MDBCardBody,
+  MDBCardHeader,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardFooter,
+} from "mdb-vue-ui-kit";
+export default {
+  name: "ExperimentalData",
+  components: {
+    MDBRow,
+    MDBCol,
+    MDBInput,
+    MDBCheckbox,
+    MDBBtn,
+    MDBIcon,
+    MDBCard,
+    MDBCardBody,
+    MDBCardHeader,
+    MDBCardTitle,
+    MDBCardText,
+    MDBCardFooter,
+  },
+  setup() {
+    const selectedMutation = ref("");
+    const info = reactive({
+      ledv: "",
+      redv: "",
+      lesv: "",
+      resv: "",
+      lvef: "",
+      rvef: "",
+      lvmass: "",
+      rvmass: "",
+      lsv: "",
+      rsv: "",
+      female: false,
+      fibrosis: false,
+      ageAtMri: false,
+      apicalHcm: false,
+      suddenCardiacDeath: false,
+      hypertension: false,
+      diabetes: false,
+      myectomy: false,
+    });
 
-      function onChange(e) {
-        console.log(e.target.value);
-        selectedMutation.value = e.target.value;
+    async function experimentalData() {
+      for (const key in info) {
+        if (info[key] === "" || info[key] === undefined) {
+          delete info[key];
+        }
       }
 
-      async function experimentalData() {
-        const info = {
-          geneMutation: selectedMutation.value,
-          ledv: ledv.value,
-          redv: redv.value,
-          lesv: lesv.value,
-          resv: resv.value,
-          lvef: lvef.value,
-          rvef: rvef.value,
-          lvmass: lvmass.value,
-          rvmass: rvmass.value,
-          lsv: lsv.value,
-          rsv: rsv.value,
-          female: female.value,
-          fibrosis: fibrosis.value,
-          ageAtMri: ageAtMri.value,
-          apicalHcm: apicalHcm.value,
-          suddenCardiacDeath: suddenCardiacDeath.value,
-          hypertension: hypertension.value,
-          diabetes: diabetes.value,
-          myectomy: myectomy.value
-        };
-
-
-        for(const key in info) {
-          if(info[key] === '' || info[key] === false) {
-            delete info[key];
+      
+        const result = await setDoc(
+          doc(await store.database, "hcmData", uuid()),
+          {
+            ...info,
+            [selectedMutation.value]: true,
           }
-        }
-
-        if (info.geneMutation == '') {
-          alert('Please select a Gene mutation');
-        } else {
-          const result = await setDoc(doc(await store.database, 'hcmData', uuid()), info);
-          console.log(result);
-        }
-      }
-
-      return {
-        ledv,
-        redv,
-        lesv,
-        resv,
-        lvef,
-        rvef,
-        lvmass,
-        rvmass,
-        lsv,
-        rsv,
-        female,
-        fibrosis,
-        ageAtMri,
-        apicalHcm,
-        suddenCardiacDeath,
-        hypertension,
-        diabetes,
-        myectomy,
-        experimentalData,
-        onChange
-      };
+        );
+        console.log(result);
     }
-  };
+
+    return {
+      info,
+      selectedMutation,
+      experimentalData,
+    };
+  },
+};
 </script>
 
 <style module lang="scss">
