@@ -42,14 +42,14 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () =>
-      import(/* webpackChunkName: "register" */ '../../components/Registration.vue'),
+      import(/* webpackChunkName: "register" */ '../../components/Authentication/Registration.vue'),
     beforeEnter: requireSignedOut
   },
   {
     path: '/reset',
     name: 'PasswordReset',
     component: () =>
-      import(/* webpackChunkName: "reset" */ '../../components/PassReset.vue'),
+      import(/* webpackChunkName: "reset" */ '../../components/Authentication/PassReset.vue'),
     beforeEnter: requireSignedOut
   },
   {

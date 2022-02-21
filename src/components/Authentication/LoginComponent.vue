@@ -1,12 +1,15 @@
 <template>
-  <div class="login">
-    <MDBCard text="center">
-      <MDBCardHeader>Featured</MDBCardHeader>
+  <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
+    <MDBCard class="authentication-card" text="center">
+      <MDBCardHeader>Login</MDBCardHeader>
       <MDBCardBody>
-        <MDBCardTitle>Special title treatment</MDBCardTitle>
+        <MDBCardTitle v-if="errorMessage" class="error-message mb-4">
+          {{ errorMessage }}
+        </MDBCardTitle>
         <MDBCardText>
           <form @submit.prevent="Login">
             <!-- Email input -->
+
             <MDBInput
               type="email"
               label="Email address"
@@ -25,39 +28,28 @@
             <!-- 2 column grid layout for inline styling -->
             <MDBRow class="mb-4">
               <MDBCol class="d-flex justify-content-center">
-                <!-- Checkbox -->
-                <MDBCheckbox
-                  label="Remember me"
-                  id="form2LoginCheck"
-                  v-model="loginCheck"
-                  wrapperClass="mb-3 mb-md-0"
-                />
-              </MDBCol>
-              <p v-if="errorMessage">{{ errorMessage }}</p>
-              <MDBCol>
                 <!-- Simple link -->
-                <router-link :to="{ name: 'PasswordReset' }"
+                <router-link :to="{ name: 'PasswordReset' }" class="reset-password-link"
                   >Forgotten password?</router-link
                 >
               </MDBCol>
             </MDBRow>
-            <!-- Submit button -->
-            <MDBBtn type="submit" color="primary" block>Login</MDBBtn>
 
-            <!-- Register buttons -->
-            <div class="text-center">
-              <p>
-                Not a member?
-                <router-link :to="{ name: 'Register' }"
-                  >Register here</router-link
-                >
-              </p>
-            </div>
+            <MDBBtn type="submit" color="primary">Login</MDBBtn>
           </form>
         </MDBCardText>
-        <MDBBtn tag="a" href="#!" color="primary">Button</MDBBtn>
       </MDBCardBody>
-      <MDBCardFooter class="text-muted">2 days ago</MDBCardFooter>
+      <MDBCardFooter>
+        <!-- Register buttons -->
+        <div class="text-center mt-3">
+          <p>
+            Not a member?
+            <router-link :to="{ name: 'Register' }" class="register-link"
+              >Register here</router-link
+            >
+          </p>
+        </div>
+      </MDBCardFooter>
     </MDBCard>
   </div>
 </template>
@@ -100,7 +92,6 @@ export default {
   setup() {
     const email = ref("");
     const password = ref("");
-    const loginCheck = ref(true);
     const errorMessage = ref();
     const auth = getAuth();
     const router = useRouter();
@@ -132,11 +123,12 @@ export default {
       Login,
       email,
       password,
-      loginCheck,
       errorMessage,
     };
   },
 };
 </script>
 
-<style></style>
+<style>
+@import "./Authentication.scss";
+</style>

@@ -14,7 +14,7 @@ export default {
   components: {PageWrapper},
   created(){
     const { currentUser } = getUser();
-    const user = currentUser.value.uid;
+    const user = currentUser.value; //.uid;
     
     this.$store.commit("updateUser", user);
     if(user){
