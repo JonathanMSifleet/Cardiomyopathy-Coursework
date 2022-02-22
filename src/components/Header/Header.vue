@@ -29,7 +29,7 @@
       //nav bar logout
       const logout = () => {
         signOut(auth)
-          .then(() => console.log('Signed out'))
+          .then(() => alert('You have successfully signed out.'))
           .then(() => router.push('/'))
           .catch((err) => alert(err.message));
       };

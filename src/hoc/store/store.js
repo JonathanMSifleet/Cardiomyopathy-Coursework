@@ -24,7 +24,7 @@ export default new Vuex.Store({
   actions: {
     async getCurrentUser({commit}) {
       let dbResults = auth.currentUser;
-      console.log(dbResults);
+      // console.log(dbResults);
       commit('setAccountInfo', dbResults);
     }
   },
