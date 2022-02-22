@@ -102,6 +102,17 @@
     overflow-x: scroll;
 }
 
+.PaginationOptions {
+    color: blue;
+    cursor: pointer;
+    float: left;
+    margin-left: 1%;
+}
+
+.SelectedPaginationOption {
+    color: grey;
+}
+
 .TableHeaderText {
     color: blue;
     cursor: pointer;

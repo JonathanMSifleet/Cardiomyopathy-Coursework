@@ -111,10 +111,19 @@
         Click a table header to view a graph on the data
       </p>
       <div :class="$style.TableWrapper">
-        <p>Results ({{ renderableResults.length }}):</p>
+        <p>Results ({{ filteredResults.length }}):</p>
 
         <Spinner v-if="isLoadingGraph" />
         <div id="chart" />
+
+        <p
+          v-for="index in Math.ceil(filteredResults.length / pageSize)"
+          :key="index"
+          :class="[$style.PaginationOptions, index === selectedTablePage ? $style.SelectedPaginationOption : '']"
+          @click="selectedTablePage = index"
+        >
+          {{ index }}
+        </p>
 
         <MDBTable
           bordered
@@ -198,7 +207,7 @@
         'Diabetes',
         'Myectomy'
       ]);
-      let allDocuments = []; // do not edit the value of this variable
+      let allDocuments = [];
       let displayChart = ref(false);
       let errorMessage = ref('');
       const fireStoreOperators = {
@@ -214,6 +223,7 @@
       let isFetchingData = ref(false);
       let isLoadingGraph = ref(false);
       let canSubmitFilter = ref(false);
+      let filteredResults = ref([]);
       const geneMutations = ref([
         'Please select',
         'MYH7',
@@ -227,25 +237,26 @@
         'TTN'
       ]);
       let optionalTableKeys = ref([]);
+      const pageSize = 15;
       let queryInput = ref('');
       let queryOperand = ref('');
       let renderableResults = ref([]);
       let selectedGeneMutation = ref('Please select');
       let selectedGraphKey = ref();
       let selectedOperator = ref('Please select');
+      let selectedTablePage = ref(1);
       let useAdvancedMode = ref(false);
 
       (async () => {
         isFetchingData.value = true;
+
         try {
-
           allDocuments = await fetchDocuments();
-          renderableResults.value = allDocuments;
-
+          filteredResults.value = allDocuments;
+          renderableResults.value = filteredResults.value.slice(0, pageSize);
           optionalTableKeys.value = determineKeys(allDocuments);
 
           activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
-
         } catch (error) {
           switch(true) {
           case error.message.includes('Network Error'):
@@ -260,7 +271,6 @@
           }
         }
         isFetchingData.value = false;
-
       })();
 
       const addFilter = () => {
@@ -291,13 +301,13 @@
         }
       };
 
-      const deleteFilter = (index) => filters = filters.splice(index, 1);
+      const deleteFilter = (index) => filters = filters.slice(index, 1);
 
       const extractDataFromResults = (keyName) => {
         let data = {};
         let type;
 
-        switch(typeof(renderableResults.value[0][keyName])) {
+        switch(typeof(filteredResults.value[0][keyName])) {
         case 'boolean':
           type = 'pie';
           break;
@@ -310,7 +320,7 @@
         }
 
         let counter = 0;
-        renderableResults.value.forEach((doc) => {
+        filteredResults.value.forEach((doc) => {
           const keyValue = doc[keyName];
 
           switch (typeof keyValue) {
@@ -378,7 +388,7 @@
 
       const toggleKey = (key) => {
         if(activeTableKeys.value.includes(key)) {
-          activeTableKeys.value.splice(activeTableKeys.value.indexOf(key), 1);
+          activeTableKeys.value.slice(activeTableKeys.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
           activeTableKeys.value.push(key);
@@ -410,7 +420,8 @@
           });
         });
 
-        renderableResults.value = intermediateResults;
+        filteredResults.value = intermediateResults;
+        filteredResults.value.forEach(doc => console.log(doc['ledv']));
 
         if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
@@ -423,14 +434,23 @@
 
       watch(selectedGeneMutation, () => {
         filters = [];
-        renderableResults.value = allDocuments
+        filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
+        selectedTablePage.value = 1;
+      });
+
+      // paginate table:
+      watch(selectedTablePage, () => {
+        const startIndex = (selectedTablePage.value - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
       });
 
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
-               filters, fireStoreOperators, geneMutations, generateGraph, isFetchingData, isLoadingGraph,
-               mapMutationToWords, optionalTableKeys, queryInput, queryOperand, renderableResults, selectedGeneMutation,
-               selectGraphKey, selectedOperator, toggleKey, useAdvancedMode };
+               filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
+               isLoadingGraph, mapMutationToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
+               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage, toggleKey,
+               useAdvancedMode };
     }
   };
 </script>
