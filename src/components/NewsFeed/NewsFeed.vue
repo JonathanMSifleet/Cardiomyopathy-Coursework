@@ -1,8 +1,5 @@
 <template>
   <div id="newsFeed">
-    <h1>News Feed</h1>
-    <!-- Button trigger modal -->
-
     <MDBModal
       id="newsFeedModal"
       v-model="newsFeedModal"
