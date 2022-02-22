@@ -30,8 +30,7 @@
             description: hcmDesc1+hcmDesc2,
             photo: 'hcm'
           }
-        ],
-        user: this.currentUser
+        ]
       };
     },
     setup() {
