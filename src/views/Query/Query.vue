@@ -133,7 +133,7 @@
                 <p :class="$style.TableHeaderText">
                   {{ mapMutationToWords(key) }}
                   {{ key[0] !== mapMutationToWords(key)
-                    ? '(' + key + ')'
+                    ? `(${key})`
                     : null
                   }}
                 </p>

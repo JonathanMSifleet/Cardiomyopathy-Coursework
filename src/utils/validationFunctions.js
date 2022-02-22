@@ -1,12 +1,5 @@
-export const isValid = (value) => {
-  switch (value) {
-    case 'false' || 'False':
-      return true;
-    case 'true' || 'True':
-      return true;
-    case value.search(/(\d+(?:\.\d+)?)/) !== -1:
-      return true;
-    default:
-      return false;
-  }
+import isNumber from 'is-number';
+
+export const isValid = (value = value.trim()) => {
+  return value.toLowerCase() === 'false' ||  value.toLowerCase() === 'true' || isNumber(value);
 };

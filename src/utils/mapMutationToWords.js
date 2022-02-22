@@ -1,5 +1,5 @@
 const mapKeyNameToWords = (key) => {
-  switch(key) {
+  switch (key) {
     case 'ledv':
       return 'Left ventricular end diastolic volume';
     case 'redv':
