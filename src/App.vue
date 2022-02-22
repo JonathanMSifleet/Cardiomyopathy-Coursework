@@ -2,6 +2,7 @@
   <div id="nav">
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link>  
+    <router-link to="/externalData">External Data</router-link>  
 
     <!--Show when signed out-->
     | <router-link to="/login" v-if="!currentUser">Login</router-link> 
