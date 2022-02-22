@@ -1,8 +1,5 @@
 <template>
   <div id="newsFeed">
-    <h1>News Feed</h1>
-    <!-- Button trigger modal -->
-
     <MDBModal
       id="newsFeedModal"
       v-model="newsFeedModal"
@@ -40,7 +37,7 @@
       </MDBModalBody>
 
       <MDBModalFooter>
-        <MDBBtn color="success" @click="newsFeedModal = false">
+        <MDBBtn color="primary" @click="newsFeedModal = false">
           Close
         </MDBBtn>
       </MDBModalFooter>
@@ -61,7 +58,7 @@
             <MDBCardBody>
               <MDBCardTitle
                 class="card-title"
-                :class="[readMore ? $style.remove-style : $style.add-style]"
+                :class="[readMore ? $style['remove-style'] : $style['add-style']]"
               >
                 {{ item.title }}
                 <br>
@@ -74,7 +71,7 @@
                 </MDBBtn>
               </MDBCardTitle><br>
               <button
-                :class="[$style.read-more-link, 'mt-3']"
+                :class="[$style['read-more-link'], 'mt-3']"
                 @click="toggleClass"
                 v-html="readMore ? 'Read less...' : 'Read more...'"
               />
