@@ -7,21 +7,20 @@
 
 <script>
 import PageWrapper from './hoc/PageWrapper/PageWrapper.vue';
-import getUser from './composables/getUser.js';
-  
+import { auth } from './firebase/config.js';
 
 export default {
   components: {PageWrapper},
   created(){
-    const { currentUser } = getUser();
-    const user = currentUser.value; //.uid;
-    
-    this.$store.commit("updateUser", user);
-    if(user){
-      console.log()
-      this.$store.dispatch("getCurrentUser")
-    }
-    
+    auth.onAuthStateChanged((user) => {
+      this.$store.commit("updateUser", user);
+      if(user){
+        this.$store.dispatch("getCurrentUser");
+        console.log(this.$store.state.accountEmail);
+      } else {
+        console.log(this.$store.state.accountEmail);
+      }
+    });
   }
 }
 </script> 

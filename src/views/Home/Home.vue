@@ -2,14 +2,12 @@
 
 <template>
     <h1>{{homePage.title}}</h1>
-    <HomeComponent :post="Welcome" />
+    <HomeComponent v-if="!user" :post="Welcome" />
     <HomeComponent :post="post" v-for="(post, index) in HCM" :key="index"/>
 </template>
 
 <script>
   import HomeComponent from '../../components/Home/HomeComponent.vue';
-  import { onBeforeMount } from 'vue';
-  import getUser from '../../composables/getUser.js';
 
   export default {
     name: 'Home',
@@ -37,21 +35,14 @@
       };
     },
     setup() {
-      const { currentUser } = getUser();
-      let user = null;
-      const homePage = { title: 'Welcome' };
+      const homePage = { title: 'Brand Name' };
 
-      onBeforeMount(() => {
-        if (currentUser.value) {
-          user = true;
-        } 
-      });
-
-      return {
-        user,
-        currentUser,
-        homePage
-      };
+      return { homePage };
+    },
+    computed: {
+      user() {
+        return this.$store.state.user //checks if user exists in store and returns boolean
+      }
     }
   };
 </script>

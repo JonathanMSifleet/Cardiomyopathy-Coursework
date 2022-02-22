@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import 'firebase/auth';
-import getUser from '../../composables/getUser.js';
+import { auth } from '../../firebase/config.js';
 
 export default new Vuex.Store({
   state: {
@@ -8,32 +8,24 @@ export default new Vuex.Store({
     accountEmail: null,
     accountFirstName: null,
     accountLastName: null,
-    accountId: null,
-    accountInitials: null
+    accountId: null
   },
   mutations: {
     setAccountInfo(state, payload){
-      state.accountId = payload.id;
-      state.accountEmail = payload.data().email;
-      state.accountFirstName = payload.data().firstName;
-      state.accountLastName = payload.data().lastName;
+      state.accountId = payload.getIdToken;
+      state.accountEmail = payload.email;
+      state.accountFirstName = payload.firstName;
+      state.accountLastName = payload.lastName;
     },
     updateUser(state, payload){
       state.user = payload;
-    },
-    setAccountInitials(state){
-      state.accountInitials =
-      state.accountFirstName.match(/\b(\S)/g) +
-      state.accountLastName.match(/\b(\S)/g);
     }
   },
   actions: {
     async getCurrentUser({commit}) {
-      const dbResults = await getUser();
-      // const dbResults = await dataBase.get();
-      commit('setAccountInfo', dbResults);
-      commit('setAccountInitials');
+      let dbResults = auth.currentUser;
       console.log(dbResults);
+      commit('setAccountInfo', dbResults);
     }
   },
   modules: {}
