@@ -69,7 +69,7 @@ const geneData = [
     symbol: 'MYH3',
     entrezId: '4621'
   }
-]
+];
 
 //returns a string of entrez gene ids separated by commas for use in api request url
 const getGeneIdString = (geneObjArray) => {
@@ -84,20 +84,20 @@ const getGeneIdString = (geneObjArray) => {
     }
   }
   return geneIdString;
-}
+};
 
 //returns array of gene objects with symbol, name, and description
 const fetchGeneDetails = async () =>{
-  const geneIDString = getGeneIdString(geneData)
+  const geneIDString = getGeneIdString(geneData);
   const baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
-  
+
   //API request URL, efetch returns xml
-  const geneDataUrl = baseURL + 'efetch.fcgi?db=gene&id=' + geneIDString 
+  const geneDataUrl = baseURL + 'efetch.fcgi?db=gene&id=' + geneIDString
     + '&retmode=xml';
 
   let genes = [];
   let xml = '';
-  
+
   //fetch gene data from ncbi database
   await fetch(geneDataUrl)
     .then(response => response.text())
@@ -109,7 +109,7 @@ const fetchGeneDetails = async () =>{
       console.log('Fetched Gene Data: ' + xml);
       //get gene elements in xml
       let geneElements = xml.getElementsByTagName('Entrezgene');
-      
+
       for(let i = 0; i<geneElements.length; i++){
         let geneElement = geneElements[i];
         //get gene properties from xml
@@ -117,24 +117,20 @@ const fetchGeneDetails = async () =>{
         let name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;
         let description = geneElement.getElementsByTagName('Entrezgene_summary')[0].innerHTML;
         //create gene object
-        let geneObj = {symbol : symbol, name : name, description: description};
+        let geneObj = { symbol : symbol, name : name, description: description };
         genes.push(geneObj);
       }
       //console.log(genes);
     })
     .catch((error)=>{
       console.log(error.message);
-    })
+    });
   return genes;
-}
+};
 
 export default fetchGeneDetails;
 
 //HOW TO CALL THE FUNCTION IN A DIFFERENT FILE TO GET GENE OBJECTS
 //import fetchGeneDetails from '../composables/getGeneInfo.js';
-// fetchGeneDetails(getGeneIdString(geneData)).then(result => 
+// fetchGeneDetails(getGeneIdString(geneData)).then(result =>
 // {console.log(result)});
-
-
-
-     

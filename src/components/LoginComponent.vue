@@ -29,9 +29,12 @@
             <MDBRow class="mb-4">
               <MDBCol class="d-flex justify-content-center">
                 <!-- Simple link -->
-                <router-link to='/reset' class="reset-password-link"
-                >Forgotten password?</router-link
+                <router-link
+                  to="/reset"
+                  class="reset-password-link"
                 >
+                  Forgotten password?
+                </router-link>
               </MDBCol>
             </MDBRow>
 
@@ -44,7 +47,9 @@
         <div class="text-center mt-3">
           <p>
             Not a member?
-            <router-link to='/register' class="register-link"
+            <router-link
+              to ="/register"
+              class="register-link"
             >Register here</router-link
             >
           </p>
