@@ -20,7 +20,9 @@
           Query
         </MDBNavbarItem>
       </MDBNavbarNav>
-      <button v-if="currentUser" class="logout" @click="logout">Logout</button>
+      <button v-if="currentUser" class="logout" @click="logout">
+        Logout
+      </button>
     </MDBNavbar>
   </header>
 </template>
@@ -47,7 +49,7 @@
       const logout = () => {
         signOut(auth)
           .then(() => console.log('Signed out'))
-          .then(()=> router.push('/login'))
+          .then(() => router.push('/login'))
           .catch((err) => alert(err.message));
       };
       return { currentUser, logout };
@@ -57,5 +59,5 @@
 </script>
 
 <style lang="scss" module scoped>
-@import "./Header.module.scss";
+  @import "./Header.module.scss";
 </style>

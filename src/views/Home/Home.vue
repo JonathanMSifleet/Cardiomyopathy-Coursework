@@ -1,10 +1,10 @@
 <template>
   <PageWrapper>
     <NewsFeed />
-    <h1 v-if="currentUser">Welcome, {{ name }}</h1>
+    <h1 v-if="currentUser">
+      Welcome, {{ name }}
+    </h1>
   </PageWrapper>
-  <!-- If Logged In-->
-
 </template>
 
 <script>
@@ -29,10 +29,7 @@
         }
       });
 
-      return {
-        name,
-        currentUser
-      };
+      return { currentUser, name };
     }
   };
 </script>

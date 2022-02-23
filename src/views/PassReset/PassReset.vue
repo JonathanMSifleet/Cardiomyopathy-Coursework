@@ -9,13 +9,15 @@
         <MDBCardText>
           <form @submit.prevent="handleSubmit">
             <MDBInput
-              type="email"
-              label="Email address"
               id="form2Email"
               v-model="email"
-              wrapperClass="mb-4"
+              type="email"
+              label="Email address"
+              wrapper-class="mb-4"
             />
-            <MDBBtn type="submit" color="primary">Send reset email</MDBBtn>
+            <MDBBtn type="submit" color="primary">
+              Send reset email
+            </MDBBtn>
           </form>
         </MDBCardText>
       </MDBCardBody>
@@ -25,7 +27,7 @@
 
 <script>
   import { ref } from 'vue';
-  import usePassReset from '../composables/passReset';
+  import usePassReset from '../../composables/passReset';
   import {
     MDBInput,
     MDBBtn,
@@ -53,9 +55,7 @@
       const handleSubmit = async ()=> {
         //attempt to send reset email
         await passReset(email.value);
-        if (!error.value){//success
-          alert('Password reset email sent');
-        }
+        if (!error.value ) alert('Password reset email sent');
       };
       return { email, handleSubmit, error };
     }
@@ -63,5 +63,5 @@
 </script>
 
 <style>
-@import "../assets/styles/Authentication.scss";
+  @import "../../assets/styles/Authentication.scss";
 </style>

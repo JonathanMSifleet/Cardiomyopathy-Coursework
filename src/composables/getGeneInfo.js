@@ -1,5 +1,3 @@
-import 'regenerator-runtime/runtime';
-
 //gene symbol with corresponding entrez id in ncbi database
 //genes correspond with csv HCM data
 //entrez id is needed to query the ncbi gene db api
@@ -73,17 +71,14 @@ const geneData = [
 
 //returns a string of entrez gene ids separated by commas for use in api request url
 const getGeneIdString = (geneObjArray) => {
-  let geneIdString='';
-  for(let i = 0; i<geneObjArray.length; i++){
-    geneObjArray[i].entrezId;
-    if( i== geneObjArray.length-1 ){//last gene
-      geneIdString = geneIdString + geneObjArray[i].entrezId;
-    }
-    else{
-      geneIdString = geneIdString + geneObjArray[i].entrezId + ',';
-    }
-  }
-  return geneIdString;
+  let geneIdString = '';
+
+  geneObjArray.forEach(gene => {
+    geneIdString += gene.entrezId + ',';
+  });
+
+  // remove last character from string
+  return geneIdString.slice(0, -1);
 };
 
 //returns array of gene objects with symbol, name, and description
@@ -95,42 +90,35 @@ const fetchGeneDetails = async () =>{
   const geneDataUrl = baseURL + 'efetch.fcgi?db=gene&id=' + geneIDString
     + '&retmode=xml';
 
-  let genes = [];
-  let xml = '';
+  const genes = [];
 
   //fetch gene data from ncbi database
-  await fetch(geneDataUrl)
-    .then(response => response.text())
-    .then(data=>{
-      let parser = new DOMParser();
-      //convert string response to xml doc obj
-      xml = parser.parseFromString(data, 'application/xml');
-      //log xml doc obj to console
-      console.log('Fetched Gene Data: ' + xml);
-      //get gene elements in xml
-      let geneElements = xml.getElementsByTagName('Entrezgene');
+  try {
+    let response = await fetch(geneDataUrl);
+    response = await response.text();
 
-      for(let i = 0; i<geneElements.length; i++){
-        let geneElement = geneElements[i];
-        //get gene properties from xml
-        let symbol = geneElement.getElementsByTagName('Gene-ref_locus')[0].innerHTML;
-        let name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;
-        let description = geneElement.getElementsByTagName('Entrezgene_summary')[0].innerHTML;
-        //create gene object
-        let geneObj = { symbol : symbol, name : name, description: description };
-        genes.push(geneObj);
-      }
-      //console.log(genes);
-    })
-    .catch((error)=>{
-      console.log(error.message);
-    });
+    let parser = new DOMParser();
+    //convert string response to xml doc obj
+    const xml = parser.parseFromString(response, 'application/xml');
+    //log xml doc obj to console
+    console.log('Fetched Gene Data:', xml);
+    //get gene elements in xml
+    let geneElements = xml.getElementsByTagName('Entrezgene');
+
+    for(let i = 0; i<geneElements.length; i++){
+      const geneElement = geneElements[i];
+      //get gene properties from xml
+      const symbol = geneElement.getElementsByTagName('Gene-ref_locus')[0].innerHTML;
+      const name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;
+      const description = geneElement.getElementsByTagName('Entrezgene_summary')[0].innerHTML;
+      //create gene object
+      genes.push({ symbol, name, description });
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+
   return genes;
 };
 
 export default fetchGeneDetails;
-
-//HOW TO CALL THE FUNCTION IN A DIFFERENT FILE TO GET GENE OBJECTS
-//import fetchGeneDetails from '../composables/getGeneInfo.js';
-// fetchGeneDetails(getGeneIdString(geneData)).then(result =>
-// {console.log(result)});
