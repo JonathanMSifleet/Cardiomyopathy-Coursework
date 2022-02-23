@@ -10,6 +10,15 @@
     margin-bottom: 1%;
 }
 
+.AdvancedModeSwitchWrapper {
+    float: left;
+    margin-left: 1%;
+}
+
+.PageSpinner {
+    clear: both;
+}
+
 .FilterInstruction {
     font-size: 0.8rem;
 }
@@ -36,6 +45,15 @@
 .DeleteFilterSpan {
     cursor: pointer;
     font-weight: bold;
+}
+
+.GeneMutationSelection {
+    clear: both;
+    float: left;
+}
+
+.GeneMutationWrapper {
+    margin-left: 1%;
 }
 
 .InputWrapper,
@@ -84,9 +102,24 @@
     overflow-x: scroll;
 }
 
+.PaginationOptions {
+    color: blue;
+    cursor: pointer;
+    float: left;
+    margin-left: 1%;
+}
+
+.SelectedPaginationOption {
+    color: grey;
+}
+
 .TableHeaderText {
     color: blue;
     cursor: pointer;
-    font-size: 1vw;
-    line-height: 0.75rem;
+    font-size: 0.9vw;
+    line-height: 0.9rem;
+}
+
+.ErrorOccuredText {
+    clear: both;
 }

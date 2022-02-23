@@ -1,12 +1,10 @@
 import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
-import firebaseDetails from '../constants/firebaseDetails';
 
-const getDatabase = async () => {
-  const db = getFirestore(initializeApp(firebaseDetails.details));
+const initDatabase = async (app) => {
+  const db = getFirestore(app);
   if (process.env.DEVELOPMENT) await enableIndexedDbPersistence(db);
 
   return db;
 };
 
-export default getDatabase;
+export default initDatabase;
