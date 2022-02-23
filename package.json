@@ -10,13 +10,15 @@
   },
   "dependencies": {
     "csvtojson": "^2.0.10",
+    "fast-xml-parser": "^4.0.3",
     "firebase": "^9.6.7",
     "google-charts": "^2.0.0",
     "is-number": "^7.0.0",
     "mdb-vue-ui-kit": "^1.9.0",
     "moment": "^2.29.1",
     "vue": "^3.2.31",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "yaml": "^1.10.2"
   },
   "devDependencies": {
     "@types/node": "^17.0.20",
@@ -35,6 +37,7 @@
     "node-sass": "^7.0.1",
     "npm-check-updates": "^12.4.0",
     "path": "^0.12.7",
+    "raw-loader": "^4.0.2",
     "remove-node-modules": "^1.7.6",
     "sass": "^1.49.8",
     "sass-loader": "10.1.1",
