@@ -39,7 +39,7 @@
       };
     },
     setup() {
-      const homePage = { title: 'Brand Name' };
+      const homePage = { title: 'Welcome' };
 
       return { homePage };
     },
