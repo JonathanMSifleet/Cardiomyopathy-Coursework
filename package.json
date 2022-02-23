@@ -15,6 +15,7 @@
     "core-js": "^3.21.0",
     "firebase": "^9.6.6",
     "firebase-admin": "^10.0.2",
+    "mdb-vue-ui-kit": "^1.9.0",
     "style-loader": "^3.3.1",
     "vue": "^3.0.0",
     "vue-fragment": "^1.5.2",

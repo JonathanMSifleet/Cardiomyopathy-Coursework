@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import 'mdb-vue-ui-kit/css/mdb.min.css';
 import './assets/styles/main.module.css';
 import { auth } from './firebase/config'
 import { onAuthStateChanged } from 'firebase/auth'

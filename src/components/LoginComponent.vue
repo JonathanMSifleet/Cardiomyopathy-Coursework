@@ -1,14 +1,56 @@
 <template>
-  <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="Login">
-      <input type="text" placeholder="Email" v-model="email" />
-      <input type="password" placeholder="Password" v-model="password" />
-      <input type="submit" value="Login" />
-      <p v-if="errorMessage">{{ errorMessage }}</p>
-      <p><router-link to="/reset">Forgotten password?</router-link></p>
-      <p>Need an account? <router-link to="/register">Register here</router-link></p>
-    </form>
+  <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
+    <MDBCard class="authentication-card" text="center">
+      <MDBCardHeader>Login</MDBCardHeader>
+      <MDBCardBody>
+        <MDBCardTitle v-if="errorMessage" class="error-message mb-4">
+          {{ errorMessage }}
+        </MDBCardTitle>
+        <MDBCardText>
+          <form @submit.prevent="Login">
+            <!-- Email input -->
+
+            <MDBInput
+              type="email"
+              label="Email address"
+              id="form2Email"
+              v-model="email"
+              wrapperClass="mb-4"
+            />
+            <!-- Password input -->
+            <MDBInput
+              type="password"
+              label="Password"
+              id="form2Password"
+              v-model="password"
+              wrapperClass="mb-4"
+            />
+            <!-- 2 column grid layout for inline styling -->
+            <MDBRow class="mb-4">
+              <MDBCol class="d-flex justify-content-center">
+                <!-- Simple link -->
+                <router-link to='/reset' class="reset-password-link"
+                >Forgotten password?</router-link
+                >
+              </MDBCol>
+            </MDBRow>
+
+            <MDBBtn type="submit" color="primary">Login</MDBBtn>
+          </form>
+        </MDBCardText>
+      </MDBCardBody>
+      <MDBCardFooter>
+        <!-- Register buttons -->
+        <div class="text-center mt-3">
+          <p>
+            Not a member?
+            <router-link to='/register' class="register-link"
+            >Register here</router-link
+            >
+          </p>
+        </div>
+      </MDBCardFooter>
+    </MDBCard>
   </div>
 </template>
 
@@ -17,8 +59,32 @@
   import { getAuth } from 'firebase/auth';
   import { signInWithEmailAndPassword } from 'firebase/auth';
   import { useRouter } from 'vue-router';
+  import {
+    MDBRow,
+    MDBCol,
+    MDBInput,
+    MDBBtn,
+    MDBCard,
+    MDBCardHeader,
+    MDBCardBody,
+    MDBCardTitle,
+    MDBCardText,
+    MDBCardFooter
+  } from 'mdb-vue-ui-kit';
   export default {
     name: 'Login',
+    components: {
+      MDBRow,
+      MDBCol,
+      MDBInput,
+      MDBBtn,
+      MDBCard,
+      MDBCardHeader,
+      MDBCardBody,
+      MDBCardTitle,
+      MDBCardText,
+      MDBCardFooter
+    },
     setup() {
       const email = ref('');
       const password = ref('');
@@ -59,4 +125,6 @@
   };
 </script>
 
-<style></style>
+<style>
+@import "../assets/styles/Authentication.scss";
+</style>
