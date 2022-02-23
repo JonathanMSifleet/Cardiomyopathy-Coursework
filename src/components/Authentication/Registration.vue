@@ -92,31 +92,13 @@
 </template>
 
 <script>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import { auth, db } from "../../firebase/config.js";
-import { sendEmailVerification, signOut, updateProfile } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import useSignup from "../../composables/useSignup";
-import getUser from "../../composables/getUser";
-import {
-  MDBRow,
-  MDBCol,
-  MDBInput,
-  MDBCheckbox,
-  MDBBtn,
-  MDBIcon,
-  MDBCard,
-  MDBCardHeader,
-  MDBCardBody,
-  MDBCardTitle,
-  MDBCardText,
-  MDBCardFooter,
-} from "mdb-vue-ui-kit";
-
-export default {
-  name: "Register",
-  components: {
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
+  import { auth, db } from "../../firebase/config.js";
+  import { sendEmailVerification, signOut, updateProfile } from "firebase/auth";
+  import { doc, setDoc } from "firebase/firestore";
+  import useSignup from "../../composables/useSignup";
+  import {
     MDBRow,
     MDBCol,
     MDBInput,
@@ -129,107 +111,124 @@ export default {
     MDBCardTitle,
     MDBCardText,
     MDBCardFooter,
-  },
-  setup() {
-    const router = useRouter();
-    const email = ref("");
-    const password = ref("");
-    const passConfirm = ref("");
-    const firstName = ref("");
-    const lastName = ref("");
-    const phone = ref("");
-    const address = ref("");
-    const { signupError, signup } = useSignup();
-    const passMatchErr = ref("");
+  } from "mdb-vue-ui-kit";
 
-    //in firebase firestore, create collection called users
-    //change db rules to: write: if request.auth != null;
-    //for this to work (if not in test mode)
-    const addUserInfo = async (userObj) => {
-      //create new user doc in user collection
-      await setDoc(doc(db, "users", userObj.uid), userObj);
-    };
+  export default {
+    name: "Register",
+    components: {
+      MDBRow,
+      MDBCol,
+      MDBInput,
+      MDBCheckbox,
+      MDBBtn,
+      MDBIcon,
+      MDBCard,
+      MDBCardHeader,
+      MDBCardBody,
+      MDBCardTitle,
+      MDBCardText,
+      MDBCardFooter,
+    },
+    setup() {
+      const router = useRouter();
+      const email = ref("");
+      const password = ref("");
+      const passConfirm = ref("");
+      const firstName = ref("");
+      const lastName = ref("");
+      const phone = ref("");
+      const address = ref("");
+      const { signupError, signup } = useSignup();
+      const passMatchErr = ref("");
 
-    //compare the 2 password inputs
-    const passwordsMatch = () => {
-      if (
-        password.value !== passConfirm.value &&
-        password.value !== "" &&
-        passConfirm.value !== ""
-      ) {
-        passMatchErr.value = "Your passwords do not match! " + "Please try again.";
-        return false;
-      } else {
-        passMatchErr.value = null;
-        return true;
-      }
-    };
+      //in firebase firestore, create collection called users
+      //change db rules to: write: if request.auth != null;
+      //for this to work (if not in test mode)
+      const addUserInfo = async (userObj) => {
+        //create new user doc in user collection
+        await setDoc(doc(db, "users", userObj.uid), userObj);
+      };
 
-    //submit registration data and create account
-    const handleSubmit = async () => {
-      //exit function if password confirmation does not match
-      if (passwordsMatch() == false) {
-        return;
-      }
-      //create user acc
-      await signup(email.value, password.value);
+      //compare the 2 password inputs
+      const passwordsMatch = () => {
+        if (
+          password.value !== passConfirm.value &&
+          password.value !== "" &&
+          passConfirm.value !== ""
+        ) {
+          passMatchErr.value = "Your passwords do not match! " + "Please try again.";
+          return false;
+        } else {
+          passMatchErr.value = null;
+          return true;
+        }
+      };
 
-      if (!signupError.value) {
-        //success
+      //submit registration data and create account
+      const handleSubmit = async () => {
+        //exit function if password confirmation does not match
+        if (passwordsMatch() == false) {
+          return;
+        }
+        //create user acc
+        await signup(email.value, password.value);
 
-        //send email for the user to verify email
-        await sendEmailVerification(auth.currentUser);
-        alert("Verification email sent.");
+        if (!signupError.value) {
+          //success
 
-        //get currently signed in user
-        const { currentUser } = getUser();
+          //send email for the user to verify email
+          await sendEmailVerification(this.$store.state.user);
+          alert('Verification email sent.');
 
-        //create user info object
-        let user = {
-          uid: currentUser.value.uid,
-          firstName: firstName.value,
-          lastName: lastName.value,
-          address: address.value,
-          email: email.value,
-          phone: phone.value,
-        };
-        //add user info to firestore db
-        await addUserInfo(user);
+          //get currently signed in user
+          const currentUser = this.$store.state.user;
 
-        //set user display name
-        updateProfile(auth.currentUser, {
-          displayName: firstName.value,
-        }).catch((error) => {
-          console.log(error);
-        });
+          //create user info object
+          let user = {
+            uid: currentUser.uid,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            address: address.value,
+            email: email.value,
+            phone: phone.value
+          };
+          //add user info to firestore db
+          await addUserInfo(user);
 
-        //sign user out
-        signOut(auth)
-          .then(() => {
-            console.log("Signed Out");
-          })
-          .catch((error) => {
+          //set user display name
+          updateProfile(auth.currentUser, {
+            displayName: firstName.value + ' ' + lastName.value
+          }).catch((error) => {
             console.log(error);
           });
 
-        //redirect to login
-        router.push("/");
-      }
-    };
-    return {
-      email,
-      password,
-      handleSubmit,
-      signupError,
-      phone,
-      address,
-      firstName,
-      lastName,
-      passMatchErr,
-      passConfirm,
-    };
-  },
-};
+          //sign user out
+          signOut(auth)
+            .then(() => {
+              console.log('Signed Out');
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+          //redirect to login
+          router.push('/');
+        }
+      };
+      return {
+        email,
+        password,
+        handleSubmit,
+        signupError,
+        phone,
+        address,
+        firstName,
+        lastName,
+        passMatchErr,
+        passConfirm
+      };
+    }
+  };
 </script>
 
 <style>

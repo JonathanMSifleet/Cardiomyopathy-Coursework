@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 
 <template>
-    <h1>{{homePage.title}}</h1>
-    <HomeComponent v-if="!user" :post="Welcome" />
-    <HomeComponent :post="post" v-for="(post, index) in HCM" :key="index"/>
+  <h1>{{homePage.title}}</h1>
+  <HomeComponent v-if="!user" :post="Welcome" />
+  <HomeComponent :post="post" v-for="(post, index) in HCM" :key="index"/>
 </template>
 
 <script>
@@ -29,6 +29,11 @@
             title: 'Hypertrophic cardiomyopathy (HCM)',
             description: hcmDesc1+hcmDesc2,
             photo: 'hcm'
+          },
+          {
+            title: this.$store.state.accountDisplayName,
+            description: this.$store.state.accountEmail,
+            photo: 'hcm'
           }
         ]
       };
@@ -40,7 +45,7 @@
     },
     computed: {
       user() {
-        return this.$store.state.user //checks if user exists in store and returns boolean
+        return this.$store.state.user; //checks if user exists in store and returns boolean
       }
     }
   };

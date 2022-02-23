@@ -6,16 +6,14 @@ export default new Vuex.Store({
   state: {
     user: null,
     accountEmail: null,
-    accountFirstName: null,
-    accountLastName: null,
+    accountDisplayName: null,
     accountId: null
   },
   mutations: {
     setAccountInfo(state, payload){
       state.accountId = payload.getIdToken;
       state.accountEmail = payload.email;
-      state.accountFirstName = payload.firstName;
-      state.accountLastName = payload.lastName;
+      state.accountDisplayName = payload.displayName;
     },
     updateUser(state, payload){
       state.user = payload;
@@ -24,7 +22,7 @@ export default new Vuex.Store({
   actions: {
     async getCurrentUser({commit}) {
       let dbResults = auth.currentUser;
-      // console.log(dbResults);
+      console.log(dbResults);
       commit('setAccountInfo', dbResults);
     }
   },
