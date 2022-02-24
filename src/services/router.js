@@ -3,7 +3,7 @@ import { auth } from '../firebase/config';
 
 //route guard functions
 
-const requireSignedOut = (to, from, next) =>{
+const requireSignedOut = (to, from, next) => {
   let user = auth.currentUser;
 
   // if user redirect to home, otherwise continue to original route
@@ -42,6 +42,11 @@ const routes = [
     name: 'Login',
     component: () => import('../views/Login/Login.vue'),
     beforeEnter: requireSignedOut
+  },
+  {
+    path: '/experimentalData',
+    name: 'ExperimentalData',
+    component: () => import('../views/ExperimentalData/ExperimentalData.vue')
   },
   // no route, route:
   {
