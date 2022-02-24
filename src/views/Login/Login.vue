@@ -106,31 +106,30 @@
       const auth = getAuth();
       const router = useRouter();
 
-      const Login = () => {
-        signInWithEmailAndPassword(auth, email.value, password.value)
-          .then(() => {
-            router.push('/');
-          })
-          .catch((error) => {
-            //custom error messages
-            switch (error.code) {
-            case 'auth/invalid-email':
-              errorMessage.value = 'Invalid email';
-              break;
-            case 'auth/user-not-found':
-              errorMessage.value = 'No account with that email was found';
-              break;
-            case 'auth/wrong-password':
-              errorMessage.value = 'Incorrect password';
-              break;
-            default:
-              errorMessage.value = 'Email or password was incorrect';
-              break;
-            }
-          });
+      const login = async () => {
+        try {
+          await signInWithEmailAndPassword(auth, email.value, password.value);
+          router.push('/');
+        } catch(error) {
+          //custom error messages
+          switch (error.code) {
+          case 'auth/invalid-email':
+            errorMessage.value = 'Invalid email';
+            break;
+          case 'auth/user-not-found':
+            errorMessage.value = 'No account with that email was found';
+            break;
+          case 'auth/wrong-password':
+            errorMessage.value = 'Incorrect password';
+            break;
+          default:
+            errorMessage.value = 'Email or password was incorrect';
+            break;
+          }
+        }
       };
 
-      return { Login, email, errorMessage, password };
+      return { login, email, errorMessage, password };
     }
   };
 </script>

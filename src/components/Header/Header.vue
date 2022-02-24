@@ -50,15 +50,15 @@
 
       //nav bar logout
       const logout = async () => {
-        try{
+        try {
           await signOut(auth);
           console.log('Signed out');
           router.push('/login');
-        }
-        catch(err){
+        } catch (err) {
           alert(err.message);
         }
       };
+
       return { currentUser, logout };
     }
   };

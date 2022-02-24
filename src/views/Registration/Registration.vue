@@ -196,24 +196,24 @@
           //get currently signed in user
           const { currentUser } = getUser();
 
-          //create user info object
-          const user = {
+          //add user info to firestore db
+          await addUserInfo({
             uid: currentUser.value.uid,
             firstName: firstName.value,
             lastName: lastName.value,
             address: address.value,
             email: email.value,
             phone: phone.value
-          };
-          //add user info to firestore db
-          await addUserInfo(user);
+          });
 
           //set user display name
-          updateProfile(auth.currentUser, {
-            displayName: firstName.value
-          }).catch((error) => {
+          try {
+            updateProfile(auth.currentUser, {
+              displayName: firstName.value
+            });
+          } catch (error) {
             console.log(error);
-          });
+          }
 
           //sign user out
           try{
@@ -221,14 +221,13 @@
             console.log('Signed Out');
             //redirect to login
             router.push('/');
-          }
-          catch(error){
+          } catch (error){
             console.log(error);
           }
         }
       };
-      return { email, password, handleSubmit, signupError,
-               phone, address, firstName, lastName, passMatchErr, passConfirm };
+      return { address, email, firstName, handleSubmit, lastName, passConfirm,
+               passMatchErr, password, phone, signupError };
     }
   };
 </script>
