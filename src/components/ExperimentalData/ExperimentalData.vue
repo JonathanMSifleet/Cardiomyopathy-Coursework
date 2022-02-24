@@ -34,7 +34,7 @@
                   type="number"
                   label="LEDV"
                   id="form2Email"
-                  v-model="ledv"
+                  v-model="info.ledv"
                   wrapperClass="mb-4"
                   step="0.00000000001"
                 />
@@ -156,7 +156,7 @@
                   justify-content-center
                 "
               >
-                <MDBBtn type="submit" @click="experimentalData" color="success">
+                <MDBBtn @click="experimentalData" color="success">
                   Submit
                 </MDBBtn>
               </div>
@@ -170,8 +170,7 @@
 
 <script>
 import { ref, reactive } from "@vue/reactivity";
-import { doc, setDoc } from "firebase/firestore";
-import { v4 as uuid } from "uuid";
+import { collection, addDoc } from "firebase/firestore";
 import store from "../../services/store";
 import {
   MDBRow,
@@ -233,15 +232,11 @@ export default {
         }
       }
 
-      
-        const result = await setDoc(
-          doc(await store.database, "hcmData", uuid()),
-          {
-            ...info,
-            [selectedMutation.value]: true,
-          }
-        );
-        console.log(result);
+      const docRef = await addDoc(collection(await store.database, "hcmData"), {
+        ...info,
+        [selectedMutation.value]: true,
+      });
+      console.log("Document written with ID: ", docRef.id);
     }
 
     return {
