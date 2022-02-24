@@ -11,7 +11,7 @@
   export default {
     name: 'Home',
     components: {
-      NewsFeed, PageWrapper
+      FileUpload, NewsFeed, PageWrapper
     },
     setup() {}
   };
