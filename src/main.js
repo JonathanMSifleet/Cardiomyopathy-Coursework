@@ -1,20 +1,16 @@
-import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
+// must go first:
 import 'mdb-vue-ui-kit/css/mdb.min.css';
-import './assets/styles/main.module.css';
-import { auth } from './firebase/config'
-import { onAuthStateChanged } from 'firebase/auth'
-// import axios from 'axios';
+import './assets/styles/global.scss';
+import App from './App.vue';
+import router from './services/router.js';
+import { createApp } from 'vue';
 
-let app = null;
+const app = createApp(App);
 
-//establishes user state (logged in/out) before rendering components
-onAuthStateChanged(auth, ()=>{
-  if (app == null){
-    app = createApp(App).use(router).mount('#app');
-  }
-})
-// app.use(axios);
+if(!process.env.DEVELOPMENT) {
+  app.config.errorHandler = () => null;
+  app.config.warnHandler = () => null;
+}
 
-
+app.use(router);
+app.mount('#app');

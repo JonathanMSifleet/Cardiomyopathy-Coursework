@@ -98,10 +98,10 @@
       <div :class="$style.CheckboxWrapper">
         <p>Selected columns:</p>
         <MDBCheckbox
-          v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
+          v-for="(key, index) in mapMutationToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
           :key="index"
           v-model="activeCheckboxes[key]"
-          :label="mapKeyToWords(key)"
+          :label="mapMutationToWords(key)"
           inline
           @change="toggleKey(key)"
         />
@@ -140,8 +140,8 @@
                 @click="selectGraphKey(key)"
               >
                 <p :class="$style.TableHeaderText">
-                  {{ mapKeyToWords(key) }}
-                  {{ key[0] !== mapKeyToWords(key)
+                  {{ mapMutationToWords(key) }}
+                  {{ key[0] !== mapMutationToWords(key)
                     ? `(${key})`
                     : null
                   }}
@@ -174,7 +174,7 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
-  import mapKeyToWords from '../../utils/mapKeyToWords';
+  import mapMutationToWords from '../../utils/mapMutationToWords';
   import fetchDocuments from '../../utils/fetchDocuments';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
@@ -370,7 +370,7 @@
           new chartHelper.ColumnChart(divToRenderChart);
 
         chart.draw(chartData, {
-          title: mapKeyToWords(keyName),
+          title: mapMutationToWords(keyName),
           is3D: true,
           vAxis: {
             title: 'Value'
@@ -448,7 +448,7 @@
 
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
                filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
-               isLoadingGraph, mapKeyToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
+               isLoadingGraph, mapMutationToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
                renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage, toggleKey,
                useAdvancedMode };
     }

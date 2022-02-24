@@ -13,6 +13,7 @@ const routes = [
     base: '/',
     component: () => import('../views/Query/Query.vue')
   },
+  // no route, route:
   {
     path: '/:pathMatch(.*)*',
     redirect: '/'

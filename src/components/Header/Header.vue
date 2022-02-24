@@ -35,5 +35,5 @@
 </script>
 
 <style lang="scss" module scoped>
-  @import "./Header.module.scss";
+@import "./Header.module.scss";
 </style>

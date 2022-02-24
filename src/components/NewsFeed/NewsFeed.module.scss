@@ -1,0 +1,23 @@
+.add-style {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 95%;
+    font-weight: bold;
+}
+
+.remove-style {
+    all: unset;
+    font-weight: bold;
+}
+
+.read-more-link {
+    font-size: 0.875rem;
+    text-decoration: underline;
+}
+
+.carousel {
+    float: right;
+    width: 15.625rem;
+}
