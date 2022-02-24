@@ -11,36 +11,31 @@
             <!-- Email input -->
 
             <MDBInput
-              id="form2Email"
-              v-model="email"
               type="email"
               label="Email address"
-              wrapper-class="mb-4"
+              id="form2Email"
+              v-model="email"
+              wrapperClass="mb-4"
             />
             <!-- Password input -->
             <MDBInput
-              id="form2Password"
-              v-model="password"
               type="password"
               label="Password"
-              wrapper-class="mb-4"
+              id="form2Password"
+              v-model="password"
+              wrapperClass="mb-4"
             />
             <!-- 2 column grid layout for inline styling -->
             <MDBRow class="mb-4">
               <MDBCol class="d-flex justify-content-center">
                 <!-- Simple link -->
-                <router-link
-                  to="/reset"
-                  class="reset-password-link"
+                <router-link to='/reset' class="reset-password-link"
+                >Forgotten password?</router-link
                 >
-                  Forgotten password?
-                </router-link>
               </MDBCol>
             </MDBRow>
 
-            <MDBBtn type="submit" color="primary">
-              Login
-            </MDBBtn>
+            <MDBBtn type="submit" color="primary">Login</MDBBtn>
           </form>
         </MDBCardText>
       </MDBCardBody>
@@ -49,12 +44,9 @@
         <div class="text-center mt-3">
           <p>
             Not a member?
-            <router-link
-              to="/register"
-              class="register-link"
+            <router-link to='/register' class="register-link"
+            >Register here</router-link
             >
-              Register here
-            </router-link>
           </p>
         </div>
       </MDBCardFooter>
@@ -64,8 +56,8 @@
 
 <script>
   import { ref } from 'vue';
-  import { getAuth , signInWithEmailAndPassword } from 'firebase/auth';
-
+  import { getAuth } from 'firebase/auth';
+  import { signInWithEmailAndPassword } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
     MDBRow,

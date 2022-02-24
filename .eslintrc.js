@@ -11,12 +11,13 @@ module.exports = {
     }
   },
   rules: {
-    'comma-dangle': [
+    indent: ['error', 2],
+    'vue/script-indent': [
       'error',
-      'never'
+      2,
+      { baseIndent: 1 }
     ],
     'eol-last': [2, 'windows'],
-    indent: ['error', 2, { 'SwitchCase': 1 }],
     'linebreak-style': [
       'error',
       'windows'
@@ -24,40 +25,24 @@ module.exports = {
     'max-len': [
       'error',
       {
-        code: 120
+        code: 100
       }
     ],
-    'no-trailing-spaces': 'error',
-    'object-curly-spacing': ['error', 'always'],
-    'quotes': [
+    quotes: [
       'error',
       'single'
     ],
-    semi: ['error', 'always'],
+    'comma-dangle': [
+      'error',
+      'never'
+    ],
     'vue/html-indent': ['error', 2, {
       baseIndent: 1
-    }],
-    'vue/max-attributes-per-line': ['error', {
-      'singleline': {
-        'max': 3
-      },
-      'multiline': {
-        'max': 1
-      }
-    }],
-    'vue/script-indent': [
-      'error',
-      2,
-      { baseIndent: 1 }
-    ]
+    }]
   },
   extends: [
-    'plugin:vue/base',
     'plugin:vue/vue3-essential',
-    'plugin:vue/vue3-strongly-recommended',
-    'plugin:vue/vue3-recommended',
-    'eslint:recommended',
-    'plugin:import/recommended'
+    'eslint:recommended'
   ],
   overrides: [
     {

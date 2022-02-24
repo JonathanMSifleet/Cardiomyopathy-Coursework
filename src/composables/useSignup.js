@@ -3,12 +3,11 @@ import 'regenerator-runtime/runtime';
 //firebase
 import { auth } from '../firebase/config'
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-
 const signupError = ref(null);
 const pending = ref(false);
 
 //creates firebase user email/pass auth entry
-const signup = async (email, password) => {
+const signup = async(email, password) => {
   signupError.value = null;
   pending.value = true;
 
@@ -19,8 +18,9 @@ const signup = async (email, password) => {
     }
     signupError.value = null;
     pending.value=false;
-  } catch (err) {
-    console.error(err.message);
+  }
+  catch(err){
+    console.log(err.message);
     signupError.value = err.message;
     pending.value = false;
   }

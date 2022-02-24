@@ -12,8 +12,9 @@ const passReset = async(email) => {
   try{
     await sendPasswordResetEmail(auth, email, actionCodeSettings);
     isPending.value = false;
-  } catch (err) {
-    console.error(err.message);
+  }
+  catch(err){
+    console.log(err.message);
     error.value = err.message;
     isPending.value = false;
   }

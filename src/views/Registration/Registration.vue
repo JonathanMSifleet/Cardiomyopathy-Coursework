@@ -113,6 +113,7 @@
     MDBCardFooter
   } from 'mdb-vue-ui-kit';
 
+
   export default {
     name: 'Register',
     components: {
@@ -127,23 +128,22 @@
       MDBCardText,
       MDBCardFooter
     },
-    setup() {
-      const address = ref('');
+    setup(){
+      const router = useRouter();
       const email = ref('');
+      const password = ref('');
+      const passConfirm = ref('');
       const firstName = ref('');
       const lastName = ref('');
-      const passConfirm = ref('');
-      const passMatchErr = ref('');
-      const password = ref('');
       const phone = ref('');
-      const router = useRouter();
+      const address = ref('');
       const { signupError, signup } = useSignup();
       const passMatchErr = ref('');
       
       //in firebase firestore, create collection called users
       //change db rules to: write: if request.auth != null;
       //for this to work (if not in test mode)
-      const addUserInfo = async (userObj) => {
+      const addUserInfo = async (userObj) =>{
         //create new user doc in user collection
         await setDoc(doc(db, 'users', userObj.uid), userObj);
       }
@@ -167,8 +167,9 @@
       //submit registration data and create account
       const handleSubmit = async ()=> {
         //exit function if password confirmation does not match
-        if(!checkPasswordsMatch()) return;
-
+        if(passwordsMatch() == false){
+          return;
+        }
         //create user acc
         await signup(email.value, password.value);
         
@@ -182,7 +183,7 @@
           const {currentUser} = getUser();
           
           //create user info object
-          const user = {
+          let user = {
             uid: currentUser.value.uid,
             firstName: firstName.value,
             lastName: lastName.value,
@@ -196,9 +197,10 @@
           //set user display name
           updateProfile(auth.currentUser, {
             displayName: firstName.value
-          }).catch((error) => {
-            console.log(error);
-          });
+          })
+            .catch((error) => {
+              console.log(error);
+            });
 
           //sign user out
           signOut(auth).then(() => {
@@ -218,5 +220,5 @@
 </script>
 
 <style>
-  @import "../../assets/styles/Authentication.scss";
+@import "../assets/styles/Authentication.scss";
 </style>
