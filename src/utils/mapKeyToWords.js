@@ -1,4 +1,4 @@
-const mapKeyNameToWords = (key) => {
+const mapKeyToWords = (key) => {
   switch (key) {
     case 'ledv':
       return 'Left ventricular end diastolic volume';
@@ -31,4 +31,4 @@ const mapKeyNameToWords = (key) => {
   }
 };
 
-export default mapKeyNameToWords;
+export default mapKeyToWords;
