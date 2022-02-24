@@ -156,7 +156,7 @@
                   justify-content-center
                 "
               >
-                <MDBBtn @click="experimentalData" color="success">
+                <MDBBtn @click="experimentalData" color="primary">
                   Submit
                 </MDBBtn>
               </div>
@@ -171,6 +171,7 @@
 <script>
 import { ref, reactive } from "@vue/reactivity";
 import { collection, addDoc } from "firebase/firestore";
+import getUser from "../../composables/getUser";
 import store from "../../services/store";
 import {
   MDBRow,
@@ -203,8 +204,10 @@ export default {
     MDBCardFooter,
   },
   setup() {
+    const { currentUser } = getUser();
     const selectedMutation = ref("");
     const info = reactive({
+      userId: currentUser.value.uid,
       ledv: "",
       redv: "",
       lesv: "",
