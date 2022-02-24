@@ -63,11 +63,6 @@ const routes = [
     name: 'Login',
     component: () => import('../views/Login.vue'),
     beforeEnter: requireSignedOut
-  },
-  {
-    path: '/externalData',
-    name: 'externalData',
-    component: () => import('../views/ExternalData.vue')
   }
 ];
 
