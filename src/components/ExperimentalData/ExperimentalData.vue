@@ -9,103 +9,96 @@
             <MDBRow>
               <MDBCol md="4">
                 <select
+                  v-model="selectedMutation"
                   name="gene-mutations"
                   class="form-select mb-4"
                   aria-label="Default select example"
-                  v-model="selectedMutation"
                   required
                 >
-                  <option value="" disabled>Select Gene Mutation</option>
-                  <option value="MYH7">MYH7</option>
-                  <option value="MYBPC3">MYBPC3</option>
-                  <option value="TNNT2">TNNT2</option>
-                  <option value="ACTC">ACTC</option>
-                  <option value="TPM1">TPM1</option>
-                  <option value="TNNCI">TNNCI</option>
-                  <option value="TNNI3">TNNI3</option>
-                  <option value="MYL2">MYL2</option>
-                  <option value="TTN">TTN</option>
+                  <option v-for="key in geneMutations" :key="key" :disabled="key === 'Please select'">
+                    {{ key }}
+                  </option>
                 </select>
               </MDBCol>
             </MDBRow>
             <MDBRow class="mb-3">
               <MDBCol>
                 <MDBInput
-                  type="number"
-                  label="LEDV"
                   id="form2Email"
                   v-model="info.ledv"
-                  wrapperClass="mb-4"
+                  type="number"
+                  label="LEDV"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.redv"
                   type="number"
                   label="REDV"
-                  v-model="info.redv"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.lesv"
                   type="number"
                   label="LESV"
-                  v-model="info.lesv"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.resv"
                   type="number"
                   label="RESV"
-                  v-model="info.resv"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.lvef"
                   type="number"
                   label="LVEF "
-                  v-model="info.lvef"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.rvef"
                   type="number"
                   label="RVEF"
-                  v-model="info.rvef"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.lvmass"
                   type="number"
                   label="LVMASS"
-                  v-model="info.lvmass"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.rvmass"
                   type="number"
                   label="RVMASS"
-                  v-model="info.rvmass"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.lsv"
                   type="number"
                   label="LSV"
-                  v-model="info.lsv"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.rsv"
                   type="number"
                   label="RSV"
-                  v-model="info.rsv"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
                 <MDBInput
+                  v-model="info.ageAtMri"
                   type="number"
                   label="Age at MRI"
-                  v-model="info.ageAtMri"
-                  wrapperClass="mb-4"
+                  wrapper-class="mb-4"
                   step="0.00000000001"
                 />
               </MDBCol>
@@ -113,36 +106,36 @@
             <MDBRow class="mb-4">
               <MDBCol md="3">
                 <MDBCheckbox
-                  label="Female"
                   v-model="info.female"
-                  wrapperClass="mb-2"
+                  label="Female"
+                  wrapper-class="mb-2"
                 />
-                <MDBCheckbox label="Fibrosis" v-model="info.fibrosis" />
+                <MDBCheckbox v-model="info.fibrosis" label="Fibrosis" />
               </MDBCol>
               <MDBCol md="4">
                 <MDBCheckbox
-                  label="Apical HCM"
                   v-model="info.apicalHcm"
-                  wrapperClass="mb-2"
+                  label="Apical HCM"
+                  wrapper-class="mb-2"
                 />
                 <MDBCheckbox
-                  label="Sudden Cardiac Death"
                   v-model="info.suddenCardiacDeath"
+                  label="Sudden Cardiac Death"
                 />
               </MDBCol>
               <MDBCol md="3">
                 <MDBCheckbox
-                  label="Hypertension"
                   v-model="info.hypertension"
-                  wrapperClass="mb-2"
+                  label="Hypertension"
+                  wrapper-class="mb-2"
                 />
-                <MDBCheckbox label="Diabetes" v-model="info.diabetes" />
+                <MDBCheckbox v-model="info.diabetes" label="Diabetes" />
               </MDBCol>
               <MDBCol md="2">
                 <MDBCheckbox
-                  label="Myectomy"
                   v-model="info.myectomy"
-                  wrapperClass="mb-2"
+                  label="Myectomy"
+                  wrapper-class="mb-2"
                 />
               </MDBCol>
             </MDBRow>
@@ -156,7 +149,7 @@
                   justify-content-center
                 "
               >
-                <MDBBtn @click="experimentalData" color="primary">
+                <MDBBtn color="primary" @click="experimentalData">
                   Submit
                 </MDBBtn>
               </div>
@@ -169,86 +162,91 @@
 </template>
 
 <script>
-import { ref, reactive } from "@vue/reactivity";
-import { collection, addDoc } from "firebase/firestore";
-import getUser from "../../composables/getUser";
-import store from "../../services/store";
-import {
-  MDBRow,
-  MDBCol,
-  MDBInput,
-  MDBCheckbox,
-  MDBBtn,
-  MDBIcon,
-  MDBCard,
-  MDBCardBody,
-  MDBCardHeader,
-  MDBCardTitle,
-  MDBCardText,
-  MDBCardFooter,
-} from "mdb-vue-ui-kit";
-export default {
-  name: "ExperimentalData",
-  components: {
+  import { ref, reactive } from '@vue/reactivity';
+  import { collection, addDoc } from 'firebase/firestore';
+  import getUser from '../../composables/getUser';
+  import store from '../../services/store';
+  import {
     MDBRow,
     MDBCol,
     MDBInput,
     MDBCheckbox,
     MDBBtn,
-    MDBIcon,
     MDBCard,
     MDBCardBody,
     MDBCardHeader,
     MDBCardTitle,
     MDBCardText,
-    MDBCardFooter,
-  },
-  setup() {
-    const { currentUser } = getUser();
-    const selectedMutation = ref("");
-    const info = reactive({
-      userId: currentUser.value.uid,
-      ledv: "",
-      redv: "",
-      lesv: "",
-      resv: "",
-      lvef: "",
-      rvef: "",
-      lvmass: "",
-      rvmass: "",
-      lsv: "",
-      rsv: "",
-      female: false,
-      fibrosis: false,
-      ageAtMri: false,
-      apicalHcm: false,
-      suddenCardiacDeath: false,
-      hypertension: false,
-      diabetes: false,
-      myectomy: false,
-    });
+    MDBCardFooter
+  } from 'mdb-vue-ui-kit';
+  export default {
+    name: 'ExperimentalData',
+    components: {
+      MDBRow,
+      MDBCol,
+      MDBInput,
+      MDBCheckbox,
+      MDBBtn,
+      MDBCard,
+      MDBCardBody,
+      MDBCardHeader,
+      MDBCardTitle,
+      MDBCardText,
+      MDBCardFooter
+    },
+    setup() {
+      const { currentUser } = getUser();
+      const geneMutations = reactive([
+        'Please select',
+        'MYH7',
+        'MYBPC3',
+        'TNNT2',
+        'ACTC',
+        'TPM1',
+        'TNNCI',
+        'TNNI3',
+        'MYL2',
+        'TTN'
+      ]);
+      const selectedMutation = ref('Please select');
+      const info = reactive({
+        userId: currentUser.value.uid,
+        ledv: '',
+        redv: '',
+        lesv: '',
+        resv: '',
+        lvef: '',
+        rvef: '',
+        lvmass: '',
+        rvmass: '',
+        lsv: '',
+        rsv: '',
+        female: false,
+        fibrosis: false,
+        ageAtMri: false,
+        apicalHcm: false,
+        suddenCardiacDeath: false,
+        hypertension: false,
+        diabetes: false,
+        myectomy: false
+      });
 
-    async function experimentalData() {
-      for (const key in info) {
-        if (info[key] === "" || info[key] === undefined) {
-          delete info[key];
+      async function experimentalData() {
+        for (const key in info) {
+          if (info[key] === '' || info[key] === undefined) {
+            delete info[key];
+          }
         }
+
+        const docRef = await addDoc(collection(await store.database, 'hcmData'), {
+          ...info, [selectedMutation.value]: true
+        });
+        console.log('Document written with ID: ', docRef.id);
       }
 
-      const docRef = await addDoc(collection(await store.database, "hcmData"), {
-        ...info,
-        [selectedMutation.value]: true,
-      });
-      console.log("Document written with ID: ", docRef.id);
+      return { info, geneMutations, selectedMutation, experimentalData };
     }
-
-    return {
-      info,
-      selectedMutation,
-      experimentalData,
-    };
-  },
-};
+  };
 </script>
 
 <style module lang="scss">
