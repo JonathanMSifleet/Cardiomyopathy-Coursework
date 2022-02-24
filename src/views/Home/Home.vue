@@ -19,16 +19,6 @@
       FileUpload, NewsFeed, PageWrapper
     },
     setup() {
-      const { currentUser } = getUser();
-      const name = ref('');
-
-      onBeforeMount(() => {
-        if (currentUser.value) {
-          name.value = currentUser.value.displayName;
-        }
-      });
-
-      return { currentUser, name };
     }
   };
 </script>
