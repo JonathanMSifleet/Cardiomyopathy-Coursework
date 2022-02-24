@@ -72,12 +72,12 @@ module.exports = {
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
       "process.env.DEVELOPMENT": JSON.stringify(true),
-      "process.env.API_KEY": JSON.stringify('AIzaSyBuiC69m_Rz3X4Htt4epBFqAwfq5VKULS8'),
-      "process.env.AUTH_DOMAIN": JSON.stringify('frdtest-ee098.firebaseapp.com'),
-      "process.env.PROJECT_ID": JSON.stringify('frdtest-ee098'),
-      "process.env.STORAGE_BUCKET": JSON.stringify('frdtest-ee098.appspot.com'),
-      "process.env.MESSAGING_SENDER_ID": JSON.stringify('385905656452'),
-      "process.env.APP_ID": JSON.stringify('1:385905656452:web:ae167cdb7fb0d973feb8d1')
+      "process.env.API_KEY": JSON.stringify(''),
+      "process.env.AUTH_DOMAIN": JSON.stringify(''),
+      "process.env.PROJECT_ID": JSON.stringify(''),
+      "process.env.STORAGE_BUCKET": JSON.stringify(''),
+      "process.env.MESSAGING_SENDER_ID": JSON.stringify(''),
+      "process.env.APP_ID": JSON.stringify('')
     })
   ]
 };
