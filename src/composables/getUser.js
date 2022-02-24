@@ -6,9 +6,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 const currentUser = ref(auth.currentUser);
 
 //fires on log in / sign out
-onAuthStateChanged(auth, (user) => {
-  currentUser.value = user;
-});
+onAuthStateChanged(auth, (user) => currentUser.value = user);
 
 const getUser = () => {
   return { currentUser };
