@@ -1,6 +1,8 @@
 .DS_Store
 node_modules
 /dist
+/build
+/.github
 package-lock.json
 
 # local env files
@@ -24,3 +26,4 @@ pnpm-debug.log*
 *.jpg
 *.jpeg
 *.png
+*.log
