@@ -1,6 +1,7 @@
-import { auth } from '../firebase/config';
-import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../firebase/config'
+import { sendPasswordResetEmail, actionCodeSettings } from 'firebase/auth';
 import { ref } from 'vue';
+import 'regenerator-runtime/runtime'; //needed for async 
 
 const error = ref(null);
 const isPending = ref(false);
@@ -8,19 +9,18 @@ const isPending = ref(false);
 const passReset = async(email) => {
   error.value = null;
   isPending.value = true;
-
-  try {
-    await sendPasswordResetEmail(auth, email);
+  try{
+    await sendPasswordResetEmail(auth, email, actionCodeSettings);
     isPending.value = false;
   } catch (err) {
     console.error(err.message);
     error.value = err.message;
     isPending.value = false;
   }
-};
+}
 //composable function
-const usePassReset = () => {
-  return { passReset, error, isPending };
-};
+const usePassReset = ()=>{
+  return {passReset, error, isPending}
+}
 
 export default usePassReset;

@@ -50,14 +50,16 @@
     },
     setup(){
       const email = ref('');
-      const { error, passReset } = usePassReset();
-
+      const {error, passReset} = usePassReset();
+      
       const handleSubmit = async ()=> {
         //attempt to send reset email
         await passReset(email.value);
-        if (!error.value ) alert('Password reset email sent');
-      };
-      return { email, handleSubmit, error };
+        if (!error.value){//success
+          alert('Password reset email sent');
+        }
+      }
+      return {email, handleSubmit, error};
     }
   };
 </script>
