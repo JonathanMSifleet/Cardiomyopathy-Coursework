@@ -2,6 +2,8 @@
 node_modules
 /dist
 package-lock.json
+/.github
+/build
 
 # local env files
 .env.local
@@ -24,3 +26,5 @@ pnpm-debug.log*
 *.jpg
 *.jpeg
 *.png
+*.log
+*.cache
