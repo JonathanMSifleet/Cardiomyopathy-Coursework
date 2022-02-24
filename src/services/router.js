@@ -1,17 +1,18 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 
+// leave comments in import
 const routes = [
   {
     name: 'Home',
     path: '/',
     base: '/',
-    component: () => import('../views/Home/Home.vue')
+    component: () => import(/* webpackChunkName: "Home" */ '../views/Home/Home.vue')
   },
   {
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import('../views/Query/Query.vue')
+    component: () => import(/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
   },
   // no route, route:
   {
