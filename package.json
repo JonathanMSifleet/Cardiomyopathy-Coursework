@@ -5,10 +5,6 @@
   "scripts": {
     "serve": "webpack serve --mode=development",
     "build": "webpack --mode=production",
-    "firebaseLogin": "firebase login",
-    "firebaseDeploy": "firebase deploy",
-    "fullDeploy": "npm i && npm run build && firebase login && firebase deploy",
-    "": "",
     "forceUpdate": "ncu -u",
     "insertHCMData": "node --trace-warnings ./src/utils/insertHcmDataToDatabase.js"
   },
