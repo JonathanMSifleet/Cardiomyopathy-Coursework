@@ -16,8 +16,7 @@
   export default {
     name: 'Home',
     components: {
-      PageWrapper,
-      NewsFeed
+      FileUpload, NewsFeed, PageWrapper
     },
     setup() {
       const { currentUser } = getUser();
