@@ -23,6 +23,7 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
+                    maxlength="20"
                     required
                   />
                 </MDBCol>
@@ -33,6 +34,7 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
+                    maxlength="20"
                     required
                   />
                 </MDBCol>
@@ -43,6 +45,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
+                maxlength="30"
                 required
               />
               <!-- Password input -->
@@ -52,6 +55,7 @@
                 type="password"
                 label="Password"
                 wrapper-class="mb-4"
+                maxlength="30"
                 required
               />
               <MDBInput
@@ -60,6 +64,7 @@
                 type="password"
                 label="Confirm Password"
                 wrapper-class="mb-4"
+                maxlength="30"
                 required
               />
               <MDBInput
@@ -68,6 +73,7 @@
                 type="number"
                 label="Phone Number"
                 wrapper-class="mb-4"
+                maxlength="15"
                 required
               />
               <MDBInput
@@ -76,6 +82,7 @@
                 type="text"
                 label="Address"
                 wrapper-class="mb-4"
+                maxlength="35"
                 required
               />
 
@@ -105,11 +112,12 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { auth, db } from '../../firebase/config';
+  import { auth } from '../../firebase/config';
   import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
   import { doc, setDoc } from 'firebase/firestore';
   import useSignup from '../../composables/useSignup';
   import getUser from '../../composables/getUser';
+  import store from '../../services/store.js';
   import {
     MDBRow,
     MDBCol,
@@ -155,6 +163,7 @@
       //for this to work (if not in test mode)
       const addUserInfo = async (userObj) => {
         //create new user doc in user collection
+        const db = await store.database;
         await setDoc(doc(db, 'users', userObj.uid), userObj);
       };
 
@@ -207,14 +216,15 @@
           });
 
           //sign user out
-          signOut(auth).then(() => {
+          try{
+            await signOut(auth);
             console.log('Signed Out');
-          }).catch((error) => {
+            //redirect to login
+            router.push('/');
+          }
+          catch(error){
             console.log(error);
-          });
-
-          //redirect to login
-          router.push('/');
+          }
         }
       };
       return { email, password, handleSubmit, signupError,

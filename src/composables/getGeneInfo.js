@@ -97,28 +97,26 @@ const fetchGeneDetails = async () =>{
     let response = await fetch(geneDataUrl);
     response = await response.text();
 
-    let parser = new DOMParser();
+    const parser = new DOMParser();
     //convert string response to xml doc obj
     const xml = parser.parseFromString(response, 'application/xml');
     //log xml doc obj to console
     console.log('Fetched Gene Data:', xml);
     //get gene elements in xml
-    let geneElements = xml.getElementsByTagName('Entrezgene');
-
-    for(let i = 0; i<geneElements.length; i++){
-      const geneElement = geneElements[i];
+    const geneElements = xml.getElementsByTagName('Entrezgene');
+    //loop through each gene element
+    geneElements.forEach(geneElement => {
       //get gene properties from xml
       const symbol = geneElement.getElementsByTagName('Gene-ref_locus')[0].innerHTML;
       const name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;
       const description = geneElement.getElementsByTagName('Entrezgene_summary')[0].innerHTML;
       //create gene object
       genes.push({ symbol, name, description });
-    }
+    });
+    return genes;
   } catch (error) {
     console.error(error.message);
   }
-
-  return genes;
 };
 
 export default fetchGeneDetails;

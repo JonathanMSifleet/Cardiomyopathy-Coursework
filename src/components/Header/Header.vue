@@ -16,13 +16,16 @@
         <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Login' }" active>
           Login
         </MDBNavbarItem>
+        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Registration' }" active>
+          Register
+        </MDBNavbarItem>
         <MDBNavbarItem :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
       </MDBNavbarNav>
-      <button v-if="currentUser" class="logout" @click="logout">
+      <MDButton v-if="currentUser" class="logout" @click="logout">
         Logout
-      </button>
+      </MDButton>
     </MDBNavbar>
   </header>
 </template>
@@ -46,16 +49,19 @@
       const { currentUser } = getUser();
 
       //nav bar logout
-      const logout = () => {
-        signOut(auth)
-          .then(() => console.log('Signed out'))
-          .then(() => router.push('/login'))
-          .catch((err) => alert(err.message));
+      const logout = async () => {
+        try{
+          await signOut(auth);
+          console.log('Signed out');
+          router.push('/login');
+        }
+        catch(err){
+          alert(err.message);
+        }
       };
       return { currentUser, logout };
     }
   };
-
 </script>
 
 <style lang="scss" module scoped>
