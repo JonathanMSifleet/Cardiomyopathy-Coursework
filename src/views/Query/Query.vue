@@ -388,7 +388,7 @@
 
       const toggleKey = (key) => {
         if(activeTableKeys.value.includes(key)) {
-          activeTableKeys.value.slice(activeTableKeys.value.indexOf(key), 1);
+          activeTableKeys.value.splice(activeTableKeys.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
           activeTableKeys.value.push(key);
