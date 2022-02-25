@@ -421,8 +421,6 @@
         });
 
         filteredResults.value = intermediateResults;
-        filteredResults.value.forEach(doc => console.log(doc['ledv']));
-
         if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
 
@@ -436,7 +434,10 @@
         filters = [];
         filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
+
         selectedTablePage.value = 1;
+
+        renderableResults.value = filteredResults.value.slice(0, pageSize);
       });
 
       // paginate table:
