@@ -106,7 +106,7 @@
       const auth = getAuth();
       const router = useRouter();
 
-      const login = async () => {
+      const Login = async () => {
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
           router.push('/');
@@ -129,7 +129,7 @@
         }
       };
 
-      return { login, email, errorMessage, password };
+      return { Login, email, errorMessage, password };
     }
   };
 </script>
