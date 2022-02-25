@@ -43,6 +43,11 @@ const routes = [
     component: () => import('../views/Login/Login.vue'),
     beforeEnter: requireSignedOut
   },
+  {
+    path: '/experimentalData',
+    name: 'ExperimentalData',
+    component: () => import('../views/ExperimentalData/ExperimentalData.vue')
+  },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
