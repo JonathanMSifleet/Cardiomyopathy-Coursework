@@ -208,7 +208,7 @@
 
           //set user display name
           try {
-            updateProfile(auth.currentUser, {
+            await updateProfile(auth.currentUser, {
               displayName: firstName.value
             });
           } catch (error) {
@@ -216,7 +216,7 @@
           }
 
           //sign user out
-          try{
+          try {
             await signOut(auth);
             console.log('Signed Out');
             //redirect to login
