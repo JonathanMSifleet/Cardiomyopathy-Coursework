@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
@@ -10,8 +9,21 @@ module.exports = {
   entry: './src/main.js',
   devtool: 'eval-source-map',
   output: {
-    filename: 'index.js',
-    path: path.resolve(__dirname, 'build')
+    chunkFilename: '[name].[chunkhash].js',
+    path: path.resolve(__dirname, 'build'),
+    pathinfo: false
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
   },
   resolve: {
     extensions: ['.js', '.vue']
@@ -71,13 +83,13 @@ module.exports = {
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
-      "process.env.DEVELOPMENT": JSON.stringify(true),
-      "process.env.API_KEY": JSON.stringify('AIzaSyBuiC69m_Rz3X4Htt4epBFqAwfq5VKULS8'),
-      "process.env.AUTH_DOMAIN": JSON.stringify('frdtest-ee098.firebaseapp.com'),
-      "process.env.PROJECT_ID": JSON.stringify('frdtest-ee098'),
-      "process.env.STORAGE_BUCKET": JSON.stringify('frdtest-ee098.appspot.com'),
-      "process.env.MESSAGING_SENDER_ID": JSON.stringify('385905656452'),
-      "process.env.APP_ID": JSON.stringify('1:385905656452:web:ae167cdb7fb0d973feb8d1')
+      'process.env.DEVELOPMENT': JSON.stringify(true),
+      'process.env.API_KEY': JSON.stringify('AIzaSyDGrP1QWYsQqLFAoev-AHjAQKq4aal9q_M'),
+      'process.env.AUTH_DOMAIN': JSON.stringify('advwebdevproject-7d239.firebaseapp.com'),
+      'process.env.PROJECT_ID': JSON.stringify('advwebdevproject-7d239'),
+      'process.env.STORAGE_BUCKET': JSON.stringify('advwebdevproject-7d239.appspot.com'),
+      'process.env.MESSAGING_SENDER_ID': JSON.stringify('68352912449'),
+      'process.env.APP_ID': JSON.stringify('1:683529124490:web:9105469d5ed03da2350b73')
     })
   ]
 };
