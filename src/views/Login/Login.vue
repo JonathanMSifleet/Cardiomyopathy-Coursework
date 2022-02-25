@@ -8,7 +8,7 @@
             {{ errorMessage }}
           </MDBCardTitle>
           <MDBCardText>
-            <form @submit.prevent="Login">
+            <form @submit.prevent="login">
               <!-- Email input -->
 
               <MDBInput
