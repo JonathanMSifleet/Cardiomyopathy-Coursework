@@ -58,14 +58,11 @@
       const logout = async () => {
         try {
           await signOut(auth);
-          console.log('Signed out');
           router.push('/login');
         } catch (err) {
           alert(err.message);
         }
       };
-
-      console.log('currentUser', currentUser.value);
 
       return { currentUser, logout };
     }

@@ -99,8 +99,6 @@ const fetchGeneDetails = async () =>{
 
     //convert string response to xml doc obj
     const xml = new DOMParser().parseFromString(response, 'application/xml');
-    //log xml doc obj to console
-    console.log('Fetched Gene Data:', xml);
     //get gene elements in xml
     const geneElements = xml.getElementsByTagName('Entrezgene');
     //loop through each gene element
