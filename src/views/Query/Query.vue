@@ -178,7 +178,7 @@
   import fetchDocuments from '../../utils/fetchDocuments';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
-  import { isValid } from '../../utils/validationFunctions';
+  import { operandIsValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch } from 'vue';
 
   export default {
@@ -278,7 +278,7 @@
           alert('Attribute not found in database'); return;
         }
 
-        const operandValidationMessage = isValid(queryOperand.value);
+        const operandValidationMessage = operandIsValid(queryOperand.value);
         if (!operandValidationMessage) {
           alert('Input must be a number or equal to true or false'); return;
         }

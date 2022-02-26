@@ -70,7 +70,7 @@
               <MDBInput
                 id="form2Phone"
                 v-model="phone"
-                type="number"
+                type="text"
                 label="Phone Number"
                 wrapper-class="mb-4"
                 maxlength="15"
@@ -86,7 +86,7 @@
                 required
               />
 
-              <MDBBtn type="submit" color="primary">
+              <MDBBtn type="submit" color="primary" :disabled="!canRegister">
                 Register
               </MDBBtn>
             </form>
@@ -110,14 +110,14 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { auth } from '../../firebase/config';
-  import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
-  import { doc, setDoc } from 'firebase/firestore';
-  import useSignup from '../../composables/useSignup';
   import getUser from '../../composables/getUser';
   import store from '../../services/store.js';
+  import useSignup from '../../composables/useSignup';
+  import { auth } from '../../firebase/config';
+  import { doc, setDoc } from 'firebase/firestore';
+  import { ref, watch } from 'vue';
+  import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
+  import { useRouter } from 'vue-router';
   import {
     MDBRow,
     MDBCol,
@@ -130,6 +130,7 @@
     MDBCardText,
     MDBCardFooter
   } from 'mdb-vue-ui-kit';
+  import { validateEmail, validateName } from '../../utils/validationFunctions';
 
   export default {
     name: 'Register',
@@ -148,6 +149,7 @@
     },
     setup() {
       const address = ref('');
+      let canRegister = ref(false);
       const email = ref('');
       const firstName = ref('');
       const lastName = ref('');
@@ -180,9 +182,9 @@
       };
 
       //submit registration data and create account
-      const handleSubmit = async ()=> {
-        //exit function if password confirmation does not match
-        if(!checkPasswordsMatch()) return;
+      const handleSubmit = async () => {
+        // check all inputs are valid:
+        if (validateInputs()) return;
 
         //create user acc
         await signup(email.value, password.value);
@@ -225,8 +227,32 @@
           }
         }
       };
-      return { address, email, firstName, handleSubmit, lastName, passConfirm,
-               passMatchErr, password, phone, signupError };
+
+      const validateInputs = () => {
+        let inputsValid = true;
+
+        if(!checkPasswordsMatch()) inputsValid = false;
+
+        const firstNameValMessages = validateName(firstName.value);
+        const lastNameValMessages = validateName(lastName.value);
+        const emailValMessage = validateEmail(email.value);
+
+        return inputsValid;
+      };
+
+      watch([address, email, firstName, lastName, passConfirm, password, phone], () => {
+        canRegister.value =
+          address.value !== '' &&
+          email.value !== '' &&
+          firstName.value !== '' &&
+          lastName.value !== '' &&
+          passConfirm.value !== '' &&
+          password.value !== '' &&
+          phone.value !== '';
+      });
+
+      return { address, canRegister, email, firstName, handleSubmit, lastName,
+               passConfirm, passMatchErr, password, phone, signupError };
     }
   };
 </script>
