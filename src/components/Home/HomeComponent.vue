@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 <template>
-  <div :class="[$style['information-wrapper'], false ? '' : $style['no-user']]">
+  <div :class="[$style['information-wrapper'], currentUser ? '' : $style['no-user']]">
     <div :class="[$style['information-content']]">
       <div>
         <h2 v-if="post.WelcomeSection">
@@ -35,6 +35,7 @@
 </template>
 
 <script>
+  import { ref } from '@vue/reactivity';
   import getUser from '../../composables/getUser';
   export default {
     name: 'HomeComponent',
@@ -42,7 +43,10 @@
     props: ['post'],
     setup () {
       const { currentUser } = getUser();
-      const userBoolean = Boolean(true);
+      let userBoolean = ref(false);
+      if (currentUser) {
+        userBoolean.value = true;
+      }
       return (currentUser, userBoolean);
     }
   };
