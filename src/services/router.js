@@ -10,18 +10,19 @@ const requireSignedOut = (to, from, next) =>{
   user ? next({ name: 'Home' }) : next();
 };
 
+// leave comments in import
 const routes = [
   {
     name: 'Home',
     path: '/',
     base: '/',
-    component: () => import('../views/Home/Home.vue')
+    component: () => import(/* webpackChunkName: "Home" */ '../views/Home/Home.vue')
   },
   {
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import('../views/Query/Query.vue')
+    component: () => import(/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
   },
   {
     name: 'Registration',

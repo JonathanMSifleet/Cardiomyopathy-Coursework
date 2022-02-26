@@ -1,14 +1,16 @@
 const csvToJSON = require('csvtojson');
-const firebaseDetails = require('../constants/firebaseDetails');
 const path = require('path');
 const { addDoc, collection, getFirestore } = require('firebase/firestore');
 const { initializeApp } = require('firebase/app');
 
-const initialiseDatabase = () => {
-  initializeApp(firebaseDetails.details);
-
-  return getFirestore();
-};
+const initialiseDatabase = () => getFirestore(initializeApp({
+  apiKey: 'AIzaSyDGrP1QWYsQqLFAoev-AHjAQKq4aal9q_M',
+  authDomain: 'advwebdevproject-7d239.firebaseapp.com',
+  projectId: 'advwebdevproject-7d239',
+  storageBucket: 'advwebdevproject-7d239.appspot.com',
+  messagingSenderId: '683529124490',
+  appId: '1:683529124490:web:9105469d5ed03da2350b73'
+}));
 
 const parseData = async (filePath) => {
   const items = [];

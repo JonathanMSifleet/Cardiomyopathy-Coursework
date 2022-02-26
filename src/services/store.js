@@ -4,7 +4,7 @@ import { initializeApp } from 'firebase/app';
 import firebaseDetails from '../constants/firebaseDetails';
 
 const store = reactive({
-  app: (() => initializeApp(firebaseDetails.details))(),
+  app: (() => initializeApp(firebaseDetails))(),
   database: (async () => await initDatabase())()
 });
 

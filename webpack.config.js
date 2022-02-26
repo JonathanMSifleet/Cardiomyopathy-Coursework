@@ -1,4 +1,3 @@
-/* eslint-disable quotes */
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const webpack = require('webpack');
@@ -10,8 +9,21 @@ module.exports = {
   entry: './src/main.js',
   devtool: 'eval-source-map',
   output: {
-    filename: 'index.js',
-    path: path.resolve(__dirname, 'build')
+    chunkFilename: '[name].[chunkhash].js',
+    path: path.resolve(__dirname, 'build'),
+    pathinfo: false
+  },
+  optimization: {
+    minimize: true,
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
   },
   resolve: {
     extensions: ['.js', '.vue']
