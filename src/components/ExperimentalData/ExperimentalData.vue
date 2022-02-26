@@ -15,7 +15,11 @@
                   aria-label="Default select example"
                   required
                 >
-                  <option v-for="key in geneMutations" :key="key" :disabled="key === 'Please select'">
+                  <option
+                    v-for="key in geneMutations"
+                    :key="key"
+                    :disabled="key === 'Please select'"
+                  >
                     {{ key }}
                   </option>
                 </select>
@@ -101,37 +105,37 @@
                   wrapper-class="mb-4"
                   step="0.00000000001"
                 />
+                <MDBInput
+                  v-model="info.gender"
+                  type="text"
+                  label="Gender"
+                  wrapper-class="mb-4"
+                  
+                />
               </MDBCol>
             </MDBRow>
             <MDBRow class="mb-4">
-              <MDBCol md="3">
-                <MDBCheckbox
-                  v-model="info.female"
-                  label="Female"
-                  wrapper-class="mb-2"
-                />
-                <MDBCheckbox v-model="info.fibrosis" label="Fibrosis" />
-              </MDBCol>
               <MDBCol md="4">
+                <MDBCheckbox v-model="info.fibrosis" label="Fibrosis" />
                 <MDBCheckbox
                   v-model="info.apicalHcm"
                   label="Apical HCM"
                   wrapper-class="mb-2"
                 />
+              </MDBCol>
+              <MDBCol md="4">
                 <MDBCheckbox
                   v-model="info.suddenCardiacDeath"
                   label="Sudden Cardiac Death"
                 />
-              </MDBCol>
-              <MDBCol md="3">
                 <MDBCheckbox
                   v-model="info.hypertension"
                   label="Hypertension"
                   wrapper-class="mb-2"
                 />
-                <MDBCheckbox v-model="info.diabetes" label="Diabetes" />
               </MDBCol>
-              <MDBCol md="2">
+              <MDBCol md="4">
+                <MDBCheckbox v-model="info.diabetes" label="Diabetes" />
                 <MDBCheckbox
                   v-model="info.myectomy"
                   label="Myectomy"
@@ -162,11 +166,26 @@
 </template>
 
 <script>
-  import { ref, reactive } from '@vue/reactivity';
-  import { collection, addDoc } from 'firebase/firestore';
-  import getUser from '../../composables/getUser';
-  import store from '../../services/store';
-  import {
+import { ref, reactive } from "@vue/reactivity";
+import { collection, addDoc } from "firebase/firestore";
+import getUser from "../../composables/getUser";
+import store from "../../services/store";
+import {
+  MDBRow,
+  MDBCol,
+  MDBInput,
+  MDBCheckbox,
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardHeader,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardFooter,
+} from "mdb-vue-ui-kit";
+export default {
+  name: "ExperimentalData",
+  components: {
     MDBRow,
     MDBCol,
     MDBInput,
@@ -177,76 +196,62 @@
     MDBCardHeader,
     MDBCardTitle,
     MDBCardText,
-    MDBCardFooter
-  } from 'mdb-vue-ui-kit';
-  export default {
-    name: 'ExperimentalData',
-    components: {
-      MDBRow,
-      MDBCol,
-      MDBInput,
-      MDBCheckbox,
-      MDBBtn,
-      MDBCard,
-      MDBCardBody,
-      MDBCardHeader,
-      MDBCardTitle,
-      MDBCardText,
-      MDBCardFooter
-    },
-    setup() {
-      const { currentUser } = getUser();
-      const geneMutations = reactive([
-        'Please select',
-        'MYH7',
-        'MYBPC3',
-        'TNNT2',
-        'ACTC',
-        'TPM1',
-        'TNNCI',
-        'TNNI3',
-        'MYL2',
-        'TTN'
-      ]);
-      const selectedMutation = ref('Please select');
-      const info = reactive({
-        userId: currentUser.value.uid,
-        ledv: '',
-        redv: '',
-        lesv: '',
-        resv: '',
-        lvef: '',
-        rvef: '',
-        lvmass: '',
-        rvmass: '',
-        lsv: '',
-        rsv: '',
-        female: false,
-        fibrosis: false,
-        ageAtMri: false,
-        apicalHcm: false,
-        suddenCardiacDeath: false,
-        hypertension: false,
-        diabetes: false,
-        myectomy: false
-      });
+    MDBCardFooter,
+  },
+  setup() {
+    const { currentUser } = getUser();
+    const geneMutations = reactive([
+      "Please select",
+      "MYH7",
+      "MYBPC3",
+      "TNNT2",
+      "ACTC",
+      "TPM1",
+      "TNNCI",
+      "TNNI3",
+      "MYL2",
+      "TTN",
+    ]);
+    const selectedMutation = ref("Please select");
+    const info = reactive({
+      userId: currentUser.value.uid,
+      ledv: "",
+      redv: "",
+      lesv: "",
+      resv: "",
+      lvef: "",
+      rvef: "",
+      lvmass: "",
+      rvmass: "",
+      lsv: "",
+      rsv: "",
+      gender: "",
+      fibrosis: false,
+      ageAtMri: false,
+      apicalHcm: false,
+      suddenCardiacDeath: false,
+      hypertension: false,
+      diabetes: false,
+      myectomy: false,
+    });
 
-      async function experimentalData() {
-        for (const key in info) {
-          if (info[key] === '' || info[key] === undefined) {
-            delete info[key];
-          }
+    async function experimentalData() {
+      for (const key in info) {
+        if (info[key] === "" || info[key] === undefined) {
+          delete info[key];
         }
-
-        const docRef = await addDoc(collection(await store.database, 'hcmData'), {
-          ...info, [selectedMutation.value]: true
-        });
-        console.log('Document written with ID: ', docRef.id);
       }
 
-      return { info, geneMutations, selectedMutation, experimentalData };
+      const docRef = await addDoc(collection(await store.database, "hcmData"), {
+        ...info,
+        GeneMutation: selectedMutation.value,
+      });
+      console.log("Document written with ID: ", docRef.id);
     }
-  };
+
+    return { info, geneMutations, selectedMutation, experimentalData };
+  },
+};
 </script>
 
 <style module lang="scss">

@@ -8,7 +8,7 @@
             {{ errorMessage }}
           </MDBCardTitle>
           <MDBCardText>
-            <form @submit.prevent="Login">
+            <form @submit.prevent="login">
               <!-- Email input -->
 
               <MDBInput
@@ -106,7 +106,7 @@
       const auth = getAuth();
       const router = useRouter();
 
-      const Login = async () => {
+      const login = async () => {
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
           router.push('/');
@@ -129,7 +129,7 @@
         }
       };
 
-      return { Login, email, errorMessage, password };
+      return { login, email, errorMessage, password };
     }
   };
 </script>

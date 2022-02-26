@@ -1,15 +1,15 @@
 <template>
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-      <MDBCard class="authentication-card" text="center">
+      <MDBCard :class="$style['authentication-card']" text="center">
         <MDBCardHeader>User Registration</MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle>
             <!--print any google auth errors-->
-            <div v-if="signupError" class="error-message mb-4">
+            <div v-if="signupError" :class="[$style['error-message'], 'mb-4']">
               {{ signupError }}
             </div>
-            <div v-if="passMatchErr" class="error-message mb-4">
+            <div v-if="passMatchErr" :class="[$style['error-message'], 'mb-4']">
               {{ passMatchErr }}
             </div>
           </MDBCardTitle>
@@ -97,7 +97,7 @@
           <div class="text-center mt-3">
             <p>
               Already a member?
-              <router-link :to="{ name: 'Login' }" class="register-link">
+              <router-link :to="{ name: 'Login' }" :class="$style['register-link']">
                 Login here
               </router-link>
             </p>
@@ -232,6 +232,6 @@
   };
 </script>
 
-<style>
+<style lang="scss" scoped module>
   @import "../../assets/styles/Authentication.scss";
 </style>
