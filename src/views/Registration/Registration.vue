@@ -19,71 +19,95 @@
                 <MDBCol md="6">
                   <MDBInput
                     id="form2FirstName"
-                    v-model="firstName"
+                    v-model.trim="firstName"
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="32"
                     required
                   />
                 </MDBCol>
                 <MDBCol md="6">
                   <MDBInput
                     id="form2LastName"
-                    v-model="lastName"
+                    v-model.trim="lastName"
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="32"
                     required
                   />
                 </MDBCol>
               </MDBRow>
               <MDBInput
                 id="form2Email"
-                v-model="email"
+                v-model.trim="email"
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="320"
                 required
               />
               <!-- Password input -->
               <MDBInput
                 id="form2Password"
-                v-model="password"
+                v-model.trim="password"
                 type="password"
                 label="Password"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="64"
                 required
               />
               <MDBInput
-                id="form2Password"
-                v-model="passConfirm"
+                id="form2PasswordConfirm"
+                v-model.trim="passConfirm"
                 type="password"
                 label="Confirm Password"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="64"
                 required
               />
               <MDBInput
                 id="form2Phone"
-                v-model="phone"
+                v-model.trim="phone"
                 type="text"
                 label="Phone Number"
                 wrapper-class="mb-4"
-                maxlength="15"
+                :maxlength="13"
                 required
               />
               <MDBInput
-                id="form2Address"
-                v-model="address"
+                id="form2AddressLineOne"
+                v-model.trim="addressLineOne"
                 type="text"
-                label="Address"
+                label="Address line 1"
                 wrapper-class="mb-4"
-                maxlength="35"
+                :maxlength="35"
                 required
+              />
+              <MDBInput
+                id="form2AddressLineTwo"
+                v-model.trim="addressLineTwo"
+                type="text"
+                label="Address line 2"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2city"
+                v-model.trim="city"
+                type="text"
+                label="Town / city"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2postcode"
+                v-model.trim="postcode"
+                type="text"
+                label="Postcode"
+                wrapper-class="mb-4"
+                :maxlength="8"
               />
 
               <MDBBtn type="submit" color="primary" :disabled="!canRegister">
@@ -130,7 +154,7 @@
     MDBCardText,
     MDBCardFooter
   } from 'mdb-vue-ui-kit';
-  import { validateEmail, validateName } from '../../utils/validationFunctions';
+  import { validateEmail, validateName, validatePassword, validatePhoneNumber } from '../../utils/validationFunctions';
 
   export default {
     name: 'Register',
@@ -148,8 +172,11 @@
       PageWrapper
     },
     setup() {
-      const address = ref('');
+      const addressLineOne = ref('');
+      const addressLineTwo = ref(null);
       let canRegister = ref(false);
+      const city = ref('');
+      const country = ref('');
       const email = ref('');
       const firstName = ref('');
       const lastName = ref('');
@@ -157,6 +184,7 @@
       const passMatchErr = ref('');
       const password = ref('');
       const phone = ref('');
+      const postcode = ref ('');
       const router = useRouter();
       const { signupError, signup } = useSignup();
 
@@ -203,7 +231,11 @@
             uid: currentUser.value.uid,
             firstName: firstName.value,
             lastName: lastName.value,
-            address: address.value,
+            address: {
+              addressLineOne: addressLineOne.value,
+              addressLineTwo: addressLineTwo.value,
+              city: city.value
+            },
             email: email.value,
             phone: phone.value
           });
@@ -235,14 +267,19 @@
 
         const firstNameValMessages = validateName(firstName.value);
         const lastNameValMessages = validateName(lastName.value);
-        const emailValMessage = validateEmail(email.value);
-
+        const emailValMessages = validateEmail(email.value);
+        const passwordValMessages = validatePassword(password.value);
+        const phoneValMessages = validatePhoneNumber(phone.value);
         return inputsValid;
       };
 
-      watch([address, email, firstName, lastName, passConfirm, password, phone], () => {
+      watch([addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
+        console.log('🚀 ~ file: Registration.vue ~ line 287 ~ watch ~ addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode', addressLineOne.value, city.value, country.value, email.value, firstName.value, lastName.value, passConfirm.value, password.value, phone.value, postcode.value);
+
+
         canRegister.value =
-          address.value !== '' &&
+          addressLineOne.value !== '' &&
+          city.value !== '' &&
           email.value !== '' &&
           firstName.value !== '' &&
           lastName.value !== '' &&
@@ -251,8 +288,8 @@
           phone.value !== '';
       });
 
-      return { address, canRegister, email, firstName, handleSubmit, lastName,
-               passConfirm, passMatchErr, password, phone, signupError };
+      return { addressLineOne, addressLineTwo, canRegister, city, country, email, firstName, handleSubmit, lastName,
+               passConfirm, passMatchErr, password, phone, postcode, signupError };
     }
   };
 </script>
