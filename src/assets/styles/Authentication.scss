@@ -1,0 +1,26 @@
+.authentication-card {
+  width: 32rem;
+}
+
+.register-link, .reset-password-link {
+  text-decoration: none;
+  color: #1266f1 !important;
+}
+
+.register-link:hover, .reset-password-link:hover {
+  text-decoration: none;
+  transition: background-color 2s;
+  color: #0b49ac !important;
+}
+
+.error-message {
+  border: 1px solid;
+  margin: 1%;
+  padding: 2% 1% 2% 3%;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  max-width: 40vw;
+  color: #D8000C;
+  background-color: #FFBABA;
+  background-image: url('https://i.imgur.com/GnyDvKN.png');
+}

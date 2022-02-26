@@ -13,27 +13,62 @@
         <MDBNavbarItem :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
+        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Login' }" active>
+          Login
+        </MDBNavbarItem>
+        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Registration' }" active>
+          Register
+        </MDBNavbarItem>
         <MDBNavbarItem :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
       </MDBNavbarNav>
+      <MDBBtn
+        v-if="currentUser"
+        class="logout"
+        color="light"
+        @click="logout"
+      >
+        Logout
+      </MDBBtn>
     </MDBNavbar>
   </header>
 </template>
 
 <script>
-  import { MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
+  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
+  import { useRouter } from 'vue-router';
+  import { getAuth, signOut }  from 'firebase/auth';
+  import getUser from '../../composables/getUser';
 
   export default {
     components: {
+      MDBBtn,
       MDBNavbar,
       MDBNavbarToggler,
       MDBNavbarNav,
       MDBNavbarItem
+    },
+    setup () {
+      const router = useRouter();
+      const auth = getAuth();
+      const { currentUser } = getUser();
+
+      //nav bar logout
+      const logout = async () => {
+        try {
+          await signOut(auth);
+          router.push('/login');
+        } catch (err) {
+          alert(err.message);
+        }
+      };
+
+      return { currentUser, logout };
     }
   };
 </script>
 
 <style lang="scss" module scoped>
-@import "./Header.module.scss";
+  @import "./Header.module.scss";
 </style>
