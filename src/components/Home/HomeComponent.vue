@@ -29,7 +29,7 @@
       </div>
     </div>
     <div :class="[$style['bg-photo']]">
-      <img :src="post.photo">
+      <img :src="require(`../../assets/imgs/${post.photo}.jpg`)">
     </div>
   </div>
 </template>

@@ -9,8 +9,6 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import HomeComponent from '../../components/Home/HomeComponent.vue';
   import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
-  import hcmImg from '../../assets/imgs/query-page.jpg';
-  import queryPageImg from '../../assets/imgs/hcm.jpg';
   export default {
     name: 'Help',
     components: {
@@ -24,12 +22,12 @@
           {
             title: 'Query',
             description: 'query is',
-            photo: hcmImg
+            photo: 'hcm'
           },
           {
             title: 'help 2',
             description: 'help 2',
-            photo: queryPageImg
+            photo: 'query-page'
           }
         ]
       };

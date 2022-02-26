@@ -12,7 +12,6 @@
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import HomeComponent from '../../components/Home/HomeComponent.vue';
   import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
-  import hcmImg from '../../assets/imgs/hcm.jpg';
 
   export default {
     name: 'Home',
@@ -42,18 +41,19 @@
           title: 'COMPANY TITLE',
           description: 'this will be content to explain a bit about the site',
           WelcomeSection: true,
-          photo: hcmImg
+          photo: 'hcm'
+          // hcmImg
         },
         HCM: [
           {
             title: 'Hypertrophic cardiomyopathy (HCM)',
             description: hcmDesc1+hcmDesc2,
-            photo: hcmImg
+            photo: 'hcm'
           },
           {
             title: 'Hypertrophic cardiomyopathy (HCM)',
             description: hcmDesc1+hcmDesc2,
-            photo: hcmImg
+            photo: 'hcm'
           }
         ]
       };
