@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 
 <template>
-  <div :class="[$style['information-wrapper'], currentUser ? '' : $style['no-user']]">
+  <div :class="[$style['information-wrapper'], false ? '' : $style['no-user']]">
     <div :class="[$style['information-content']]">
       <div>
         <h2 v-if="post.WelcomeSection">
@@ -29,7 +29,7 @@
       </div>
     </div>
     <div :class="[$style['bg-photo']]">
-      <img src="../../assets/imgs/hcm.jpg">
+      <img :src="post.photo">
     </div>
   </div>
 </template>

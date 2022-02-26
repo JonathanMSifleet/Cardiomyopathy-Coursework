@@ -44,6 +44,11 @@ const routes = [
     component: () => import('../views/Login/Login.vue'),
     beforeEnter: requireSignedOut
   },
+  {
+    path: '/help',
+    name: 'Help',
+    component: () => import('../views/Help/Help.vue')
+  },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
