@@ -1,11 +1,10 @@
-import { initializeApp } from 'firebase/app';
 //firebase authentification function
 import { getAuth } from 'firebase/auth';
-
-const firebaseConfig = require('../constants/firebaseDetails');
+import store from '../services/store';
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig.details);
+const app = store.app;
+
 const auth = getAuth();
 
 export { auth, app };

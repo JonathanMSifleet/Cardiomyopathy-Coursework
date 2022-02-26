@@ -110,7 +110,7 @@ const fetchGeneDetails = async () =>{
       //create gene object
       genes.push({ symbol, name, description });
     });
-    
+
     return genes;
   } catch (error) {
     console.error(error.message);
