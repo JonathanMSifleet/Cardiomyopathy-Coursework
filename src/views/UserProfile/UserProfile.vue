@@ -334,7 +334,7 @@ export default {
 
     async function deleteExperimentalDataDoc(docId) {
       console.log(docId);
-      await deleteDoc(doc(await store.database, "hcmData", docId));
+      await deleteDoc(doc(await store.database, "hcmData", docId)).then(alert("Data has been successfully deleted.")).then(router.push('/'));
     }
 
     const toggleModal = (docId) => {

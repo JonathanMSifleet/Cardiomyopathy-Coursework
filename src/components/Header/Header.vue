@@ -22,6 +22,12 @@
         <MDBNavbarItem :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'ExperimentalData' }" active>
+          Experimental Data
+        </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'UserProfile' }" active>
+          Profile
+        </MDBNavbarItem>
       </MDBNavbarNav>
       <MDButton v-if="currentUser" class="logout" @click="logout">
         Logout
