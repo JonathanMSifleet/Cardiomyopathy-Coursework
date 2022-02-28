@@ -9,6 +9,7 @@
             <MDBRow>
               <MDBCol md="4">
                 <select
+                  id="geneMutations"
                   v-model="selectedMutation"
                   name="gene-mutations"
                   class="form-select mb-4"
@@ -19,6 +20,7 @@
                     v-for="key in geneMutations"
                     :key="key"
                     :disabled="key === 'Please select'"
+                    :value="key"
                   >
                     {{ key }}
                   </option>
@@ -110,7 +112,6 @@
                   type="text"
                   label="Gender"
                   wrapper-class="mb-4"
-                  
                 />
               </MDBCol>
             </MDBRow>
@@ -242,12 +243,19 @@ export default {
         }
       }
 
-      const docRef = await addDoc(collection(await store.database, "hcmData"), {
-        ...info,
-        GeneMutation: selectedMutation.value,
-        createdAt: serverTimestamp(),
-      });
-      console.log("Document written with ID: ", docRef.id);
+      if (document.getElementById("geneMutations").value === "Please select") {
+        alert("Please select a valid Gene mutation");
+      } else {
+        const docRef = await addDoc(
+          collection(await store.database, "hcmData"),
+          {
+            ...info,
+            GeneMutation: selectedMutation.value,
+            createdAt: serverTimestamp(),
+          }
+        );
+        console.log("Document written with ID: ", docRef.id);
+      }
     }
 
     return { info, geneMutations, selectedMutation, experimentalData };
