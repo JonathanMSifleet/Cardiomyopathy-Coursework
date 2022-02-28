@@ -123,7 +123,7 @@
             errorMessage.value = 'Incorrect password';
             break;
           default:
-            errorMessage.value = 'Email or password was incorrect';
+            errorMessage.value = error.message;
             break;
           }
         }
