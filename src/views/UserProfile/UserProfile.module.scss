@@ -1,3 +1,7 @@
+* {
+    overflow: hidden;
+}
+
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
@@ -42,4 +46,9 @@
 .styled-table tbody tr.active-row {
     font-weight: bold;
     color: #0d6efd;
+}
+
+.delete-btn:hover {
+    transition: 0.3s;
+    background-color: rgb(185, 6, 6);
 }

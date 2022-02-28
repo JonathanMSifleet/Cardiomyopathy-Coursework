@@ -109,13 +109,22 @@
   </div>
 
   <div class="d-flex justify-content-center mt-5">
-    <MDBRow class="mb-5">
+    <MDBRow>
       <MDBCol md="12">
-        <MDBBtn color="primary" @click="toggleTable"
-          >Display Experimental Data</MDBBtn
-        >
+        <MDBBtn
+          :class="[
+            showTable ? $style['display-tbl-btn'] : $style['hide-tbl-btn'],
+          ]"
+          color="primary"
+          @click="toggleTable"
+          v-html="
+            showTable ? 'Hide Experimental Data' : 'Display Experimental Data'
+          "
+        />
       </MDBCol>
     </MDBRow>
+  </div>
+  <div class="d-flex justify-content-center mt-5">
     <MDBRow>
       <table
         :class="$style['styled-table']"
@@ -187,9 +196,12 @@
               {{ entity.myectomy == undefined ? "N/A" : entity.myectomy }}
             </td>
             <td>
-              <MDBBtn @click="toggleModal(entity.documentId)" color="danger">
-                <!-- <MDBIcon icon="trash" size="5x" /> -->
-                Delete
+              <MDBBtn
+                :class="$style['delete-btn']"
+                @click="toggleModal(entity.documentId)"
+                color="danger"
+              >
+                <MDBIcon icon="trash" />
               </MDBBtn>
             </td>
           </tr>
@@ -310,12 +322,12 @@ export default {
       try {
         updateProfile(auth.currentUser, {
           displayName: firstName.value,
-        });
+        })
+          .then(alert("User profile updated."))
+          .then(router.push("/"));
       } catch (error) {
         console.log(error);
       }
-      alert("User profile updated.");
-      router.push("/");
     }
 
     async function getExperimentalDataByUserId() {
@@ -334,7 +346,9 @@ export default {
 
     async function deleteExperimentalDataDoc(docId) {
       console.log(docId);
-      await deleteDoc(doc(await store.database, "hcmData", docId)).then(alert("Data has been successfully deleted.")).then(router.push('/'));
+      await deleteDoc(doc(await store.database, "hcmData", docId))
+        .then(alert("Data has been successfully deleted."))
+        .then(router.push("/"));
     }
 
     const toggleModal = (docId) => {
@@ -352,6 +366,7 @@ export default {
       deleteExperimentalDataDoc,
       toggleModal,
       toggleTable,
+      showTable,
       deleteConfirmationModal,
       experimentalData,
       firstName,
