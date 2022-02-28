@@ -167,7 +167,7 @@
 
 <script>
 import { ref, reactive } from "@vue/reactivity";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import getUser from "../../composables/getUser";
 import store from "../../services/store";
 import {
@@ -245,6 +245,7 @@ export default {
       const docRef = await addDoc(collection(await store.database, "hcmData"), {
         ...info,
         GeneMutation: selectedMutation.value,
+        createdAt: serverTimestamp(),
       });
       console.log("Document written with ID: ", docRef.id);
     }

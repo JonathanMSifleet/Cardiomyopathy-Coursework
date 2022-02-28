@@ -151,6 +151,7 @@
             <th scope="col">Hypertension</th>
             <th scope="col">Diabetes</th>
             <th scope="col">Myectomy</th>
+            <th scope="col">Date Created</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -194,6 +195,9 @@
             </td>
             <td>
               {{ entity.myectomy == undefined ? "N/A" : entity.myectomy }}
+            </td>
+            <td>
+              {{ entity.createdAt.toDate() }}
             </td>
             <td>
               <MDBBtn
