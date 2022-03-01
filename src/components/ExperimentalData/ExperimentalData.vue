@@ -252,6 +252,7 @@ export default {
             ...info,
             GeneMutation: selectedMutation.value,
             createdAt: serverTimestamp(),
+            deletedAt: null
           }
         );
         console.log("Document written with ID: ", docRef.id);

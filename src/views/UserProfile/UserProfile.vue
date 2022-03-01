@@ -229,6 +229,7 @@ import {
   where,
   getDocs,
   deleteDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { updateProfile } from "firebase/auth";
 import store from "../../services/store";
@@ -349,7 +350,15 @@ export default {
     }
 
     async function deleteExperimentalDataDoc(docId) {
-      console.log(docId);
+      //Update the deleted timestamp
+      const docRef = doc(await store.database, "hcmData", docId);
+
+      // Update the timestamp field with the value from the server
+      await updateDoc(docRef, {
+        deletedAt: serverTimestamp(),
+      });
+
+      //Delete the document from the database
       await deleteDoc(doc(await store.database, "hcmData", docId))
         .then(alert("Data has been successfully deleted."))
         .then(router.push("/"));
@@ -385,7 +394,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped module>
+<style lang="scss" module scoped>
 @import "../../assets/styles/Authentication.scss";
 @import "./UserProfile.module.scss";
 </style>
