@@ -105,9 +105,7 @@ const geneData = [
 const getGeneIdString = (geneObjArray) => {
   let geneIdString = '';
 
-  geneObjArray.forEach(gene => {
-    geneIdString += gene.entrezId + ',';
-  });
+  geneObjArray.forEach(gene => geneIdString += `${gene.entrezId},`);
 
   // remove last character from string
   return geneIdString.slice(0, -1);
@@ -121,8 +119,6 @@ const fetchGeneDetails = async () =>{
   //API request URL, efetch returns xml
   const geneDataUrl = baseURL + 'efetch.fcgi?db=gene&id=' + geneIDString
     + '&retmode=xml';
-
-  //const genes = [];
 
   //fetch gene data from ncbi database
   try {
@@ -139,16 +135,16 @@ const fetchGeneDetails = async () =>{
       const geneElemId = geneElement.getElementsByTagName('Gene-track_geneid')[0].innerHTML;
 
       //checks if id of geneElement in fetched xml matches that of a gene in geneData array
-      const correspondingGene = geneData.find(gene =>gene.entrezId==geneElemId);
-      if(correspondingGene !== undefined){
-        let i = geneData.indexOf(correspondingGene);
-        geneData[i].name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;
-        geneData[i].description = geneElement.getElementsByTagName('Entrezgene_summary')[0].innerHTML;
-      }
+      const correspondingGene = geneData.find(gene => gene.entrezId === geneElemId);
+      if(correspondingGene === undefined) return;
+
+      let i = geneData.indexOf(correspondingGene);
+      geneData[i].name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;
+      geneData[i].description = geneElement.getElementsByTagName('Entrezgene_summary')[0].innerHTML;
     });
+
     return geneData;
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error.message);
   }
 };

@@ -15,11 +15,19 @@
     labelledby="geneModalLabel"
   >
     <MDBModalHeader>
-      <MDBModalTitle id="geneModalLabel"><h2>{{ geneSymbol }}</h2></MDBModalTitle>
+      <MDBModalTitle id="geneModalLabel">
+        <h2>{{ geneSymbol }}</h2>
+      </MDBModalTitle>
     </MDBModalHeader>
-    <MDBModalBody><h3>{{ geneName }}</h3> <br> {{ geneDesc }} </MDBModalBody>
+    <MDBModalBody>
+      <h3>{{ geneName }}</h3>
+      <br>
+      {{ geneDesc }}
+    </MDBModalBody>
     <MDBModalFooter>
-      <MDBBtn color="primary" @click="geneModal = false">Close</MDBBtn>
+      <MDBBtn color="primary" @click="geneModal = false">
+        Close
+      </MDBBtn>
     </MDBModalFooter>
   </MDBModal>
 </template>
@@ -35,6 +43,7 @@
   } from 'mdb-vue-ui-kit';
   import { onMounted, ref } from 'vue';
   import fetchGeneDetails from '../../composables/getGeneInfo.js';
+
   export default {
     components: {
       MDBModal,
@@ -45,7 +54,7 @@
       MDBBtn
     },
     props: ['selectedGene'],
-    setup(props) {
+    setup (props) {
       const geneModal = ref(false);
       let geneData = null;
       const currentGene = ref('');
@@ -53,30 +62,26 @@
       const geneSymbol = ref('');
       const geneName = ref('');
 
-      const populateModal = async()=>{
-        if(geneData!=null){
-          currentGene.value = props.selectedGene;
-          console.log(currentGene);
-          console.log(geneData);
-          const geneObj =  geneData.filter(function(gene) {
-            return gene.symbol == currentGene.value;
-          });
-          geneDesc.value = geneObj[0].description;
-          geneSymbol.value = geneObj[0].symbol;
-          geneName.value = geneObj[0].name;
-        }
+      const populateModal = async () => {
+        if (geneData === null) return;
+
+        currentGene.value = props.selectedGene;
+        console.log(currentGene);
+        console.log(geneData);
+
+        const geneObj = geneData.filter((gene) => gene.symbol === currentGene.value);
+
+        geneDesc.value = geneObj[0].description;
+        geneSymbol.value = geneObj[0].symbol;
+        geneName.value = geneObj[0].name;
       };
 
-      const showButton = ()=>{
-        if (props.selectedGene!=='Please select'){
-          return true;
-        }
-        return false;
-      };
-      onMounted(async()=>{geneData = await fetchGeneDetails();});
-      return {
-        geneModal, geneData, currentGene, populateModal, showButton, geneSymbol, geneName, geneDesc
-      };
+      const showButton = () => props.selectedGene !== 'Please select';
+
+      onMounted(async () => { geneData = await fetchGeneDetails(); });
+
+      return { geneModal, geneData, currentGene, populateModal, showButton,
+               geneSymbol, geneName, geneDesc };
     }
   };
 </script>

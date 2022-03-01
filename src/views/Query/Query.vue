@@ -93,7 +93,7 @@
             </option>
           </select>
           <div :class="$style.GeneInfoWrapper">
-            <GeneModal :selectedGene="selectedGeneMutation"/>
+            <GeneModal :selectedGene="selectedGeneMutation" />
           </div>
         </div>
       </div>
@@ -174,16 +174,16 @@
 </template>
 
 <script>
+  import GeneModal from '../../components/GeneModal/GeneModal.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
-  import mapKeyToWords from '../../utils/mapKeyToWords';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch } from 'vue';
-  import GeneModal from '../../components/GeneInfo/GeneModal.vue';
 
   export default {
     name: 'Query',
