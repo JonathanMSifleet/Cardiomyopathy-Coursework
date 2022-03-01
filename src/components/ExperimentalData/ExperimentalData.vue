@@ -171,6 +171,7 @@ import { ref, reactive } from "@vue/reactivity";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import getUser from "../../composables/getUser";
 import store from "../../services/store";
+import { useRouter } from "vue-router";
 import {
   MDBRow,
   MDBCol,
@@ -201,6 +202,7 @@ export default {
   },
   setup() {
     const { currentUser } = getUser();
+    const router = useRouter();
     const geneMutations = reactive([
       "Please select",
       "MYH7",
@@ -252,9 +254,9 @@ export default {
             ...info,
             GeneMutation: selectedMutation.value,
             createdAt: serverTimestamp(),
-            deletedAt: null
+            deletedAt: null,
           }
-        );
+        ).then(alert("A new document has been added.")).then(router.push("/"));
         console.log("Document written with ID: ", docRef.id);
       }
     }
