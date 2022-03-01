@@ -92,6 +92,9 @@
               {{ geneMutation }}
             </option>
           </select>
+          <div :class="$style.GeneInfoWrapper">
+            <GeneModal :selectedGene="selectedGeneMutation"/>
+          </div>
         </div>
       </div>
 
@@ -180,11 +183,12 @@
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch } from 'vue';
+  import GeneModal from '../../components/GeneInfo/GeneModal.vue';
 
   export default {
     name: 'Query',
     components: {
-      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner
+      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
     },
     setup() {
       let activeCheckboxes = ref({});
