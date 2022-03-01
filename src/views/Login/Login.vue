@@ -1,10 +1,10 @@
 <template>
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-      <MDBCard :class="$style.authentication-card" text="center">
+      <MDBCard :class="$style['authentication-card']" text="center">
         <MDBCardHeader>Login</MDBCardHeader>
         <MDBCardBody>
-          <MDBCardTitle v-if="errorMessage" :class="[$style.error-message, 'mb-4']">
+          <MDBCardTitle v-if="errorMessage" :class="[$style['error-message'], 'mb-4']">
             {{ errorMessage }}
           </MDBCardTitle>
           <MDBCardText>
@@ -34,7 +34,7 @@
                   <!-- Simple link -->
                   <router-link
                     to="/reset"
-                    :class="$style.reset-password-link"
+                    :class="$style['reset-password-link']"
                   >
                     Forgotten password?
                   </router-link>
@@ -54,7 +54,7 @@
               Not a member?
               <router-link
                 to="/register"
-                :class="$style.register-link"
+                :class="$style['register-link']"
               >
                 Register here
               </router-link>
@@ -110,7 +110,7 @@
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
           router.push('/');
-        } catch(error) {
+        } catch (error) {
           //custom error messages
           switch (error.code) {
           case 'auth/invalid-email':
@@ -123,7 +123,7 @@
             errorMessage.value = 'Incorrect password';
             break;
           default:
-            errorMessage.value = 'Email or password was incorrect';
+            errorMessage.value = error.message;
             break;
           }
         }

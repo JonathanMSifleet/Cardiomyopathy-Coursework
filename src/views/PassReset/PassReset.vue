@@ -1,9 +1,9 @@
 <template>
   <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-    <MDBCard class="authentication-card" text="center">
+    <MDBCard :class="$style['authentication-card']" text="center">
       <MDBCardHeader>Reset Password</MDBCardHeader>
       <MDBCardBody>
-        <MDBCardTitle v-if="error" class="error-message mb-4">
+        <MDBCardTitle v-if="error" :class="[$style['error-message'], 'mb-4']">
           {{ error }}
         </MDBCardTitle>
         <MDBCardText>
