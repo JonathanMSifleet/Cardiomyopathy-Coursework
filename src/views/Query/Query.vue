@@ -78,11 +78,11 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else :class="$style.ComponentWrapper">
         <p :class="$style.GeneMutationSelection">
           Select a gene mutation:
         </p>
-        <div :class="[$style.SelectWrapper, $style.GeneMutationWrapper]">
+        <div :class="[$style.SelectWrapper]">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
             <option
               v-for="geneMutation in geneMutations"
@@ -92,10 +92,8 @@
               {{ geneMutation }}
             </option>
           </select>
-          <div :class="$style.GeneInfoWrapper">
-            <GeneModal :selectedGene="selectedGeneMutation" />
-          </div>
         </div>
+        <GeneModal :selectedGene="selectedGeneMutation" />
       </div>
 
       <div :class="$style.CheckboxWrapper">
@@ -453,8 +451,8 @@
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
                filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
                isLoadingGraph, mapKeyToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
-               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage, toggleKey,
-               useAdvancedMode };
+               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
+               toggleKey, useAdvancedMode };
     }
   };
 </script>

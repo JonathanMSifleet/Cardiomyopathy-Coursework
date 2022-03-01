@@ -62,6 +62,8 @@
       const geneSymbol = ref('');
       const geneName = ref('');
 
+      //modal is blank for a few seconds on first open
+      //maybe add loading spinner?
       const populateModal = async () => {
         if (geneData === null) return;
 
@@ -80,8 +82,7 @@
 
       onMounted(async () => { geneData = await fetchGeneDetails(); });
 
-      return { geneModal, geneData, currentGene, populateModal, showButton,
-               geneSymbol, geneName, geneDesc };
+      return { geneModal, geneData, currentGene, showButton, geneSymbol, geneName, geneDesc, populateModal };
     }
   };
 </script>
