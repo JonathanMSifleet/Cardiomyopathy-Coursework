@@ -29,21 +29,22 @@
           Profile
         </MDBNavbarItem>
       </MDBNavbarNav>
-      <MDButton v-if="currentUser" class="logout" @click="logout">
+      <MDBBtn v-if="currentUser" class="logout" @click="logout">
         Logout
-      </MDButton>
+      </MDBBtn>
     </MDBNavbar>
   </header>
 </template>
 
 <script>
-  import { MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
+  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
   import { useRouter } from 'vue-router';
   import { getAuth, signOut }  from 'firebase/auth';
   import getUser from '../../composables/getUser';
 
   export default {
     components: {
+      MDBBtn,
       MDBNavbar,
       MDBNavbarToggler,
       MDBNavbarNav,

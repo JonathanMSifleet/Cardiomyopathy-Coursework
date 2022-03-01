@@ -100,21 +100,20 @@
     mdbRipple
   } from 'mdb-vue-ui-kit';
   import { ref, computed } from 'vue';
-  import moment from 'moment';
 
   export default {
     components: {
-      MDBModal,
-      MDBModalHeader,
-      MDBModalTitle,
-      MDBModalBody,
-      MDBModalFooter,
       MDBBtn,
       MDBCard,
       MDBCardBody,
-      MDBCardTitle,
       MDBCardImg,
+      MDBCardTitle,
       MDBCol,
+      MDBModal,
+      MDBModalBody,
+      MDBModalFooter,
+      MDBModalHeader,
+      MDBModalTitle,
       MDBRow
     },
     directives: {
@@ -144,7 +143,13 @@
         newsFeedModal.value = !newsFeedModal.value;
       };
 
-      const dateTime = (value) => moment(value).format('Do MMMM YYYY');
+      const dateTime = (value) =>
+        new Date(value).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
 
       const activeCarousel = computed(() => {
         if (carouselIndex.value < 0) carouselIndex.value = items.value.length - 1;
