@@ -72,16 +72,16 @@
   import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
-    MDBRow,
-    MDBCol,
-    MDBInput,
     MDBBtn,
     MDBCard,
-    MDBCardHeader,
     MDBCardBody,
-    MDBCardTitle,
+    MDBCardFooter,
+    MDBCardHeader,
     MDBCardText,
-    MDBCardFooter
+    MDBCardTitle,
+    MDBCol,
+    MDBInput,
+    MDBRow
   } from 'mdb-vue-ui-kit';
 
   export default {
@@ -110,7 +110,7 @@
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
           router.push('/');
-        } catch(error) {
+        } catch (error) {
           //custom error messages
           switch (error.code) {
           case 'auth/invalid-email':

@@ -97,11 +97,8 @@ const fetchGeneDetails = async () =>{
     let response = await fetch(geneDataUrl);
     response = await response.text();
 
-    const parser = new DOMParser();
     //convert string response to xml doc obj
-    const xml = parser.parseFromString(response, 'application/xml');
-    //log xml doc obj to console
-    console.log('Fetched Gene Data:', xml);
+    const xml = new DOMParser().parseFromString(response, 'application/xml');
     //get gene elements in xml
     const geneElements = xml.getElementsByTagName('Entrezgene');
     //loop through each gene element
@@ -113,6 +110,7 @@ const fetchGeneDetails = async () =>{
       //create gene object
       genes.push({ symbol, name, description });
     });
+    
     return genes;
   } catch (error) {
     console.error(error.message);

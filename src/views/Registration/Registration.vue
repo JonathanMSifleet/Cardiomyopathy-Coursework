@@ -212,17 +212,16 @@
               displayName: firstName.value
             });
           } catch (error) {
-            console.log(error);
+            console.error(error);
           }
 
           //sign user out
-          try{
+          try {
             await signOut(auth);
-            console.log('Signed Out');
             //redirect to login
             router.push('/');
           } catch (error){
-            console.log(error);
+            console.error(error);
           }
         }
       };

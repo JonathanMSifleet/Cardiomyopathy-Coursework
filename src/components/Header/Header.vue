@@ -29,7 +29,12 @@
           Profile
         </MDBNavbarItem>
       </MDBNavbarNav>
-      <MDBBtn v-if="currentUser" class="logout" @click="logout">
+      <MDBBtn
+        v-if="currentUser"
+        class="logout"
+        color="light"
+        @click="logout"
+      >
         Logout
       </MDBBtn>
     </MDBNavbar>
@@ -59,7 +64,6 @@
       const logout = async () => {
         try {
           await signOut(auth);
-          console.log('Signed out');
           router.push('/login');
         } catch (err) {
           alert(err.message);
