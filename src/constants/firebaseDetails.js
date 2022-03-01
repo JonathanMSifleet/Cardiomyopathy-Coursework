@@ -1,4 +1,5 @@
 // details can be found here: https://support.google.com/firebase/answer/7015592#web
+
 export default {
   apiKey: process.env.API_KEY,
   authDomain: process.env.AUTH_DOMAIN,
@@ -7,3 +8,4 @@ export default {
   messagingSenderId: process.env.MESSAGING_SENDER_ID,
   appId: process.env.APP_ID
 };
+
