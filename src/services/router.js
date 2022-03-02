@@ -1,8 +1,15 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { auth } from '../firebase/config';
 
-// leave comments in import
-const routes = [
-  {
+
+// if user redirect to home, otherwise continue to original route
+const requireSignedOut = (to, from, next) => auth.currentUser ? next({ name: 'Home' }) : next();
+const requireSignedIn = (to, from, next) => !auth.currentUser ? next({ name: 'Login' }) : next();
+
+//route guard functions
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: [{
     name: 'Home',
     path: '/',
     base: '/',
@@ -12,18 +19,51 @@ const routes = [
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import(/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
+    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue'),
+    beforeEnter: requireSignedIn
+  },
+  {
+    name: 'Registration',
+    path: '/register',
+    base: '/',
+    component: () =>
+      import (/* webpackChunkName: "Registration" */ '../views/Registration/Registration.vue'),
+    beforeEnter: requireSignedOut
+  },
+  {
+    name: 'Password Reset',
+    path: '/reset',
+    base: '/',
+    component: () =>
+      import (/* webpackChunkName: "PasswordReset" */ '../views/PassReset/PassReset.vue'),
+    beforeEnter: requireSignedOut
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () =>
+      import (/* webpackChunkName: "Login" */ '../views/Login/Login.vue'),
+    beforeEnter: requireSignedOut
+  },
+  {
+    path: '/experimental-data',
+    name: 'ExperimentalData',
+    component: () =>
+      import (/* webpackChunkName: "ExperimentalData" */ '../views/ExperimentalData/ExperimentalData.vue'),
+    beforeEnter: requireSignedIn
+  },
+  {
+    path: '/profile',
+    name: 'UserProfile',
+    component: () =>
+      import (/* webpackChunkName: "Profile" */ '../views/UserProfile/UserProfile.vue'),
+    beforeEnter: requireSignedIn
   },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
     redirect: '/'
-  }
-];
-
-const router = createRouter({
-  history: createWebHashHistory(),
-  routes
+  }]
 });
 
 export default router;
