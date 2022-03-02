@@ -22,6 +22,12 @@
         <MDBNavbarItem :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'ExperimentalData' }" active>
+          Experimental Data
+        </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'UserProfile' }" active>
+          Profile
+        </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBBtn
         v-if="currentUser"
@@ -63,7 +69,6 @@
           alert(err.message);
         }
       };
-
       return { currentUser, logout };
     }
   };
