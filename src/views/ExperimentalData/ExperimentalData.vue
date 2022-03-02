@@ -29,90 +29,22 @@
             </MDBRow>
             <MDBRow class="mb-3">
               <MDBCol>
-                <MDBInput
-                  id="form2Email"
-                  v-model="info.ledv"
-                  type="number"
-                  label="LEDV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.redv"
-                  type="number"
-                  label="REDV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lesv"
-                  type="number"
-                  label="LESV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.resv"
-                  type="number"
-                  label="RESV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lvef"
-                  type="number"
-                  label="LVEF "
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rvef"
-                  type="number"
-                  label="RVEF"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lvmass"
-                  type="number"
-                  label="LVMASS"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rvmass"
-                  type="number"
-                  label="RVMASS"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lsv"
-                  type="number"
-                  label="LSV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rsv"
-                  type="number"
-                  label="RSV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.ageAtMri"
-                  type="number"
-                  label="Age at MRI"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.gender"
-                  type="text"
-                  label="Gender"
-                  wrapper-class="mb-4"
-                />
+                <div v-for="input in dataInputs" :key="input">
+                  <MDBInput
+                    v-model="info[input]"
+                    type="number"
+                    :label="input"
+                    wrapper-class="mb-4"
+                  />
+                </div>
+                <div>
+                  <MDBInput
+                    v-model="info[Gender]"
+                    type="text"
+                    label="Gender"
+                    wrapper-class="mb-4"
+                  />
+                </div>
               </MDBCol>
             </MDBRow>
             <MDBRow class="mb-4">
@@ -241,6 +173,19 @@
         diabetes: false,
         myectomy: false
       });
+      const dataInputs = reactive([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'rvmass',
+        'lsv',
+        'rsv',
+        'AgeatMRI'
+      ]);
 
       const experimentalData = async () => {
         for (const key in info) {
@@ -269,7 +214,7 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return { info, geneMutations, selectedMutation, experimentalData };
+      return { dataInputs, info, geneMutations, selectedMutation, experimentalData };
     }
   };
 </script>

@@ -260,6 +260,7 @@
           filteredResults.value = allDocuments;
           renderableResults.value = filteredResults.value.slice(0, pageSize);
           optionalTableKeys.value = determineKeys(allDocuments);
+          delete optionalTableKeys.value.userId;
 
           activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
         } catch (error) {
