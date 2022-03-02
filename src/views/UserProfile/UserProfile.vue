@@ -267,7 +267,7 @@
   import getUser from '../../composables/getUser';
   import store from '../../services/store';
   import { auth } from '../../firebase/config';
-  import { ref, watchEffect } from 'vue';
+  import { ref, watchEffect, onMounted } from 'vue';
   import { updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
@@ -328,6 +328,11 @@
       const currentDocId = ref('');
       const router = useRouter();
       const showTable = ref(false);
+
+      onMounted( () => {
+        userIdentity();
+        getExperimentalDataByUserId();
+      });
 
       async function userIdentity() {
         const docRef = doc(await store.database, 'users', currentUser.value.uid);
