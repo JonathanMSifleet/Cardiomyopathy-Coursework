@@ -266,9 +266,7 @@
       //redirects anytime the user is signed out
       //whilst still on this page
       watchEffect(() => {
-        if (!currentUser.value){
-          router.push('/login');
-        }
+        if (!currentUser.value) router.push('/login');
       });
 
       return { info, geneMutations, selectedMutation, experimentalData };

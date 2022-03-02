@@ -177,12 +177,12 @@
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import getUser from '../../composables/getUser';
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch, watchEffect } from 'vue';
-  import getUser from '../../composables/getUser';
   import { useRouter } from 'vue-router';
 
   export default {
@@ -191,7 +191,6 @@
       MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
     },
     setup() {
-      const router = useRouter();
       let activeCheckboxes = ref({});
       const activeTableKeys = ref([
         'ledv',
@@ -246,6 +245,7 @@
       let queryInput = ref('');
       let queryOperand = ref('');
       let renderableResults = ref([]);
+      const router = useRouter();
       let selectedGeneMutation = ref('Please select');
       let selectedGraphKey = ref();
       let selectedOperator = ref('Please select');
@@ -452,10 +452,9 @@
       });
 
       const { currentUser } = getUser();
+
       watchEffect(() => {
-        if (!currentUser.value){
-          router.push('/login');
-        }
+        if (!currentUser.value) router.push('/login');
       });
 
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
