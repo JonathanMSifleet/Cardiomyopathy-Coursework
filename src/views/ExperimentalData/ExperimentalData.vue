@@ -173,6 +173,7 @@
   import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
   import { ref, reactive } from '@vue/reactivity';
   import { useRouter } from 'vue-router';
+  import { watchEffect } from 'vue';
   import {
     MDBRow,
     MDBCol,
@@ -261,6 +262,14 @@
         alert('A new document has been added.');
         router.push('/');
       };
+
+      //redirects anytime the user is signed out
+      //whilst still on this page
+      watchEffect(() => {
+        if (!currentUser.value){
+          router.push('/login');
+        }
+      });
 
       return { info, geneMutations, selectedMutation, experimentalData };
     }

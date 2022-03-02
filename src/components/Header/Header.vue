@@ -69,7 +69,6 @@
           alert(err.message);
         }
       };
-
       return { currentUser, logout };
     }
   };

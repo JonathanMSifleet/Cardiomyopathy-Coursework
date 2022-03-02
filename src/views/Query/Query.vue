@@ -181,7 +181,9 @@
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
-  import { reactive, ref, watch } from 'vue';
+  import { reactive, ref, watch, watchEffect } from 'vue';
+  import getUser from '../../composables/getUser';
+  import { useRouter } from 'vue-router';
 
   export default {
     name: 'Query',
@@ -189,6 +191,7 @@
       MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
     },
     setup() {
+      const router = useRouter();
       let activeCheckboxes = ref({});
       const activeTableKeys = ref([
         'ledv',
@@ -446,6 +449,13 @@
         const startIndex = (selectedTablePage.value - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
+      });
+
+      const { currentUser } = getUser();
+      watchEffect(() => {
+        if (!currentUser.value){
+          router.push('/login');
+        }
       });
 
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
