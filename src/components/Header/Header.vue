@@ -16,9 +16,6 @@
         <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Login' }" active>
           Login
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Registration' }" active>
-          Register
-        </MDBNavbarItem>
         <MDBNavbarItem :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
@@ -27,6 +24,9 @@
         </MDBNavbarItem>
         <MDBNavbarItem :to="{ name: 'UserProfile' }" active>
           Profile
+        </MDBNavbarItem>
+        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Help' }" active>
+          Need Help?
         </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBBtn
@@ -64,7 +64,7 @@
       const logout = async () => {
         try {
           await signOut(auth);
-          router.push('/login');
+          router.push('/a');
         } catch (err) {
           alert(err.message);
         }

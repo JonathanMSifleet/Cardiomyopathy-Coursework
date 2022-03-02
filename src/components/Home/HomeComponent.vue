@@ -1,7 +1,5 @@
-/* eslint-disable max-len */
-
 <template>
-  <div :class="[$style['information-wrapper'], false ? '' : $style['no-user']]">
+  <div :class="[$style['information-wrapper'], user ? '' : $style['no-user']]">
     <div :class="[$style['information-content']]">
       <div>
         <h2 v-if="post.WelcomeSection">
@@ -17,7 +15,7 @@
           {{ post.description }}
         </p>
         <!-- <div v-if="!post.user" v-on="post.user"> -->
-        <router-link v-if="post.WelcomeSection" :class="[$style['link'],$style['link-light']]" :to="{name: 'Login'}">
+        <router-link v-if="post.WelcomeSection" :class="[$style['link'], $style['link-light']]" :to="{name: 'Login'}">
           Login/Register
         </router-link>
         <!-- </div> -->
@@ -35,23 +33,27 @@
 </template>
 
 <script>
-  import { ref } from '@vue/reactivity';
   import getUser from '../../composables/getUser';
+  import { ref, onBeforeMount } from 'vue';
+
   export default {
     name: 'HomeComponent',
     // eslint-disable-next-line vue/require-prop-types
     props: ['post'],
-    setup () {
+    setup(){
       const { currentUser } = getUser();
-      let userBoolean = ref(false);
-      if (currentUser) {
-        userBoolean.value = true;
-      }
-      return (currentUser, userBoolean);
+      const user = ref(false);
+
+      onBeforeMount(() => {
+        if (currentUser.value) {
+          user.value = true;
+        }
+      });
+      return{ user };
     }
   };
 </script>
 
 <style lang="scss" module scoped>
-@import "./HomeComponent.module.scss";
+  @import "./HomeComponent.module.scss";
 </style>

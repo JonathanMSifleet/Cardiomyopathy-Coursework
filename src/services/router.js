@@ -63,7 +63,7 @@ const router = createRouter({
     path: '/help',
     name: 'Help',
     component: () => import('../views/Help/Help.vue')
-  }
+  },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',

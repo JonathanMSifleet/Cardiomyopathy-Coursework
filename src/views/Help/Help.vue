@@ -1,22 +1,20 @@
 <template>
   <PageWrapper>
-    <HomeComponent v-for="(post, index) in HCM" :key="index" :post="post" />
-    <NewsFeed />
+    <HelpComponent v-for="(post, index) in HCM" :key="index" :post="post" />
   </PageWrapper>
 </template>
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import HomeComponent from '../../components/Home/HomeComponent.vue';
-  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
+  import HelpComponent from '../../components/Help/HelpComponent.vue';
+
   export default {
     name: 'Help',
     components: {
       PageWrapper,
-      HomeComponent,
-      NewsFeed
+      HelpComponent
     },
-    data(){
+    setup() {
       return {
         HCM: [
           {

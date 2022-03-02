@@ -7,10 +7,6 @@
       <a class="text-dark" href="https://github.com/MuminRahman2001/advanced-web-project">
         Advanced Web Development Project
       </a>
-      <br>
-      <router-link :to="{name : 'Help'}">
-        need help?
-      </router-link>
     </div>
   </MDBFooter>
 </template>

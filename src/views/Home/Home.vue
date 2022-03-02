@@ -30,12 +30,9 @@
         }
       });
 
-      return { currentUser, name };
-    },
-    data(){
       const hcmDesc1 = 'Hypertrophic cardiomyopathy (HCM) is a disease in which the heart muscle ';
       const hcmDesc2 = 'becomes abnormally thick...';
-      // const { currentUser } = getUser();
+
       return {
         Welcome: {
           title: 'COMPANY TITLE',
@@ -55,7 +52,8 @@
             description: hcmDesc1+hcmDesc2,
             photo: 'hcm'
           }
-        ]
+        ],
+        currentUser
       };
     }
   };
