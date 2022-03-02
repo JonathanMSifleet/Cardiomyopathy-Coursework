@@ -62,6 +62,6 @@
   };
 </script>
 
-<style>
+<style lang="scss" scoped module>
   @import "../../assets/styles/Authentication.scss";
 </style>
