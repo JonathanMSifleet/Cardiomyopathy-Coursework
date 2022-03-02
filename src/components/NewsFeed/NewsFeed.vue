@@ -73,8 +73,9 @@
               <button
                 :class="[$style['read-more-link'], 'mt-3']"
                 @click="toggleClass"
-                v-html="readMore ? 'Read less...' : 'Read more...'"
-              />
+              >
+                {{ readMore ? 'Read less...' : 'Read more...' }}
+              </button>
             </MDBCardBody>
           </div>
         </MDBCard>
