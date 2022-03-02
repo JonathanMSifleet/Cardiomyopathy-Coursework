@@ -34,6 +34,7 @@ module.exports = {
       'single'
     ],
     semi: ['error', 'always'],
+    'vue/attribute-hyphenation': 0,
     'vue/html-indent': ['error', 2, {
       baseIndent: 1
     }],

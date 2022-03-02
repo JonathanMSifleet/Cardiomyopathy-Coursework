@@ -78,11 +78,11 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else :class="$style.ComponentWrapper">
         <p :class="$style.GeneMutationSelection">
           Select a gene mutation:
         </p>
-        <div :class="[$style.SelectWrapper, $style.GeneMutationWrapper]">
+        <div :class="[$style.SelectWrapper]">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
             <option
               v-for="geneMutation in geneMutations"
@@ -93,6 +93,7 @@
             </option>
           </select>
         </div>
+        <GeneModal :selectedGene="selectedGeneMutation" />
       </div>
 
       <div :class="$style.CheckboxWrapper">
@@ -171,11 +172,12 @@
 </template>
 
 <script>
+  import GeneModal from '../../components/GeneModal/GeneModal.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
-  import mapKeyToWords from '../../utils/mapKeyToWords';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
@@ -184,7 +186,7 @@
   export default {
     name: 'Query',
     components: {
-      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner
+      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
     },
     setup() {
       let activeCheckboxes = ref({});
@@ -449,8 +451,8 @@
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
                filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
                isLoadingGraph, mapKeyToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
-               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage, toggleKey,
-               useAdvancedMode };
+               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
+               toggleKey, useAdvancedMode };
     }
   };
 </script>
