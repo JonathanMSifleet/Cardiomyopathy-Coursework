@@ -17,7 +17,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
               />
               <!-- Password input -->
               <MDBInput
@@ -26,7 +26,7 @@
                 type="password"
                 label="Password"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
               />
               <!-- 2 column grid layout for inline styling -->
               <MDBRow class="mb-4">

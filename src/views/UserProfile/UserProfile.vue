@@ -53,7 +53,7 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="20"
                     :valueDefault="firstName"
                     required
                   />
@@ -65,7 +65,7 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="20"
                     :valueDefault="lastName"
                     required
                   />
@@ -77,7 +77,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
                 :valueDefault="email"
                 disabled
               />
@@ -87,7 +87,7 @@
                 type="number"
                 label="Phone Number"
                 wrapper-class="mb-4"
-                maxlength="15"
+                :maxlength="15"
                 :valueDefault="phoneNumber"
                 required
               />
@@ -97,7 +97,7 @@
                 type="text"
                 label="Address"
                 wrapper-class="mb-4"
-                maxlength="35"
+                :maxlength="35"
                 :valueDefault="address"
                 required
               />
