@@ -29,22 +29,37 @@
             </MDBRow>
             <MDBRow class="mb-3">
               <MDBCol>
-                <div v-for="input in dataInputs" :key="input">
-                  <MDBInput
-                    v-model="info[input]"
-                    type="number"
-                    :label="input"
-                    wrapper-class="mb-4"
-                  />
-                </div>
-                <div>
+                <div v-if="showGenderInput">
+                  <span :class="$style.DeleteInput" @click="showGenderInput = !showGenderInput"> x </span>
                   <MDBInput
                     v-model="info[Gender]"
                     type="text"
                     label="Gender"
-                    wrapper-class="mb-4"
                   />
                 </div>
+
+                <div v-for="input in dataInputs" :key="input" :class="$style.InputWrapper">
+                  <span :class="$style.DeleteInput" @click="deleteInput(input)"> x </span>
+
+                  <MDBInput
+                    v-model="info[input]"
+                    type="number"
+                    :label="mapKeyToWords(input)"
+                    :class="$style.ExperimentalDataInput"
+                  />
+                </div>
+
+                <MDBInput
+                  v-model="newInput"
+                  type="text"
+                  label="New input name"
+                />
+                <MDBBtn
+                  color="primary"
+                  @click="createNewInput"
+                >
+                  Add new input
+                </MDBBtn>
               </MDBCol>
             </MDBRow>
             <MDBRow class="mb-4">
@@ -101,6 +116,7 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import store from '../../services/store';
   import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
   import { ref, reactive } from '@vue/reactivity';
@@ -138,6 +154,7 @@
     },
     setup() {
       const { currentUser } = getUser();
+      let newInput = ref('');
       const router = useRouter();
       const geneMutations = reactive([
         'Please select',
@@ -152,6 +169,7 @@
         'TTN'
       ]);
       const selectedMutation = ref('Please select');
+      let showGenderInput = ref(true);
       const info = reactive({
         userId: currentUser.value.uid,
         ledv: '',
@@ -181,11 +199,22 @@
         'lvef',
         'rvef',
         'lvmass',
-        'rvmass',
         'lsv',
         'rsv',
         'AgeatMRI'
       ]);
+
+      const createNewInput = () => {
+        if (newInput.value) dataInputs.push(newInput.value);
+        newInput.value = '';
+      };
+
+      const deleteInput = (key) => {
+        if (!dataInputs.includes(key)) return;
+
+        dataInputs.splice(dataInputs.indexOf(key), 1);
+        delete info[key];
+      };
 
       const experimentalData = async () => {
         for (const key in info) {
@@ -214,7 +243,8 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return { dataInputs, info, geneMutations, selectedMutation, experimentalData };
+      return { createNewInput, dataInputs, deleteInput, experimentalData, geneMutations, info, mapKeyToWords, newInput,
+               selectedMutation, showGenderInput };
     }
   };
 </script>
