@@ -4,6 +4,7 @@ import { auth } from '../firebase/config';
 
 // if user redirect to home, otherwise continue to original route
 const requireSignedOut = (to, from, next) => auth.currentUser ? next({ name: 'Home' }) : next();
+const requireSignedIn = (to, from, next) => !auth.currentUser ? next({ name: 'Login' }) : next();
 
 //route guard functions
 const router = createRouter({
@@ -18,7 +19,8 @@ const router = createRouter({
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
+    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue'),
+    beforeEnter: requireSignedIn
   },
   {
     name: 'Registration',
@@ -47,13 +49,15 @@ const router = createRouter({
     path: '/experimental-data',
     name: 'ExperimentalData',
     component: () =>
-      import (/* webpackChunkName: "ExperimentalData" */ '../views/ExperimentalData/ExperimentalData.vue')
+      import (/* webpackChunkName: "ExperimentalData" */ '../views/ExperimentalData/ExperimentalData.vue'),
+    beforeEnter: requireSignedIn
   },
   {
     path: '/profile',
     name: 'UserProfile',
     component: () =>
-      import (/* webpackChunkName: "Profile" */ '../views/UserProfile/UserProfile.vue')
+      import (/* webpackChunkName: "Profile" */ '../views/UserProfile/UserProfile.vue'),
+    beforeEnter: requireSignedIn
   },
   // no route, route:
   {

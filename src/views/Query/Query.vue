@@ -177,11 +177,13 @@
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import getUser from '../../composables/getUser';
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
-  import { reactive, ref, watch } from 'vue';
+  import { reactive, ref, watch, watchEffect } from 'vue';
+  import { useRouter } from 'vue-router';
 
   export default {
     name: 'Query',
@@ -243,6 +245,7 @@
       let queryInput = ref('');
       let queryOperand = ref('');
       let renderableResults = ref([]);
+      const router = useRouter();
       let selectedGeneMutation = ref('Please select');
       let selectedGraphKey = ref();
       let selectedOperator = ref('Please select');
@@ -446,6 +449,12 @@
         const startIndex = (selectedTablePage.value - 1) * pageSize;
         const endIndex = startIndex + pageSize;
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
+      });
+
+      const { currentUser } = getUser();
+
+      watchEffect(() => {
+        if (!currentUser.value) router.push('/login');
       });
 
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,

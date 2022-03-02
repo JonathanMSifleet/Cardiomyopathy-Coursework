@@ -30,14 +30,14 @@
     </MDBModal>
     <div
       class="
-      login
-      w-100
-      p-4
-      d-flex
-      align-items-center
-      justify-content-center
-      mb-5
-    "
+        login
+        w-100
+        p-4
+        d-flex
+        align-items-center
+        justify-content-center
+        mb-5
+      "
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
@@ -267,7 +267,7 @@
   import getUser from '../../composables/getUser';
   import store from '../../services/store';
   import { auth } from '../../firebase/config';
-  import { ref } from 'vue';
+  import { ref, watchEffect } from 'vue';
   import { updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
@@ -277,9 +277,9 @@
     getDoc,
     getDocs,
     query,
+    serverTimestamp,
     updateDoc,
-    where,
-    serverTimestamp
+    where
   } from 'firebase/firestore';
   import {
     MDBBtn,
@@ -408,6 +408,10 @@
         currentDocId.value = docId;
       };
 
+      watchEffect(() => {
+        if (!currentUser.value) router.push('/login');
+      });
+
       const toggleTable = () => {
         showTable.value = !showTable.value;
       };
@@ -426,18 +430,13 @@
         email,
         address,
         phoneNumber,
-        currentDocId,
-        showTable
+        currentDocId
       };
-    },
-    mounted() {
-      this.userIdentity();
-      this.getExperimentalDataByUserId();
     }
   };
 </script>
 
 <style lang="scss" module scoped>
-@import "../../assets/styles/Authentication.scss";
-@import "./UserProfile.module.scss";
+  @import "../../assets/styles/Authentication.scss";
+  @import "./UserProfile.module.scss";
 </style>
