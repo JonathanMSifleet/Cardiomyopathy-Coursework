@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
 //firebase authentification function
 import { getAuth } from 'firebase/auth';
-import firebaseConfig from '../constants/firebaseDetails';
+import firebaseDetails from '../constants/firebaseDetails';
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseDetails);
 const auth = getAuth();
 
 export { auth, app };

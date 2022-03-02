@@ -103,17 +103,17 @@
 
   export default {
     components: {
-      MDBModal,
-      MDBModalHeader,
-      MDBModalTitle,
-      MDBModalBody,
-      MDBModalFooter,
       MDBBtn,
       MDBCard,
       MDBCardBody,
-      MDBCardTitle,
       MDBCardImg,
+      MDBCardTitle,
       MDBCol,
+      MDBModal,
+      MDBModalBody,
+      MDBModalFooter,
+      MDBModalHeader,
+      MDBModalTitle,
       MDBRow
     },
     directives: {
