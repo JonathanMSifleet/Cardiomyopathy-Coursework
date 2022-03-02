@@ -23,7 +23,7 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="20"
                     required
                   />
                 </MDBCol>
@@ -34,7 +34,7 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="20"
                     required
                   />
                 </MDBCol>
@@ -45,7 +45,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
                 required
               />
               <!-- Password input -->
@@ -55,7 +55,7 @@
                 type="password"
                 label="Password"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
                 required
               />
               <MDBInput
@@ -64,7 +64,7 @@
                 type="password"
                 label="Confirm Password"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
                 required
               />
               <MDBInput
@@ -73,7 +73,7 @@
                 type="number"
                 label="Phone Number"
                 wrapper-class="mb-4"
-                maxlength="15"
+                :maxlength="15"
                 required
               />
               <MDBInput
@@ -82,7 +82,7 @@
                 type="text"
                 label="Address"
                 wrapper-class="mb-4"
-                maxlength="35"
+                :maxlength="35"
                 required
               />
 
@@ -182,47 +182,45 @@
       //submit registration data and create account
       const handleSubmit = async ()=> {
         //exit function if password confirmation does not match
-        if(!checkPasswordsMatch()) return;
+        if (!checkPasswordsMatch()) return;
 
         //create user acc
         await signup(email.value, password.value);
+        if (signupError.value) return;
 
-        if (!signupError.value) {//success
+        //send email for the user to verify email
+        await sendEmailVerification(auth.currentUser);
+        alert('Verification email sent.');
 
-          //send email for the user to verify email
-          await sendEmailVerification(auth.currentUser);
-          alert('Verification email sent.');
+        //get currently signed in user
+        const { currentUser } = getUser();
 
-          //get currently signed in user
-          const { currentUser } = getUser();
+        //add user info to firestore db
+        await addUserInfo({
+          uid: currentUser.value.uid,
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          email: email.value,
+          phone: phone.value
+        });
 
-          //add user info to firestore db
-          await addUserInfo({
-            uid: currentUser.value.uid,
-            firstName: firstName.value,
-            lastName: lastName.value,
-            address: address.value,
-            email: email.value,
-            phone: phone.value
+        //set user display name
+        try {
+          updateProfile(auth.currentUser, {
+            displayName: firstName.value
           });
+        } catch (error) {
+          console.error(error);
+        }
 
-          //set user display name
-          try {
-            updateProfile(auth.currentUser, {
-              displayName: firstName.value
-            });
-          } catch (error) {
-            console.error(error);
-          }
-
-          //sign user out
-          try {
-            await signOut(auth);
-            //redirect to login
-            router.push('/');
-          } catch (error){
-            console.error(error);
-          }
+        //sign user out
+        try {
+          await signOut(auth);
+          //redirect to login
+          router.push('/');
+        } catch (error){
+          console.error(error);
         }
       };
       return { address, email, firstName, handleSubmit, lastName, passConfirm,

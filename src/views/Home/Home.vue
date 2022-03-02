@@ -23,9 +23,9 @@
       const name = ref('');
 
       onBeforeMount(() => {
-        if (currentUser.value) {
-          name.value = currentUser.value.displayName;
-        }
+        if (!currentUser.value) return;
+
+        name.value = currentUser.value.displayName;
       });
 
       return { currentUser, name };
