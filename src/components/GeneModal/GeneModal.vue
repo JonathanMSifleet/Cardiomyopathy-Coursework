@@ -14,14 +14,15 @@
     tabindex="-1"
     labelledby="geneModalLabel"
   >
-    <MDBModalHeader>
+    <MDBModalHeader :class="$style.ModalHeader">
       <MDBModalTitle id="geneModalLabel">
         <h2>{{ geneSymbol }}</h2>
       </MDBModalTitle>
     </MDBModalHeader>
     <MDBModalBody>
-      <h3>{{ geneName }}</h3>
-      <br>
+      <h3 :class="$style.GeneNameHeader">
+        {{ geneName }}
+      </h3>
       {{ geneDesc }}
     </MDBModalBody>
     <MDBModalFooter>
@@ -87,3 +88,6 @@
   };
 </script>
 
+<style lang="scss" scoped module>
+  @import './GeneModal.module.scss';
+</style>
