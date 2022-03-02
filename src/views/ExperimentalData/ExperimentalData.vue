@@ -6,8 +6,8 @@
         <MDBCardTitle>Gene Mutation Data</MDBCardTitle>
         <MDBCardText>
           <form>
-            <MDBRow>
-              <MDBCol md="4">
+            <MDBRow class="mt-5 mb-5">
+              <MDBCol md="6">
                 <select
                   id="geneMutations"
                   v-model="selectedMutation"
@@ -26,93 +26,47 @@
                   </option>
                 </select>
               </MDBCol>
+
+              <MDBCol v-if="showGenderInput" md="6">
+                <MDBInput v-model="info[Gender]" type="text" label="Gender" />
+                <span
+                  :class="$style.DeleteInput"
+                  @click="showGenderInput = !showGenderInput"
+                >
+                  x
+                </span>
+              </MDBCol>
             </MDBRow>
-            <MDBRow class="mb-3">
-              <MDBCol>
+
+            <MDBRow class="mb-5">
+              <MDBCol
+                v-for="input in dataInputs"
+                :key="input"
+                md="4"
+                class="mb-4"
+                :class="$style.InputWrapper"
+              >
                 <MDBInput
-                  id="form2Email"
-                  v-model="info.ledv"
+                  v-model="info[input]"
                   type="number"
-                  label="LEDV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
+                  :label="mapKeyToWords(input)"
+                  :class="$style.ExperimentalDataInput"
                 />
+                <span :class="$style.DeleteInput" @click="deleteInput(input)">
+                  x
+                </span>
+              </MDBCol>
+              <MDBCol md="4">
                 <MDBInput
-                  v-model="info.redv"
-                  type="number"
-                  label="REDV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lesv"
-                  type="number"
-                  label="LESV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.resv"
-                  type="number"
-                  label="RESV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lvef"
-                  type="number"
-                  label="LVEF "
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rvef"
-                  type="number"
-                  label="RVEF"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lvmass"
-                  type="number"
-                  label="LVMASS"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rvmass"
-                  type="number"
-                  label="RVMASS"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lsv"
-                  type="number"
-                  label="LSV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rsv"
-                  type="number"
-                  label="RSV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.ageAtMri"
-                  type="number"
-                  label="Age at MRI"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.gender"
+                  v-model="newInput"
                   type="text"
-                  label="Gender"
-                  wrapper-class="mb-4"
+                  label="New input name"
                 />
+              </MDBCol>
+              <MDBCol md="2">
+                <MDBBtn color="primary" @click="createNewInput">
+                  Add new input
+                </MDBBtn>
               </MDBCol>
             </MDBRow>
             <MDBRow class="mb-4">
@@ -154,7 +108,7 @@
                   justify-content-center
                 "
               >
-                <MDBBtn color="primary" @click="experimentalData">
+                <MDBBtn :disabled="selectedMutation === 'Please select'" color="primary" @click="submitExperimentalData">
                   Submit
                 </MDBBtn>
               </div>
@@ -169,6 +123,7 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import store from '../../services/store';
   import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
   import { ref, reactive } from '@vue/reactivity';
@@ -206,6 +161,7 @@
     },
     setup() {
       const { currentUser } = getUser();
+      let newInput = ref('');
       const router = useRouter();
       const geneMutations = reactive([
         'Please select',
@@ -220,6 +176,7 @@
         'TTN'
       ]);
       const selectedMutation = ref('Please select');
+      let showGenderInput = ref(true);
       const info = reactive({
         userId: currentUser.value.uid,
         ledv: '',
@@ -241,14 +198,38 @@
         diabetes: false,
         myectomy: false
       });
+      const dataInputs = reactive([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'AgeatMRI'
+      ]);
 
-      const experimentalData = async () => {
-        for (const key in info) {
-          if (info[key] === '' || info[key] === undefined) delete info[key];
+      const createNewInput = () => {
+        if (newInput.value) dataInputs.push(newInput.value);
+        newInput.value = '';
+      };
+
+      const deleteInput = (key) => {
+        if (!dataInputs.includes(key)) return;
+
+        dataInputs.splice(dataInputs.indexOf(key), 1);
+        delete info[key];
+      };
+
+      const submitExperimentalData = async () => {
+        if (info.gender.toLowerCase() !== 'male' || info.gender.toLowerCase() !== 'female') {
+          alert('Gender must me \'male\' or \'female\''); return;
         }
 
-        if (document.getElementById('geneMutations').value === 'Please select') {
-          alert('Please select a valid Gene mutation'); return;
+        for (const key in info) {
+          if (info[key] === '' || info[key] === undefined) delete info[key];
         }
 
         const docRef = await addDoc(collection(await store.database, 'hcmData'), {
@@ -269,7 +250,8 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return { info, geneMutations, selectedMutation, experimentalData };
+      return { createNewInput, dataInputs, deleteInput, geneMutations, info, mapKeyToWords, newInput,
+               selectedMutation, showGenderInput, submitExperimentalData };
     }
   };
 </script>
