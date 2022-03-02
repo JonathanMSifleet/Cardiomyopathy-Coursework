@@ -108,7 +108,7 @@
                   justify-content-center
                 "
               >
-                <MDBBtn :disabled="selectedMutation === 'Please select'" color="primary" @click="experimentalData">
+                <MDBBtn :disabled="selectedMutation === 'Please select'" color="primary" @click="submitExperimentalData">
                   Submit
                 </MDBBtn>
               </div>
@@ -223,7 +223,11 @@
         delete info[key];
       };
 
-      const experimentalData = async () => {
+      const submitExperimentalData = async () => {
+        if (info.gender.toLowerCase() !== 'male' || info.gender.toLowerCase() !== 'female') {
+          alert('Gender must me \'male\' or \'female\''); return;
+        }
+
         for (const key in info) {
           if (info[key] === '' || info[key] === undefined) delete info[key];
         }
@@ -246,22 +250,12 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return {
-        createNewInput,
-        dataInputs,
-        deleteInput,
-        experimentalData,
-        geneMutations,
-        info,
-        mapKeyToWords,
-        newInput,
-        selectedMutation,
-        showGenderInput
-      };
+      return { createNewInput, dataInputs, deleteInput, geneMutations, info, mapKeyToWords, newInput,
+               selectedMutation, showGenderInput, submitExperimentalData };
     }
   };
 </script>
 
 <style module lang="scss">
-@import "./ExperimentalData.module.scss";
+  @import "./ExperimentalData.module.scss";
 </style>
