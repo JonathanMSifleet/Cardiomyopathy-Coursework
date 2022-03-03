@@ -10,10 +10,7 @@
 
   export default {
     name: 'Help',
-    components: {
-      PageWrapper,
-      HelpComponent
-    },
+    components: { HelpComponent, PageWrapper },
     setup() {
       return {
         HCM: [

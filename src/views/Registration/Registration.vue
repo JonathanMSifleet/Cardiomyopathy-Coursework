@@ -143,32 +143,32 @@
   import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
-    MDBRow,
-    MDBCol,
-    MDBInput,
     MDBBtn,
     MDBCard,
-    MDBCardHeader,
     MDBCardBody,
-    MDBCardTitle,
+    MDBCardFooter,
+    MDBCardHeader,
     MDBCardText,
-    MDBCardFooter
+    MDBCardTitle,
+    MDBCol,
+    MDBInput,
+    MDBRow
   } from 'mdb-vue-ui-kit';
   import { validateEmail, validateName, validatePassword, validatePhoneNumber } from '../../utils/validationFunctions';
 
   export default {
     name: 'Register',
     components: {
-      MDBRow,
-      MDBCol,
-      MDBInput,
       MDBBtn,
       MDBCard,
-      MDBCardHeader,
       MDBCardBody,
-      MDBCardTitle,
-      MDBCardText,
       MDBCardFooter,
+      MDBCardHeader,
+      MDBCardText,
+      MDBCardTitle,
+      MDBCol,
+      MDBInput,
+      MDBRow,
       PageWrapper
     },
     setup() {
@@ -212,14 +212,20 @@
       //submit registration data and create account
       const handleSubmit = async () => {
         // check all inputs are valid:
-        if (validateInputs()) return;
+        if (!validateInputs()) return;
 
         //create user acc
         await signup(email.value, password.value);
         if (signupError.value) return;
 
+        //povides url to continue to after clicking on verif link
+        const actionCodeSettings = {
+          //change to domain address of production site
+          url: 'http://localhost:8080/'
+        };
+
         //send email for the user to verify email
-        await sendEmailVerification(auth.currentUser);
+        await sendEmailVerification(actionCodeSettings, auth.currentUser);
         alert('Verification email sent.');
 
         //get currently signed in user
@@ -252,7 +258,7 @@
           await signOut(auth);
           //redirect to login
           router.push('/');
-        } catch (error){
+        } catch (error) {
           console.error(error);
         }
       };

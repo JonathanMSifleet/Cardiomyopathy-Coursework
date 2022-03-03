@@ -13,17 +13,17 @@
 </template>
 
 <script>
-  import { MDBContainer, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
   import Footer from '../../components/Footer/Footer.vue';
   import Header from '../../components/Header/Header.vue';
+  import { MDBContainer, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
 
   export default {
     components: {
-      MDBContainer,
-      MDBCol,
-      MDBRow,
       Footer,
-      Header
+      Header,
+      MDBCol,
+      MDBContainer,
+      MDBRow
     }
   };
 </script>

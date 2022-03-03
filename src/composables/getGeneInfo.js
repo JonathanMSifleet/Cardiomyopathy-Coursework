@@ -112,7 +112,7 @@ const getGeneIdString = (geneObjArray) => {
 };
 
 //returns array of gene objects with symbol, name, and description
-const fetchGeneDetails = async () =>{
+const fetchGeneDetails = async () => {
   const geneIDString = getGeneIdString(geneData);
   const baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 
