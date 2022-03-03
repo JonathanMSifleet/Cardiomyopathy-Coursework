@@ -13,21 +13,21 @@
         <MDBNavbarItem :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="currentUser" :to="{ name: 'Query' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="currentUser" :to="{ name: 'ExperimentalData' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'ExperimentalData' }" active>
           Experimental Data
         </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBNavbarNav right class="mb-2 mb-lg-0">
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Login' }" active>
+        <MDBNavbarItem v-if="showLoginRegister()" :to="{ name: 'Login' }" active>
           Login
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Registration' }" active>
+        <MDBNavbarItem v-if="showLoginRegister()" :to="{ name: 'Registration' }" active>
           Register
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="currentUser" :to="{ name: 'UserProfile' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'UserProfile' }" active>
           Profile
         </MDBNavbarItem>
         <MDBNavbarItem :to="{ name: 'Help' }" active>
@@ -35,7 +35,7 @@
         </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBBtn
-        v-if="currentUser"
+        v-if="loggedInAndVerif()"
         class="logout"
         color="light"
         @click="logout"
@@ -65,6 +65,9 @@
       const router = useRouter();
       const { currentUser } = getUser();
 
+      //checks if user is logged in and also email verified
+      const loggedInAndVerif = () =>  currentUser.value && currentUser.value.emailVerified;
+
       //nav bar logout
       const logout = async () => {
         try {
@@ -74,7 +77,10 @@
           alert(err.message);
         }
       };
-      return { currentUser, logout };
+
+      const showLoginRegister = () => !currentUser.value || !currentUser.value.emailVerified;
+
+      return { currentUser, loggedInAndVerif, logout, showLoginRegister };
     }
   };
 </script>
