@@ -36,8 +36,12 @@
 
   export default {
     name: 'HomeComponent',
-    // eslint-disable-next-line vue/require-prop-types
-    props: ['post'],
+    props: {
+      post: {
+        type: Object,
+        default() { return; }
+      }
+    },
     setup(){
       const { currentUser } = getUser();
       const user = ref(false);
