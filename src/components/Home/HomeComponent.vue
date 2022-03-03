@@ -25,33 +25,34 @@
       </div>
     </div>
     <div :class="$style['bg-photo']">
-      <img :src="require(`../../assets/imgs/${post.photo}.jpg`)">
+      <img :src="`../../assets/imgs/${post.photo}.jpg`">
     </div>
   </div>
 </template>
 
 <script>
   import getUser from '../../composables/getUser';
-  import { ref, onBeforeMount } from 'vue';
+  import { ref, onBeforeMount, watch } from 'vue';
 
   export default {
     name: 'HomeComponent',
     props: {
       post: {
-        type: Object,
-        default() { return; }
+        type: Object
       }
     },
-    setup(){
+    setup(props){
       const { currentUser } = getUser();
       const user = ref(false);
 
+      console.log('post.photo', require(`../../assets/imgs/${props.post.photo}.jpg`));
+
+
       onBeforeMount(() => {
-        if (currentUser.value) {
-          user.value = true;
-        }
+        if (currentUser.value) user.value = true;
       });
-      return{ user };
+
+      return { user };
     }
   };
 </script>
