@@ -151,7 +151,6 @@
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardHeader,
     MDBCardTitle,
     MDBCardText,
     MDBCardFooter
@@ -165,7 +164,6 @@
       MDBCard,
       MDBCardBody,
       MDBCardFooter,
-      MDBCardHeader,
       MDBCardText,
       MDBCardTitle,
       MDBCheckbox,
