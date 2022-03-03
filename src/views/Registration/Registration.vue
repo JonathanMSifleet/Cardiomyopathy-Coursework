@@ -1,15 +1,15 @@
 <template>
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-      <MDBCard class="authentication-card" text="center">
+      <MDBCard :class="$style['authentication-card']" text="center">
         <MDBCardHeader>User Registration</MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle>
             <!--print any google auth errors-->
-            <div v-if="signupError" class="error-message mb-4">
+            <div v-if="signupError" :class="[$style['error-message'], 'mb-4']">
               {{ signupError }}
             </div>
-            <div v-if="passMatchErr" class="error-message mb-4">
+            <div v-if="passMatchErr" :class="[$style['error-message'], 'mb-4']">
               {{ passMatchErr }}
             </div>
           </MDBCardTitle>
@@ -23,9 +23,16 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
+                    <<<<<<<
+                    HEAD
                     :maxlength="32"
+                    =="====="
+                    :maxlength="20"
+                  >
+                    >>>>>> main
                     required
-                  />
+                    />
+                  </mdbinput>
                 </MDBCol>
                 <MDBCol md="6">
                   <MDBInput
@@ -34,9 +41,16 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
+                    <<<<<<<
+                    HEAD
                     :maxlength="32"
+                    =="====="
+                    :maxlength="20"
+                  >
+                    >>>>>> main
                     required
-                  />
+                    />
+                  </mdbinput>
                 </MDBCol>
               </MDBRow>
               <MDBInput
@@ -45,74 +59,81 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
+                <<<<<<<
+                HEAD
                 :maxlength="320"
+                =="====="
+                :maxlength="30"
+              >
+                >>>>>> main
                 required
-              />
-              <!-- Password input -->
-              <MDBInput
-                id="form2Password"
-                v-model.trim="password"
-                type="password"
-                label="Password"
-                wrapper-class="mb-4"
-                :maxlength="64"
-                required
-              />
-              <MDBInput
-                id="form2PasswordConfirm"
-                v-model.trim="passConfirm"
-                type="password"
-                label="Confirm Password"
-                wrapper-class="mb-4"
-                :maxlength="64"
-                required
-              />
-              <MDBInput
-                id="form2Phone"
-                v-model.trim="phone"
-                type="text"
-                label="Phone Number"
-                wrapper-class="mb-4"
-                :maxlength="13"
-                required
-              />
-              <MDBInput
-                id="form2AddressLineOne"
-                v-model.trim="addressLineOne"
-                type="text"
-                label="Address line 1"
-                wrapper-class="mb-4"
-                :maxlength="35"
-                required
-              />
-              <MDBInput
-                id="form2AddressLineTwo"
-                v-model.trim="addressLineTwo"
-                type="text"
-                label="Address line 2"
-                wrapper-class="mb-4"
-                :maxlength="35"
-              />
-              <MDBInput
-                id="form2city"
-                v-model.trim="city"
-                type="text"
-                label="Town / city"
-                wrapper-class="mb-4"
-                :maxlength="35"
-              />
-              <MDBInput
-                id="form2postcode"
-                v-model.trim="postcode"
-                type="text"
-                label="Postcode"
-                wrapper-class="mb-4"
-                :maxlength="8"
-              />
+                />
+                <!-- Password input -->
+                <MDBInput
+                  id="form2Password"
+                  v-model.trim="password"
+                  type="password"
+                  label="Password"
+                  wrapper-class="mb-4"
+                  :maxlength="64"
+                  required
+                />
+                <MDBInput
+                  id="form2PasswordConfirm"
+                  v-model.trim="passConfirm"
+                  type="password"
+                  label="Confirm Password"
+                  wrapper-class="mb-4"
+                  :maxlength="64"
+                  required
+                />
+                <MDBInput
+                  id="form2Phone"
+                  v-model.trim="phone"
+                  type="text"
+                  label="Phone Number"
+                  wrapper-class="mb-4"
+                  :maxlength="15"
+                  required
+                />
+                <MDBInput
+                  id="form2AddressLineOne"
+                  v-model.trim="addressLineOne"
+                  type="text"
+                  label="Address line 1"
+                  wrapper-class="mb-4"
+                  :maxlength="35"
+                  required
+                />
+                <MDBInput
+                  id="form2AddressLineTwo"
+                  v-model.trim="addressLineTwo"
+                  type="text"
+                  label="Address line 2"
+                  wrapper-class="mb-4"
+                  :maxlength="35"
+                />
+                <MDBInput
+                  id="form2city"
+                  v-model.trim="city"
+                  type="text"
+                  label="Town / city"
+                  wrapper-class="mb-4"
+                  :maxlength="35"
+                />
+                <MDBInput
+                  id="form2postcode"
+                  v-model.trim="postcode"
+                  type="text"
+                  label="Postcode"
+                  wrapper-class="mb-4"
+                  :maxlength="8"
+                />
 
-              <MDBBtn type="submit" color="primary" :disabled="!canRegister">
-                Register
-              </MDBBtn>
+                <MDBBtn type="submit" color="primary" :disabled="!canRegister">
+                  Register
+                </MDBBtn>
+              </mdbinput>
             </form>
           </MDBCardText>
         </MDBCardBody>
@@ -121,7 +142,7 @@
           <div class="text-center mt-3">
             <p>
               Already a member?
-              <router-link :to="{ name: 'Login' }" class="register-link">
+              <router-link :to="{ name: 'Login' }" :class="$style['register-link']">
                 Login here
               </router-link>
             </p>
@@ -216,18 +237,18 @@
 
         //create user acc
         await signup(email.value, password.value);
+        if (signupError.value) return;
 
-        if (!signupError.value) {//success
+        //send email for the user to verify email
+        await sendEmailVerification(auth.currentUser);
+        alert('Verification email sent.');
 
-          //send email for the user to verify email
-          await sendEmailVerification(auth.currentUser);
-          alert('Verification email sent.');
+        //get currently signed in user
+        const { currentUser } = getUser();
 
-          //get currently signed in user
-          const { currentUser } = getUser();
-
-          //add user info to firestore db
-          await addUserInfo({
+        try {
+          updateProfile(auth.currentUser, {
+            displayName: firstName.value,
             uid: currentUser.value.uid,
             firstName: firstName.value,
             lastName: lastName.value,
@@ -239,24 +260,17 @@
             email: email.value,
             phone: phone.value
           });
+        } catch (error) {
+          console.error(error);
+        }
 
-          //set user display name
-          try {
-            await updateProfile(auth.currentUser, {
-              displayName: firstName.value
-            });
-          } catch (error) {
-            console.error(error);
-          }
-
-          //sign user out
-          try {
-            await signOut(auth);
-            //redirect to login
-            router.push('/');
-          } catch (error){
-            console.error(error);
-          }
+        //sign user out
+        try {
+          await signOut(auth);
+          //redirect to login
+          router.push('/');
+        } catch (error){
+          console.error(error);
         }
       };
 
@@ -294,6 +308,6 @@
   };
 </script>
 
-<style>
+<style lang="scss" scoped module>
   @import "../../assets/styles/Authentication.scss";
 </style>

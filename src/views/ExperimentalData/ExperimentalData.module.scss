@@ -1,0 +1,59 @@
+.MainCard {
+  margin-top: 0 !important;
+}
+
+.FileUploadWrapper {
+  clear: both;
+}
+
+.CardBody {
+  margin: 0;
+  padding: 1%;
+}
+
+.CardTitle {
+  font-size: 1.4rem;
+  margin-bottom: 0 !important;
+}
+
+.UploadFileInstructions {
+  margin-top: 1%;
+  margin-bottom: 1%;
+  float: left;
+}
+
+.ManualDataInstructions {
+  clear: both;
+  float: left;
+  margin-bottom: 1%;
+}
+
+.Row {
+  margin-bottom: 1% !important;
+  margin-top: 1% !important;
+  clear: left;
+}
+
+.MutationSelect {
+  margin-bottom: 0;
+}
+
+.DeleteInput {
+  cursor: pointer;
+  color: red;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.BottomRow {
+  margin-bottom: 0.5% !important;
+}
+
+.AddInputButton {
+  height: 5vh;
+  width: 12vw;
+}
+
+.Footer {
+  padding: 0 !important;
+}

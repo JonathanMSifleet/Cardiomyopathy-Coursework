@@ -5,7 +5,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
-  mode: 'development',
   entry: './src/main.js',
   devtool: 'eval-source-map',
   output: {
@@ -68,7 +67,7 @@ module.exports = {
         use: 'raw-loader'
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/,
         type: 'asset/inline'
       }
     ]
@@ -76,20 +75,21 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: './public/index.html'
+      template: './public/index.html',
+      favicon: './public/favicon.ico'
     }),
     new VueLoaderPlugin(),
     // define process variables here:
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
-      'process.env.DEVELOPMENT': JSON.stringify(true),
-      'process.env.API_KEY': JSON.stringify('AIzaSyAbdO1kL8ot43XdNmQgdrTCHyijn9-j-Fw'),
-      'process.env.AUTH_DOMAIN': JSON.stringify('cardiomyopathy-mmu.firebaseapp.com'),
-      'process.env.PROJECT_ID': JSON.stringify('cardiomyopathy-mmu'),
-      'process.env.STORAGE_BUCKET': JSON.stringify('cardiomyopathy-mmu.appspot.com'),
-      'process.env.MESSAGING_SENDER_ID': JSON.stringify('561426653443'),
-      'process.env.APP_ID': JSON.stringify('1:561426653443:web:69fda27182fad45f2e0936')
+      'process.env.DEVELOPMENT': JSON.stringify(false),
+      'process.env.API_KEY': JSON.stringify('AIzaSyDGrP1QWYsQqLFAoev-AHjAQKq4aal9q_M'),
+      'process.env.AUTH_DOMAIN': JSON.stringify('advwebdevproject-7d239.firebaseapp.com'),
+      'process.env.PROJECT_ID': JSON.stringify('advwebdevproject-7d239'),
+      'process.env.STORAGE_BUCKET': JSON.stringify('advwebdevproject-7d239'),
+      'process.env.MESSAGING_SENDER_ID': JSON.stringify('683529124490'),
+      'process.env.APP_ID': JSON.stringify('1:683529124490:web:9105469d5ed03da2350b73')
     })
   ]
 };

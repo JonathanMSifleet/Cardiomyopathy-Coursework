@@ -1,2 +1,4 @@
 * eol=crlf
 *.scss linguist-detectable=false
+*.jpg binary
+*.pdf binary

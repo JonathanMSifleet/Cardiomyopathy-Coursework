@@ -1,33 +1,36 @@
 <template>
-  <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-    <MDBCard class="authentication-card" text="center">
-      <MDBCardHeader>Reset Password</MDBCardHeader>
-      <MDBCardBody>
-        <MDBCardTitle v-if="error" class="error-message mb-4">
-          {{ error }}
-        </MDBCardTitle>
-        <MDBCardText>
-          <form @submit.prevent="handleSubmit">
-            <MDBInput
-              id="form2Email"
-              v-model="email"
-              type="email"
-              label="Email address"
-              wrapper-class="mb-4"
-            />
-            <MDBBtn type="submit" color="primary">
-              Send reset email
-            </MDBBtn>
-          </form>
-        </MDBCardText>
-      </MDBCardBody>
-    </MDBCard>
-  </div>
+  <PageWrapper>
+    <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
+      <MDBCard :class="$style['authentication-card']" text="center">
+        <MDBCardHeader>Reset Password</MDBCardHeader>
+        <MDBCardBody>
+          <MDBCardTitle v-if="error" :class="[$style['error-message'], 'mb-4']">
+            {{ error }}
+          </MDBCardTitle>
+          <MDBCardText>
+            <form @submit.prevent="handleSubmit">
+              <MDBInput
+                id="form2Email"
+                v-model="email"
+                type="email"
+                label="Email address"
+                wrapper-class="mb-4"
+              />
+              <MDBBtn type="submit" color="primary">
+                Send reset email
+              </MDBBtn>
+            </form>
+          </MDBCardText>
+        </MDBCardBody>
+      </MDBCard>
+    </div>
+  </PageWrapper>
 </template>
 
 <script>
   import { ref } from 'vue';
   import usePassReset from '../../composables/passReset';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import {
     MDBInput,
     MDBBtn,
@@ -46,7 +49,8 @@
       MDBCardHeader,
       MDBCardBody,
       MDBCardTitle,
-      MDBCardText
+      MDBCardText,
+      PageWrapper
     },
     setup(){
       const email = ref('');
@@ -62,6 +66,6 @@
   };
 </script>
 
-<style>
+<style lang="scss" scoped module>
   @import "../../assets/styles/Authentication.scss";
 </style>

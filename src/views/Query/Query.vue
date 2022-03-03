@@ -78,11 +78,11 @@
         </div>
       </div>
 
-      <div v-else>
+      <div v-else :class="$style.ComponentWrapper">
         <p :class="$style.GeneMutationSelection">
           Select a gene mutation:
         </p>
-        <div :class="[$style.SelectWrapper, $style.GeneMutationWrapper]">
+        <div :class="[$style.SelectWrapper]">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
             <option
               v-for="geneMutation in geneMutations"
@@ -93,6 +93,7 @@
             </option>
           </select>
         </div>
+        <GeneModal :selectedGene="selectedGeneMutation" />
       </div>
 
       <div :class="$style.CheckboxWrapper">
@@ -171,20 +172,23 @@
 </template>
 
 <script>
+  import GeneModal from '../../components/GeneModal/GeneModal.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
-  import mapKeyToWords from '../../utils/mapKeyToWords';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import getUser from '../../composables/getUser';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { operandIsValid } from '../../utils/validationFunctions';
-  import { reactive, ref, watch } from 'vue';
+  import { reactive, ref, watch, watchEffect } from 'vue';
+  import { useRouter } from 'vue-router';
 
   export default {
     name: 'Query',
     components: {
-      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner
+      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
     },
     setup() {
       let activeCheckboxes = ref({});
@@ -241,6 +245,7 @@
       let queryInput = ref('');
       let queryOperand = ref('');
       let renderableResults = ref([]);
+      const router = useRouter();
       let selectedGeneMutation = ref('Please select');
       let selectedGraphKey = ref();
       let selectedOperator = ref('Please select');
@@ -252,9 +257,12 @@
 
         try {
           allDocuments = await fetchDocuments();
+          if (allDocuments.length === 0) throw new Error('No docs');
+
           filteredResults.value = allDocuments;
           renderableResults.value = filteredResults.value.slice(0, pageSize);
           optionalTableKeys.value = determineKeys(allDocuments);
+          delete optionalTableKeys.value.userId;
 
           activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
         } catch (error) {
@@ -263,7 +271,10 @@
             errorMessage.value = 'Firebase details are setup incorrectly';
             break;
           case error.message.includes('multi-tab'):
-            errorMessage.value = 'Only one tab can be open at a time in development mode';
+            errorMessage.value = 'Only one tab can be open at a time in development mode due to Firebase persistence';
+            break;
+          case error.message.includes('No docs'):
+            errorMessage.value = 'No documents were found in the database';
             break;
           default:
             console.error(error);
@@ -274,7 +285,7 @@
       })();
 
       const addFilter = () => {
-        if(optionalTableKeys.value[queryInput.value] === undefined) {
+        if (optionalTableKeys.value[queryInput.value] === undefined) {
           alert('Attribute not found in database'); return;
         }
 
@@ -387,7 +398,7 @@
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
       const toggleKey = (key) => {
-        if(activeTableKeys.value.includes(key)) {
+        if (activeTableKeys.value.includes(key)) {
           activeTableKeys.value.slice(activeTableKeys.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
@@ -446,11 +457,17 @@
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
       });
 
+      const { currentUser } = getUser();
+
+      watchEffect(() => {
+        if (!currentUser.value) router.push('/login');
+      });
+
       return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
                filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
                isLoadingGraph, mapKeyToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
-               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage, toggleKey,
-               useAdvancedMode };
+               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
+               toggleKey, useAdvancedMode };
     }
   };
 </script>
