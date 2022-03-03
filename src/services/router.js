@@ -62,7 +62,8 @@ const router = createRouter({
   {
     path: '/help',
     name: 'Help',
-    component: () => import('../views/Help/Help.vue')
+    component: () =>
+      import(/* webpackChunkName: "Help" */ '../views/Help/Help.vue')
   },
   // no route, route:
   {
