@@ -1,6 +1,9 @@
 import isNumber from 'is-number';
 import { validate } from 'email-validator';
 
+// eslint-disable-next-line no-useless-escape
+const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
 export const operandIsValid = (value = value.trim()) => {
   return value.toLowerCase() === 'false' ||  value.toLowerCase() === 'true' || isNumber(value);
 };
@@ -30,7 +33,7 @@ export const validatePassword = (input) => {
   if(!validateRegex(input, /[A-Z]/)) valMessages.push('Password must contain at least one uppercase letter');
   if(!validateRegex(input, /[a-z]/)) valMessages.push('Password must contain at least one lowercase letter');
   // eslint-disable-next-line no-useless-escape
-  if(!validateRegex(input, /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/))
+  if(!validateRegex(input, specialCharRegex))
     valMessages.push('Password must contain at least one special character');
 
   return valMessages;
@@ -45,17 +48,40 @@ export const validatePhoneNumber = (input) => {
   return valMessages;
 };
 
-// to do:
-// Address line 1
-// Address line 2
-// City
-// Postcode
+export const validateAddressLineOne = (input) => {
+  const valMessages = [];
 
-// login
+  if(!validateLength(input, 4, 255)) valMessages.push('Address must be between 4 and 255 characters');
+  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+};
 
-// display messages on the screen
+export const validateAddressLineTwo = (input) => {
+  if(input.length === 0) return [];
+  const valMessages = [];
+
+  if(!validateLength(input, 0, 255)) valMessages.push('Address must be between 4 and 255 characters');
+  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+};
+
+export const validateCity = (input) => {
+  const valMessages = [];
+
+  if(!validateRegex(input, /^[a-zA-Z0-9_]+$/)) valMessages.push('City must only contain letters a-z and A-Z');
+  if(!validateLength(input, 4, 35)) valMessages.push('City must be between 4 and 35 characters');
+  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+
+  return valMessages;
+};
+
+export const validatePostcode = (input) => {
+  const valMessages = [];
+
+  if(!validateRegex(input, /^([A-Z][A-HJ-Y]?\d[A-Z\d]? ?\d[A-Z]{2}|GIR ?0A{2})$/))
+    valMessages.push('Postcode must be a valid UK postcode');
+
+  return valMessages;
+};
 
 const validateRegex = (input, regex) => regex.test(input);
 
 const validateLength = (input, min, max) => input.length <= max && input.length >= min;
-

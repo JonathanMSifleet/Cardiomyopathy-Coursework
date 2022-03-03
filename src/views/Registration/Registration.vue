@@ -142,6 +142,15 @@
   import { ref, watch } from 'vue';
   import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
+  import { validateAddressLineOne,
+           validateAddressLineTwo,
+           validateCity,
+           validateEmail,
+           validateName,
+           validatePassword,
+           validatePhoneNumber,
+           validatePostcode }
+    from '../../utils/validationFunctions';
   import {
     MDBBtn,
     MDBCard,
@@ -154,7 +163,6 @@
     MDBInput,
     MDBRow
   } from 'mdb-vue-ui-kit';
-  import { validateEmail, validateName, validatePassword, validatePhoneNumber } from '../../utils/validationFunctions';
 
   export default {
     name: 'Register',
@@ -273,13 +281,21 @@
         const emailValMessages = validateEmail(email.value);
         const passwordValMessages = validatePassword(password.value);
         const phoneValMessages = validatePhoneNumber(phone.value);
+        const addressLineOneValMessages = validateAddressLineOne(addressLineOne.value);
+        const addressLineTwoValMessages = validateAddressLineTwo(addressLineOne.value);
+        const cityValMessages = validateCity(addressLineOne.value);
+        const postcodeValMessages = validatePostcode(postcode.value);
 
-        if(
+        if (
           firstNameValMessages.length !== 0 ||
           lastNameValMessages.length !== 0 ||
           emailValMessages.length !== 0 ||
           passwordValMessages.length !== 0 ||
-          phoneValMessages.length !== 0
+          phoneValMessages.length !== 0 ||
+          addressLineOneValMessages.length !== 0 ||
+          addressLineTwoValMessages.length !== 0 ||
+          cityValMessages.length !== 0 ||
+          postcodeValMessages.length !== 0
         ) inputsValid = false;
 
         return inputsValid;
