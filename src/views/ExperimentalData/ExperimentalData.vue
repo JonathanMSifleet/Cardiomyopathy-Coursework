@@ -173,6 +173,7 @@
       PageWrapper
     },
     setup() {
+      const { currentUser } = getUser();
       const dataInputs = reactive([
         'ledv',
         'redv',
@@ -222,7 +223,6 @@
       const router = useRouter();
       const selectedMutation = ref('Please select');
       let showGenderInput = ref(true);
-      const { currentUser } = getUser();
 
       const createNewInput = () => {
         if (newInput.value) dataInputs.push(newInput.value);
@@ -249,6 +249,7 @@
           ...info,
           GeneMutation: selectedMutation.value,
           createdAt: serverTimestamp(),
+          createdByUser: true,
           deletedAt: null
         });
         console.log('Document written with ID: ', docRef.id);
