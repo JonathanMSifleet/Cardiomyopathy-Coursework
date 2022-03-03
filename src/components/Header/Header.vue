@@ -16,6 +16,9 @@
         <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'MutationComparison' }" active>
+          Mutation Comparison
+        </MDBNavbarItem>
         <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'ExperimentalData' }" active>
           Experimental Data
         </MDBNavbarItem>

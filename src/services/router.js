@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import { auth } from '../firebase/config';
 
-
 // if user redirect to home, otherwise continue to original route
 const requireSignedOut = (to, from, next) => auth.currentUser ? next({ name: 'Home' }) : next();
 const requireSignedIn = (to, from, next) => !auth.currentUser ? next({ name: 'Login' }) : next();
@@ -17,10 +16,18 @@ const router = createRouter({
   },
   {
     name: 'Query',
-    path: '/Query/',
+    path: '/Query',
     base: '/',
-    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
-    // beforeEnter: requireSignedIn
+    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue'),
+    beforeEnter: requireSignedIn
+  },
+  {
+    name: 'MutationComparison',
+    path: '/mutationComparison',
+    base: '/',
+    component: () =>
+      import (/* webpackChunkName: "MutationComparison" */ '../views/MutationComparison/MutationComparison.vue'),
+    beforeEnter: requireSignedIn
   },
   {
     name: 'Registration',
