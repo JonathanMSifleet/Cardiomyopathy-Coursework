@@ -47,38 +47,28 @@
 </template>
 
 <script>
-  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
-  import { useRouter } from 'vue-router';
-  import { getAuth, signOut }  from 'firebase/auth';
   import getUser from '../../composables/getUser';
+  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
+  import { getAuth, signOut }  from 'firebase/auth';
+  import { useRouter } from 'vue-router';
 
   export default {
     components: {
       MDBBtn,
       MDBNavbar,
-      MDBNavbarToggler,
+      MDBNavbarItem,
       MDBNavbarNav,
-      MDBNavbarItem
+      MDBNavbarToggler
     },
     setup () {
-      const router = useRouter();
       const auth = getAuth();
+      const router = useRouter();
       const { currentUser } = getUser();
 
       //checks if user is logged in and also email verified
-      const loggedInAndVerif = ()=>{
-        if(currentUser.value && currentUser.value.emailVerified){
-          return true;
-        }
-        return false;
-      };
+      const loggedInAndVerif = () =>  currentUser.value && currentUser.value.emailVerified;
 
-      const showLoginRegister = ()=>{
-        if(!currentUser.value || !currentUser.value.emailVerified){
-          return true;
-        }
-        return false;
-      };
+      const showLoginRegister = () => !currentUser.value || !currentUser.value.emailVerified;
 
       //nav bar logout
       const logout = async () => {

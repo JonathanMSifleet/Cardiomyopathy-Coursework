@@ -1,6 +1,6 @@
 import { auth } from '../firebase/config';
-import { sendPasswordResetEmail } from 'firebase/auth';
 import { ref } from 'vue';
+import { sendPasswordResetEmail } from 'firebase/auth';
 
 const error = ref(null);
 const isPending = ref(false);
@@ -23,6 +23,7 @@ const passReset = async(email) => {
     isPending.value = false;
   }
 };
+
 //composable function
 const usePassReset = () => {
   return { passReset, error, isPending };

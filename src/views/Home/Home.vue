@@ -7,19 +7,15 @@
 </template>
 
 <script>
-  import { ref, onBeforeMount } from 'vue';
-  import getUser from '../../composables/getUser';
-  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import HomeComponent from '../../components/HomeComponent/HomeComponent.vue';
   import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import getUser from '../../composables/getUser';
+  import { ref, onBeforeMount } from 'vue';
 
   export default {
     name: 'Home',
-    components: {
-      PageWrapper,
-      HomeComponent,
-      NewsFeed
-    },
+    components: { HomeComponent, NewsFeed, PageWrapper },
     setup() {
       const { currentUser } = getUser();
       const name = ref('');

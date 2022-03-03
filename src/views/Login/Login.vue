@@ -67,8 +67,8 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
   import { ref } from 'vue';
-  import { getAuth, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import getUser from '../../composables/getUser.js';
 
@@ -88,30 +88,31 @@
   export default {
     name: 'Login',
     components: {
-      MDBRow,
-      MDBCol,
-      MDBInput,
       MDBBtn,
       MDBCard,
-      MDBCardHeader,
       MDBCardBody,
-      MDBCardTitle,
-      MDBCardText,
       MDBCardFooter,
+      MDBCardHeader,
+      MDBCardText,
+      MDBCardTitle,
+      MDBCol,
+      MDBInput,
+      MDBRow,
       PageWrapper
     },
     setup() {
-      const email = ref('');
-      const password = ref('');
-      const errorMessage = ref();
-      const auth = getAuth();
-      const router = useRouter();
-      const { currentUser } = getUser();
       //povides url to continue to after clicking on verif link
       const actionCodeSettings = {
         //change to domain address of production site
         url: 'http://localhost:8080/'
       };
+      const auth = getAuth();
+      const email = ref('');
+      const errorMessage = ref();
+      const password = ref('');
+      const router = useRouter();
+      const { currentUser } = getUser();
+
 
       const login = async () => {
         try {
@@ -151,7 +152,8 @@
           }
         }
       };
-      return { login, email, errorMessage, password };
+
+      return { email, errorMessage, login, password };
     }
   };
 </script>

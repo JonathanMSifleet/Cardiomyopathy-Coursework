@@ -41,7 +41,7 @@
         type: Object
       }
     },
-    setup(props){
+    setup() {
       const { currentUser } = getUser();
       const user = ref(false);
 

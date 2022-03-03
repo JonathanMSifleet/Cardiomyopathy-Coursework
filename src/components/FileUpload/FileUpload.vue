@@ -63,9 +63,7 @@
   import { ref, watch } from 'vue';
 
   export default {
-    components: {
-      ButtonSpinner, MDBBtn, MDBFile, MDBRadio
-    },
+    components: { ButtonSpinner, MDBBtn, MDBFile, MDBRadio },
     setup() {
       let fileUpload = ref([]);
       const formatTypes = ref([

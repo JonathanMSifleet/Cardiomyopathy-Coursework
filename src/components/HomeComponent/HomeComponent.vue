@@ -41,12 +41,9 @@
         type: Object
       }
     },
-    setup(props){
+    setup(){
       const { currentUser } = getUser();
       const user = ref(false);
-
-      console.log('post.photo', require(`../../assets/imgs/${props.post.photo}.jpg`));
-
 
       onBeforeMount(() => {
         if (currentUser.value) user.value = true;

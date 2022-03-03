@@ -1,7 +1,6 @@
-import { initializeApp } from 'firebase/app';
-//firebase authentification function
-import { getAuth } from 'firebase/auth';
 import firebaseDetails from '../constants/firebaseDetails';
+import { getAuth } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 
 // Initialize Firebase
 const app = initializeApp(firebaseDetails);

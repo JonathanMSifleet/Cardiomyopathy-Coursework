@@ -1,7 +1,7 @@
-import initDatabase from '../utils/initDatabase';
-import { reactive } from 'vue';
-import { initializeApp } from 'firebase/app';
 import firebaseDetails from '../constants/firebaseDetails';
+import initDatabase from '../utils/initDatabase';
+import { initializeApp } from 'firebase/app';
+import { reactive } from 'vue';
 
 const store = reactive({
   app: (() => initializeApp(firebaseDetails))(),
