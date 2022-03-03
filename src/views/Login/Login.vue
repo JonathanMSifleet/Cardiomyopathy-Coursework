@@ -40,7 +40,6 @@
                   </router-link>
                 </MDBCol>
               </MDBRow>
-
               <MDBBtn type="submit" color="primary">
                 Login
               </MDBBtn>
@@ -69,8 +68,10 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import { ref } from 'vue';
-  import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+  import { getAuth, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
   import { useRouter } from 'vue-router';
+  import getUser from '../../composables/getUser.js';
+
   import {
     MDBBtn,
     MDBCard,
@@ -105,11 +106,29 @@
       const errorMessage = ref();
       const auth = getAuth();
       const router = useRouter();
+      const { currentUser } = getUser();
+      //povides url to continue to after clicking on verif link
+      const actionCodeSettings = {
+        //change to domain address of production site
+        url: 'http://localhost:8080/'
+      };
 
       const login = async () => {
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
-          router.push('/');
+          console.log(currentUser.value.emailVerified);
+          await currentUser.value.reload();
+          console.log(currentUser.value.emailVerified);
+          if (!currentUser.value.emailVerified){
+            await sendEmailVerification(auth.currentUser, actionCodeSettings);
+            await signOut(auth);
+            const verifError = new Error();
+            verifError.code = 'email-not-verif';
+            throw verifError;
+          }
+          else{
+            router.push('/');
+          }
         } catch (error) {
           //custom error messages
           switch (error.code) {
@@ -122,13 +141,16 @@
           case 'auth/wrong-password':
             errorMessage.value = 'Incorrect password';
             break;
+          case 'email-not-verif':
+            errorMessage.value = 'Please verify your email before login. Email resent.';
+            break;
           default:
+            console.log('DEFAULT');
             errorMessage.value = error.message;
             break;
           }
         }
       };
-
       return { login, email, errorMessage, password };
     }
   };
