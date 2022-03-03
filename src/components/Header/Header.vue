@@ -68,8 +68,6 @@
       //checks if user is logged in and also email verified
       const loggedInAndVerif = () =>  currentUser.value && currentUser.value.emailVerified;
 
-      const showLoginRegister = () => !currentUser.value || !currentUser.value.emailVerified;
-
       //nav bar logout
       const logout = async () => {
         try {
@@ -79,7 +77,10 @@
           alert(err.message);
         }
       };
-      return { currentUser, logout, loggedInAndVerif, showLoginRegister };
+
+      const showLoginRegister = () => !currentUser.value || !currentUser.value.emailVerified;
+
+      return { currentUser, loggedInAndVerif, logout, showLoginRegister };
     }
   };
 </script>

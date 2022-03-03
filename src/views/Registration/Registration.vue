@@ -195,7 +195,7 @@
         };
 
         //send email for the user to verify email
-        await sendEmailVerification(auth.currentUser, actionCodeSettings);
+        await sendEmailVerification(actionCodeSettings, auth.currentUser);
         alert('Verification email sent.');
 
         //get currently signed in user

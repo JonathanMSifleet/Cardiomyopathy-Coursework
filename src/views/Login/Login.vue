@@ -67,11 +67,10 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+  import getUser from '../../composables/getUser.js';
+  import { getAuth, sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import getUser from '../../composables/getUser.js';
-
   import {
     MDBBtn,
     MDBCard,
@@ -113,23 +112,19 @@
       const router = useRouter();
       const { currentUser } = getUser();
 
-
       const login = async () => {
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
           console.log(currentUser.value.emailVerified);
           await currentUser.value.reload();
           console.log(currentUser.value.emailVerified);
-          if (!currentUser.value.emailVerified){
-            await sendEmailVerification(auth.currentUser, actionCodeSettings);
-            await signOut(auth);
-            const verifError = new Error();
-            verifError.code = 'email-not-verif';
-            throw verifError;
-          }
-          else{
-            router.push('/');
-          }
+          if (currentUser.value.emailVerified) router.push('/');
+
+          await sendEmailVerification(auth.currentUser, actionCodeSettings);
+          await signOut(auth);
+          const verifError = new Error();
+          verifError.code = 'email-not-verif';
+          throw verifError;
         } catch (error) {
           //custom error messages
           switch (error.code) {
