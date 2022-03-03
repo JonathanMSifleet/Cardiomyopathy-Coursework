@@ -104,7 +104,7 @@
           v-model="activeCheckboxes[key]"
           :label="mapKeyToWords(key)"
           inline
-          @change="toggleKey(key)"
+          @change="toggleHeader(key)"
         />
       </div>
 
@@ -259,9 +259,8 @@
           allDocuments = await fetchDocuments();
           if (allDocuments.length === 0) throw new Error('No docs');
 
-          filteredResults.value = allDocuments;
-          renderableResults.value = filteredResults.value.slice(0, pageSize);
-          console.log('renderableResults', renderableResults.value[0]);
+          cleanup();
+
           optionalTableHeaders.value = determineKeys(allDocuments);
 
           activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
@@ -300,6 +299,12 @@
           opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
           value: convertValueToType(queryOperand.value)
         });
+      };
+
+      const cleanup = () => {
+        filteredResults.value = allDocuments;
+        selectedTablePage.value = 1;
+        renderableResults.value = resetTablePage(filteredResults.value);
       };
 
       const convertValueToType = (value) => {
@@ -396,9 +401,13 @@
         displayChart.value = true;
       };
 
+      const resetTablePage = (array) => {
+        return array.slice(0, pageSize);
+      };
+
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
-      const toggleKey = (key) => {
+      const toggleHeader = (key) => {
         if (activeTableHeaders.value.includes(key)) {
           activeTableHeaders.value.slice(activeTableHeaders.value.indexOf(key), 1);
           delete activeCheckboxes[key];
@@ -434,6 +443,7 @@
 
         filteredResults.value = intermediateResults;
         selectedTablePage.value = 1;
+        renderableResults.value = resetTablePage(filteredResults.value);
 
         if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
@@ -447,9 +457,7 @@
         filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
 
-        selectedTablePage.value = 1;
-
-        renderableResults.value = filteredResults.value.slice(0, pageSize);
+        cleanup();
       });
 
       watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
@@ -461,11 +469,7 @@
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
       });
 
-      watch(useAdvancedMode, () => {
-        selectedTablePage.value = 1;
-        filteredResults.value = allDocuments;
-        renderableResults.value = filteredResults.value.slice(0, pageSize);
-      });
+      watch(useAdvancedMode, () => cleanup());
 
       const { currentUser } = getUser();
 
@@ -477,7 +481,7 @@
                errorMessage, filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
                isLoadingGraph, mapKeyToWords, optionalTableHeaders, pageSize, queryInput, queryOperand,
                renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
-               toggleKey, useAdvancedMode };
+               toggleHeader, useAdvancedMode };
     }
   };
 </script>
