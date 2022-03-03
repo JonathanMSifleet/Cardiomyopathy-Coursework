@@ -433,6 +433,8 @@
         });
 
         filteredResults.value = intermediateResults;
+        selectedTablePage.value = 1;
+
         if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
 
