@@ -1,18 +1,28 @@
 <template>
   <PageWrapper>
-    <MDBCard text="center" class="mt-5">
-      <MDBCardHeader>Featured</MDBCardHeader>
-      <MDBCardBody>
-        <MDBCardTitle>Gene Mutation Data</MDBCardTitle>
+    <MDBCard text="center" :class="[$style.MainCard, 'mt-5']">
+      <MDBCardBody :class="$style.CardBody">
+        <MDBCardTitle :class="$style.CardTitle">
+          Gene Mutation Data
+        </MDBCardTitle>
         <MDBCardText>
+          <p :class="$style.UploadFileInstructions">
+            Upload a file containing experimental data:
+          </p>
+          <div :class="$style.FileUploadWrapper">
+            <FileUpload />
+          </div>
+          <p :class="$style.ManualDataInstructions">
+            Or, insert it manually:
+          </p>
           <form>
-            <MDBRow class="mt-5 mb-5">
+            <MDBRow :class="[$style.Row, 'mt-5', 'mb-5']">
               <MDBCol md="6">
                 <select
                   id="geneMutations"
                   v-model="selectedMutation"
                   name="gene-mutations"
-                  class="form-select mb-4"
+                  :class="[$style.MutationSelect, 'form-select', 'mb-4']"
                   aria-label="Default select example"
                   required
                 >
@@ -38,7 +48,7 @@
               </MDBCol>
             </MDBRow>
 
-            <MDBRow class="mb-5">
+            <MDBRow :class="[$style.BottomRow, 'mb-5']">
               <MDBCol
                 v-for="input in dataInputs"
                 :key="input"
@@ -67,6 +77,7 @@
                 <MDBBtn
                   color="primary"
                   :disabled="newInput.length === 0"
+                  :class="$style.AddInputButton"
                   @click="createNewInput"
                 >
                   Add new input
@@ -104,13 +115,7 @@
             </MDBRow>
             <MDBCardFooter>
               <div
-                class="
-                  w-100
-                  p-4
-                  d-flex
-                  align-items-center
-                  justify-content-center
-                "
+                :class="[$style.Footer, 'w-100', 'p-4', 'd-flex', 'align-items-center', 'justify-content-center']"
               >
                 <MDBBtn
                   :disabled="selectedMutation === 'Please select'"
@@ -129,6 +134,7 @@
 </template>
 
 <script>
+  import FileUpload from '../../components/FileUpload/FileUpload.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
   import mapKeyToWords from '../../utils/mapKeyToWords';
@@ -145,7 +151,6 @@
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardHeader,
     MDBCardTitle,
     MDBCardText,
     MDBCardFooter
@@ -154,11 +159,11 @@
   export default {
     name: 'ExperimentalData',
     components: {
+      FileUpload,
       MDBBtn,
       MDBCard,
       MDBCardBody,
       MDBCardFooter,
-      MDBCardHeader,
       MDBCardText,
       MDBCardTitle,
       MDBCheckbox,
