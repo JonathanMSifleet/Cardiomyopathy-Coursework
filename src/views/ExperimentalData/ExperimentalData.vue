@@ -28,7 +28,7 @@
               </MDBCol>
 
               <MDBCol v-if="showGenderInput" md="6">
-                <MDBInput v-model="info[Gender]" type="text" label="Gender" />
+                <MDBInput v-model="info.gender" type="text" label="Gender" />
                 <span
                   :class="$style.DeleteInput"
                   @click="showGenderInput = !showGenderInput"
@@ -64,7 +64,11 @@
                 />
               </MDBCol>
               <MDBCol md="2">
-                <MDBBtn color="primary" @click="createNewInput">
+                <MDBBtn
+                  color="primary"
+                  :disabled="newInput.length === 0"
+                  @click="createNewInput"
+                >
                   Add new input
                 </MDBBtn>
               </MDBCol>
@@ -108,7 +112,11 @@
                   justify-content-center
                 "
               >
-                <MDBBtn :disabled="selectedMutation === 'Please select'" color="primary" @click="submitExperimentalData">
+                <MDBBtn
+                  :disabled="selectedMutation === 'Please select'"
+                  color="primary"
+                  @click="submitExperimentalData"
+                >
                   Submit
                 </MDBBtn>
               </div>
@@ -224,7 +232,7 @@
       };
 
       const submitExperimentalData = async () => {
-        if (info.gender.toLowerCase() !== 'male' || info.gender.toLowerCase() !== 'female') {
+        if (info.gender.toLowerCase() !== 'male' && info.gender.toLowerCase() !== 'female') {
           alert('Gender must me \'male\' or \'female\''); return;
         }
 
