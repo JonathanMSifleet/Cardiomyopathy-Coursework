@@ -19,8 +19,8 @@ const router = createRouter({
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue'),
-    beforeEnter: requireSignedIn
+    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
+    // beforeEnter: requireSignedIn
   },
   {
     name: 'Registration',
