@@ -1,4 +1,5 @@
 import 'mdb-vue-ui-kit/css/mdb.min.css'; // must go first
+import 'animate.css';
 import './assets/styles/global.scss';
 import './assets/styles/main.module.css';
 import App from './App.vue';

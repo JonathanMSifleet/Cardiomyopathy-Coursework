@@ -9,6 +9,7 @@
     "insertHCMData": "node --trace-warnings ./src/utils/insertHcmDataToDatabase.js"
   },
   "dependencies": {
+    "animate.css": "^4.1.1",
     "csvtojson": "^2.0.10",
     "fast-xml-parser": "^4.0.3",
     "firebase": "^9.6.7",

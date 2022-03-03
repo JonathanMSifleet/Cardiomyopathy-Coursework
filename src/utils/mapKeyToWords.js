@@ -14,6 +14,8 @@ const mapKeyToWords = (key) => {
       return 'Right ventricular ejection fraction';
     case 'lvmass':
       return 'Left ventricular mass';
+    case 'rvmass':
+      return 'Right ventricular mass';
     case 'lsv':
       return 'Left ventricular systolic volume';
     case 'rsv':
@@ -26,6 +28,8 @@ const mapKeyToWords = (key) => {
       return 'Apical Hypertrophic Cardiomyopathy';
     case 'SuddenCardiacDeath':
       return 'Sudden Cardiac Death';
+      case 'createdAt':
+      return 'Created At';
     default:
       return key;
   }
