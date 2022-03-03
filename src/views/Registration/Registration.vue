@@ -23,16 +23,9 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    <<<<<<<
-                    HEAD
                     :maxlength="32"
-                    =="====="
-                    :maxlength="20"
-                  >
-                    >>>>>> main
                     required
-                    />
-                  </mdbinput>
+                  />
                 </MDBCol>
                 <MDBCol md="6">
                   <MDBInput
@@ -41,16 +34,9 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    <<<<<<<
-                    HEAD
                     :maxlength="32"
-                    =="====="
-                    :maxlength="20"
-                  >
-                    >>>>>> main
                     required
-                    />
-                  </mdbinput>
+                  />
                 </MDBCol>
               </MDBRow>
               <MDBInput
@@ -59,81 +45,74 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                <<<<<<<
-                HEAD
                 :maxlength="320"
-                =="====="
-                :maxlength="30"
-              >
-                >>>>>> main
                 required
-                />
-                <!-- Password input -->
-                <MDBInput
-                  id="form2Password"
-                  v-model.trim="password"
-                  type="password"
-                  label="Password"
-                  wrapper-class="mb-4"
-                  :maxlength="64"
-                  required
-                />
-                <MDBInput
-                  id="form2PasswordConfirm"
-                  v-model.trim="passConfirm"
-                  type="password"
-                  label="Confirm Password"
-                  wrapper-class="mb-4"
-                  :maxlength="64"
-                  required
-                />
-                <MDBInput
-                  id="form2Phone"
-                  v-model.trim="phone"
-                  type="text"
-                  label="Phone Number"
-                  wrapper-class="mb-4"
-                  :maxlength="15"
-                  required
-                />
-                <MDBInput
-                  id="form2AddressLineOne"
-                  v-model.trim="addressLineOne"
-                  type="text"
-                  label="Address line 1"
-                  wrapper-class="mb-4"
-                  :maxlength="35"
-                  required
-                />
-                <MDBInput
-                  id="form2AddressLineTwo"
-                  v-model.trim="addressLineTwo"
-                  type="text"
-                  label="Address line 2"
-                  wrapper-class="mb-4"
-                  :maxlength="35"
-                />
-                <MDBInput
-                  id="form2city"
-                  v-model.trim="city"
-                  type="text"
-                  label="Town / city"
-                  wrapper-class="mb-4"
-                  :maxlength="35"
-                />
-                <MDBInput
-                  id="form2postcode"
-                  v-model.trim="postcode"
-                  type="text"
-                  label="Postcode"
-                  wrapper-class="mb-4"
-                  :maxlength="8"
-                />
+              />
+              <!-- Password input -->
+              <MDBInput
+                id="form2Password"
+                v-model.trim="password"
+                type="password"
+                label="Password"
+                wrapper-class="mb-4"
+                :maxlength="64"
+                required
+              />
+              <MDBInput
+                id="form2PasswordConfirm"
+                v-model.trim="passConfirm"
+                type="password"
+                label="Confirm Password"
+                wrapper-class="mb-4"
+                :maxlength="64"
+                required
+              />
+              <MDBInput
+                id="form2Phone"
+                v-model.trim="phone"
+                type="text"
+                label="Phone Number"
+                wrapper-class="mb-4"
+                :maxlength="15"
+                required
+              />
+              <MDBInput
+                id="form2AddressLineOne"
+                v-model.trim="addressLineOne"
+                type="text"
+                label="Address line 1"
+                wrapper-class="mb-4"
+                :maxlength="35"
+                required
+              />
+              <MDBInput
+                id="form2AddressLineTwo"
+                v-model.trim="addressLineTwo"
+                type="text"
+                label="Address line 2"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2city"
+                v-model.trim="city"
+                type="text"
+                label="Town / city"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2postcode"
+                v-model.trim="postcode"
+                type="text"
+                label="Postcode"
+                wrapper-class="mb-4"
+                :maxlength="8"
+              />
 
-                <MDBBtn type="submit" color="primary" :disabled="!canRegister">
-                  Register
-                </MDBBtn>
-              </mdbinput>
+              <MDBBtn type="submit" color="primary" :disabled="!canRegister">
+                Register
+              </MDBBtn>
             </form>
           </MDBCardText>
         </MDBCardBody>
@@ -246,19 +225,23 @@
         //get currently signed in user
         const { currentUser } = getUser();
 
+        await addUserInfo({
+          uid: currentUser.value.uid,
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: {
+            addressLineOne: addressLineOne.value,
+            addressLineTwo: addressLineTwo.value,
+            city: city.value
+          },
+          email: email.value,
+          phone: phone.value
+        });
+
         try {
-          updateProfile(auth.currentUser, {
-            displayName: firstName.value,
-            uid: currentUser.value.uid,
-            firstName: firstName.value,
-            lastName: lastName.value,
-            address: {
-              addressLineOne: addressLineOne.value,
-              addressLineTwo: addressLineTwo.value,
-              city: city.value
-            },
-            email: email.value,
-            phone: phone.value
+          //set user display name
+          await updateProfile(auth.currentUser, {
+            displayName: firstName.value
           });
         } catch (error) {
           console.error(error);
@@ -284,13 +267,19 @@
         const emailValMessages = validateEmail(email.value);
         const passwordValMessages = validatePassword(password.value);
         const phoneValMessages = validatePhoneNumber(phone.value);
+
+        if(
+          firstNameValMessages.length !== 0 ||
+          lastNameValMessages.length !== 0 ||
+          emailValMessages.length !== 0 ||
+          passwordValMessages.length !== 0 ||
+          phoneValMessages.length !== 0
+        ) inputsValid = false;
+
         return inputsValid;
       };
 
       watch([addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
-        console.log('🚀 ~ file: Registration.vue ~ line 287 ~ watch ~ addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode', addressLineOne.value, city.value, country.value, email.value, firstName.value, lastName.value, passConfirm.value, password.value, phone.value, postcode.value);
-
-
         canRegister.value =
           addressLineOne.value !== '' &&
           city.value !== '' &&
