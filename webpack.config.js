@@ -67,7 +67,7 @@ module.exports = {
         use: 'raw-loader'
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/,
         type: 'asset/inline'
       }
     ]

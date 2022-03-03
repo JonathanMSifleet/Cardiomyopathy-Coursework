@@ -28,6 +28,9 @@
         <MDBNavbarItem :to="{ name: 'UserProfile' }" active>
           Profile
         </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'Help' }" active>
+          Need Help?
+        </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBBtn
         v-if="currentUser"

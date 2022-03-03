@@ -59,6 +59,12 @@ const router = createRouter({
       import (/* webpackChunkName: "Profile" */ '../views/UserProfile/UserProfile.vue'),
     beforeEnter: requireSignedIn
   },
+  {
+    path: '/help',
+    name: 'Help',
+    component: () =>
+      import(/* webpackChunkName: "Help" */ '../views/Help/Help.vue')
+  },
   // no route, route:
   {
     path: '/:pathMatch(.*)*',
