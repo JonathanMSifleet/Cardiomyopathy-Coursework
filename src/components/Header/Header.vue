@@ -13,10 +13,10 @@
         <MDBNavbarItem :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Query' }" active>
+        <MDBNavbarItem v-if="currentUser" :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'ExperimentalData' }" active>
+        <MDBNavbarItem v-if="currentUser" :to="{ name: 'ExperimentalData' }" active>
           Experimental Data
         </MDBNavbarItem>
       </MDBNavbarNav>
@@ -47,22 +47,22 @@
 </template>
 
 <script>
-  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
-  import { useRouter } from 'vue-router';
-  import { getAuth, signOut }  from 'firebase/auth';
   import getUser from '../../composables/getUser';
+  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
+  import { getAuth, signOut }  from 'firebase/auth';
+  import { useRouter } from 'vue-router';
 
   export default {
     components: {
       MDBBtn,
       MDBNavbar,
-      MDBNavbarToggler,
+      MDBNavbarItem,
       MDBNavbarNav,
-      MDBNavbarItem
+      MDBNavbarToggler
     },
     setup () {
-      const router = useRouter();
       const auth = getAuth();
+      const router = useRouter();
       const { currentUser } = getUser();
 
       //nav bar logout

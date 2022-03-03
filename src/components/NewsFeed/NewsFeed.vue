@@ -73,8 +73,9 @@
               <button
                 :class="[$style['read-more-link'], 'mt-3']"
                 @click="toggleClass"
-                v-html="readMore ? 'Read less...' : 'Read more...'"
-              />
+              >
+                {{ readMore ? 'Read less...' : 'Read more...' }}
+              </button>
             </MDBCardBody>
           </div>
         </MDBCard>
@@ -85,17 +86,17 @@
 
 <script>
   import {
-    MDBModal,
-    MDBModalHeader,
-    MDBModalTitle,
-    MDBModalBody,
-    MDBModalFooter,
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardTitle,
     MDBCardImg,
+    MDBCardTitle,
     MDBCol,
+    MDBModal,
+    MDBModalBody,
+    MDBModalFooter,
+    MDBModalHeader,
+    MDBModalTitle,
     MDBRow,
     mdbRipple
   } from 'mdb-vue-ui-kit';

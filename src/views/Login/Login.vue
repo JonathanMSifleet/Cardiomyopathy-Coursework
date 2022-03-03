@@ -68,8 +68,8 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import { ref } from 'vue';
   import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+  import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import {
     MDBBtn,
@@ -87,23 +87,23 @@
   export default {
     name: 'Login',
     components: {
-      MDBRow,
-      MDBCol,
-      MDBInput,
       MDBBtn,
       MDBCard,
-      MDBCardHeader,
       MDBCardBody,
-      MDBCardTitle,
-      MDBCardText,
       MDBCardFooter,
+      MDBCardHeader,
+      MDBCardText,
+      MDBCardTitle,
+      MDBCol,
+      MDBInput,
+      MDBRow,
       PageWrapper
     },
     setup() {
-      const email = ref('');
-      const password = ref('');
-      const errorMessage = ref();
       const auth = getAuth();
+      const email = ref('');
+      const errorMessage = ref();
+      const password = ref('');
       const router = useRouter();
 
       const login = async () => {
@@ -129,7 +129,7 @@
         }
       };
 
-      return { login, email, errorMessage, password };
+      return { email, errorMessage, login, password };
     }
   };
 </script>

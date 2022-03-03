@@ -28,18 +28,19 @@
 </template>
 
 <script>
-  import { ref } from 'vue';
-  import usePassReset from '../../composables/passReset';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import usePassReset from '../../composables/passReset';
+  import { ref } from 'vue';
   import {
-    MDBInput,
     MDBBtn,
     MDBCard,
-    MDBCardHeader,
     MDBCardBody,
+    MDBCardHeader,
+    MDBCardText,
     MDBCardTitle,
-    MDBCardText
+    MDBInput
   } from 'mdb-vue-ui-kit';
+
   export default {
     name: 'PassReset',
     components: {
@@ -52,7 +53,7 @@
       MDBCardText,
       PageWrapper
     },
-    setup(){
+    setup() {
       const email = ref('');
       const { error, passReset } = usePassReset();
 
@@ -61,7 +62,8 @@
         await passReset(email.value);
         if (!error.value ) alert('Password reset email sent');
       };
-      return { email, handleSubmit, error };
+
+      return { email, error, handleSubmit };
     }
   };
 </script>

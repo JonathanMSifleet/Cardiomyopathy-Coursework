@@ -110,40 +110,40 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { auth } from '../../firebase/config';
-  import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
-  import { doc, setDoc } from 'firebase/firestore';
-  import useSignup from '../../composables/useSignup';
   import getUser from '../../composables/getUser';
   import store from '../../services/store.js';
+  import useSignup from '../../composables/useSignup';
+  import { auth } from '../../firebase/config';
+  import { doc, setDoc } from 'firebase/firestore';
+  import { ref } from 'vue';
+  import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
+  import { useRouter } from 'vue-router';
   import {
-    MDBRow,
-    MDBCol,
-    MDBInput,
     MDBBtn,
     MDBCard,
-    MDBCardHeader,
     MDBCardBody,
-    MDBCardTitle,
+    MDBCardFooter,
+    MDBCardHeader,
     MDBCardText,
-    MDBCardFooter
+    MDBCardTitle,
+    MDBCol,
+    MDBInput,
+    MDBRow
   } from 'mdb-vue-ui-kit';
 
   export default {
     name: 'Register',
     components: {
-      MDBRow,
-      MDBCol,
-      MDBInput,
       MDBBtn,
       MDBCard,
-      MDBCardHeader,
       MDBCardBody,
-      MDBCardTitle,
-      MDBCardText,
       MDBCardFooter,
+      MDBCardHeader,
+      MDBCardText,
+      MDBCardTitle,
+      MDBCol,
+      MDBInput,
+      MDBRow,
       PageWrapper
     },
     setup() {
@@ -180,7 +180,7 @@
       };
 
       //submit registration data and create account
-      const handleSubmit = async ()=> {
+      const handleSubmit = async () => {
         //exit function if password confirmation does not match
         if (!checkPasswordsMatch()) return;
 
@@ -219,10 +219,11 @@
           await signOut(auth);
           //redirect to login
           router.push('/');
-        } catch (error){
+        } catch (error) {
           console.error(error);
         }
       };
+
       return { address, email, firstName, handleSubmit, lastName, passConfirm,
                passMatchErr, password, phone, signupError };
     }

@@ -144,16 +144,16 @@
   import { useRouter } from 'vue-router';
   import { watchEffect } from 'vue';
   import {
-    MDBRow,
-    MDBCol,
-    MDBInput,
-    MDBCheckbox,
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardTitle,
+    MDBCardFooter,
     MDBCardText,
-    MDBCardFooter
+    MDBCardTitle,
+    MDBCheckbox,
+    MDBCol,
+    MDBInput,
+    MDBRow
   } from 'mdb-vue-ui-kit';
 
   export default {
@@ -173,9 +173,18 @@
       PageWrapper
     },
     setup() {
-      const { currentUser } = getUser();
-      let newInput = ref('');
-      const router = useRouter();
+      const dataInputs = reactive([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'AgeatMRI'
+      ]);
       const geneMutations = reactive([
         'Please select',
         'MYH7',
@@ -188,8 +197,6 @@
         'MYL2',
         'TTN'
       ]);
-      const selectedMutation = ref('Please select');
-      let showGenderInput = ref(true);
       const info = reactive({
         userId: currentUser.value.uid,
         ledv: '',
@@ -211,18 +218,11 @@
         diabetes: false,
         myectomy: false
       });
-      const dataInputs = reactive([
-        'ledv',
-        'redv',
-        'lesv',
-        'resv',
-        'lvef',
-        'rvef',
-        'lvmass',
-        'lsv',
-        'rsv',
-        'AgeatMRI'
-      ]);
+      let newInput = ref('');
+      const router = useRouter();
+      const selectedMutation = ref('Please select');
+      let showGenderInput = ref(true);
+      const { currentUser } = getUser();
 
       const createNewInput = () => {
         if (newInput.value) dataInputs.push(newInput.value);

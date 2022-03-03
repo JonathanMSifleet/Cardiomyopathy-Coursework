@@ -2,3 +2,4 @@
 *.scss linguist-detectable=false
 *.jpg binary
 *.pdf binary
+*.ico binary
