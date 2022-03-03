@@ -344,9 +344,9 @@
             email.value = docSnap.data().email;
             phoneNumber.value = docSnap.data().phone;
 
-            console.log('Document data:', docSnap.data());
+            if (process.env.DEVELOPMENT) console.log('Document data:', docSnap.data());
           } else {
-            console.log('No such document!');
+            if (process.env.DEVELOPMENT) console.log('No such document!');
           }
         });
       }
@@ -375,7 +375,7 @@
             .then(alert('User profile updated.'))
             .then(router.push('/'));
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       }
 
@@ -389,7 +389,7 @@
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           experimentalData.value.push({ documentId: doc.id, ...doc.data() });
-          console.log(doc.id, ' => ', doc.data());
+          if (process.env.DEVELOPMENT) console.log(doc.id, ' => ', doc.data());
         });
       }
 

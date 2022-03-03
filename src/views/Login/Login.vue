@@ -115,9 +115,9 @@
       const login = async () => {
         try {
           await signInWithEmailAndPassword(auth, email.value, password.value);
-          console.log(currentUser.value.emailVerified);
+          if (process.env.DEVELOPMENT) console.log(currentUser.value.emailVerified);
           await currentUser.value.reload();
-          console.log(currentUser.value.emailVerified);
+          if (process.env.DEVELOPMENT) console.log(currentUser.value.emailVerified);
           if (currentUser.value.emailVerified) router.push('/');
 
           await sendEmailVerification(auth.currentUser, actionCodeSettings);
@@ -141,7 +141,7 @@
             errorMessage.value = 'Please verify your email before login. Email resent.';
             break;
           default:
-            console.log('DEFAULT');
+            if (process.env.DEVELOPMENT) console.log('DEFAULT');
             errorMessage.value = error.message;
             break;
           }

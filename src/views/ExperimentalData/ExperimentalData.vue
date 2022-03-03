@@ -264,7 +264,7 @@
           createdByUser: true,
           deletedAt: null
         });
-        console.log('Document written with ID: ', docRef.id);
+        if (process.env.DEVELOPMENT) console.log('Document written with ID: ', docRef.id);
 
         alert('A new document has been added.');
         router.push('/');
