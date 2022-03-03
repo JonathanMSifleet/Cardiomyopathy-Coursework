@@ -136,7 +136,7 @@ const fetchGeneDetails = async () =>{
 
       //checks if id of geneElement in fetched xml matches that of a gene in geneData array
       const correspondingGene = geneData.find(gene => gene.entrezId === geneElemId);
-      if(correspondingGene === undefined) return;
+      if (correspondingGene === undefined) return;
 
       let i = geneData.indexOf(correspondingGene);
       geneData[i].name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;

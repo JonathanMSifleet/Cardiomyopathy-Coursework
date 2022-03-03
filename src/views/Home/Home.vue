@@ -25,9 +25,9 @@
       const name = ref('');
 
       onBeforeMount(() => {
-        if (currentUser.value) {
-          name.value = currentUser.value.displayName;
-        }
+        if (!currentUser.value) return;
+
+        name.value = currentUser.value.displayName;
       });
 
       const hcmDesc1 = 'Hypertrophic cardiomyopathy (HCM) is a disease in which the heart muscle ';

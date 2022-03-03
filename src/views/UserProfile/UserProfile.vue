@@ -53,7 +53,7 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="20"
                     :valueDefault="firstName"
                     required
                   />
@@ -65,7 +65,7 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="20"
                     :valueDefault="lastName"
                     required
                   />
@@ -77,7 +77,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="30"
                 :valueDefault="email"
                 disabled
               />
@@ -87,7 +87,7 @@
                 type="number"
                 label="Phone Number"
                 wrapper-class="mb-4"
-                maxlength="15"
+                :maxlength="15"
                 :valueDefault="phoneNumber"
                 required
               />
@@ -97,7 +97,7 @@
                 type="text"
                 label="Address"
                 wrapper-class="mb-4"
-                maxlength="35"
+                :maxlength="35"
                 :valueDefault="address"
                 required
               />
@@ -267,7 +267,7 @@
   import getUser from '../../composables/getUser';
   import store from '../../services/store';
   import { auth } from '../../firebase/config';
-  import { ref, watchEffect } from 'vue';
+  import { ref, watchEffect, onMounted } from 'vue';
   import { updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
@@ -328,6 +328,11 @@
       const currentDocId = ref('');
       const router = useRouter();
       const showTable = ref(false);
+
+      onMounted( () => {
+        userIdentity();
+        getExperimentalDataByUserId();
+      });
 
       async function userIdentity() {
         const docRef = doc(await store.database, 'users', currentUser.value.uid);

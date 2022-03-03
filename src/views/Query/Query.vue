@@ -257,9 +257,12 @@
 
         try {
           allDocuments = await fetchDocuments();
+          if (allDocuments.length === 0) throw new Error('No docs');
+
           filteredResults.value = allDocuments;
           renderableResults.value = filteredResults.value.slice(0, pageSize);
           optionalTableKeys.value = determineKeys(allDocuments);
+          delete optionalTableKeys.value.userId;
 
           activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
         } catch (error) {
@@ -270,6 +273,9 @@
           case error.message.includes('multi-tab'):
             errorMessage.value = 'Only one tab can be open at a time in development mode';
             break;
+          case error.message.includes('No docs'):
+            errorMessage.value = 'No documents were found in the database';
+            break;
           default:
             console.error(error);
             errorMessage.value = error.message;
@@ -279,7 +285,7 @@
       })();
 
       const addFilter = () => {
-        if(optionalTableKeys.value[queryInput.value] === undefined) {
+        if (optionalTableKeys.value[queryInput.value] === undefined) {
           alert('Attribute not found in database'); return;
         }
 
@@ -392,7 +398,7 @@
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
       const toggleKey = (key) => {
-        if(activeTableKeys.value.includes(key)) {
+        if (activeTableKeys.value.includes(key)) {
           activeTableKeys.value.slice(activeTableKeys.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
