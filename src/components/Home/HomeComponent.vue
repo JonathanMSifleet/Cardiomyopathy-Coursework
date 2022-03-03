@@ -17,8 +17,8 @@
         <router-link v-if="post.WelcomeSection" :class="[$style['link'], $style['link-light']]" :to="{name: 'Login'}">
           Login/Register
         </router-link>
-        <div>
-          <a v-if="!post.WelcomeSection" :class="$style['link']" :href="post.link">
+        <div v-if="!post.WelcomeSection">
+          <a :class="$style['link']" :href="post.link" target="_blank">
             Read More
           </a>
         </div>

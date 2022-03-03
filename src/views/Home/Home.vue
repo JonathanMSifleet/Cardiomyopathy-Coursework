@@ -30,26 +30,17 @@
         name.value = currentUser.value.displayName;
       });
 
-      const hcmDesc1 = 'Hypertrophic cardiomyopathy (HCM) is a disease in which the heart muscle ';
-      const hcmDesc2 = 'becomes abnormally thick...';
-
       return {
         Welcome: {
           title: 'COMPANY TITLE',
-          description: 'this will be content to explain a bit about the site',
+          description: 'This website is a central repository for experimental data on force/tension development and sarcomere length shortening in the cardiomyopathic cells.',
           WelcomeSection: true,
           photo: 'hcm'
         },
         HCM: [
           {
             title: 'Hypertrophic cardiomyopathy (HCM)',
-            description: hcmDesc1+hcmDesc2,
-            photo: 'hcm',
-            link : 'https://www.nhs.uk/conditions/cardiomyopathy/#:~:text=In%20hypertrophic%20cardiomyopathy%2C%20the%20heart,the%20heart%20may%20be%20obstructed.'
-          },
-          {
-            title: 'Hypertrophic cardiomyopathy (HCM)',
-            description: hcmDesc1+hcmDesc2,
+            description: 'In hypertrophic cardiomyopathy, the heart muscle cells enlarge and the walls of the heart chambers thicken.',
             photo: 'hcm',
             link : 'https://www.nhs.uk/conditions/cardiomyopathy/#:~:text=In%20hypertrophic%20cardiomyopathy%2C%20the%20heart,the%20heart%20may%20be%20obstructed.'
           }
