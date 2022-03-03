@@ -20,12 +20,14 @@
           {
             title: 'Query',
             description: 'query is',
-            photo: 'hcm'
+            photo: 'query-page',
+            link: 'Query'
           },
           {
-            title: 'help 2',
-            description: 'help 2',
-            photo: 'query-page'
+            title: 'Experimental Data',
+            description: 'Experimental data is',
+            photo: 'experimental-data',
+            link: 'ExperimentalData'
           }
         ]
       };

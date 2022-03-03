@@ -39,18 +39,19 @@
           description: 'this will be content to explain a bit about the site',
           WelcomeSection: true,
           photo: 'hcm'
-          // hcmImg
         },
         HCM: [
           {
             title: 'Hypertrophic cardiomyopathy (HCM)',
             description: hcmDesc1+hcmDesc2,
-            photo: 'hcm'
+            photo: 'hcm',
+            link : 'https://www.nhs.uk/conditions/cardiomyopathy/#:~:text=In%20hypertrophic%20cardiomyopathy%2C%20the%20heart,the%20heart%20may%20be%20obstructed.'
           },
           {
             title: 'Hypertrophic cardiomyopathy (HCM)',
             description: hcmDesc1+hcmDesc2,
-            photo: 'hcm'
+            photo: 'hcm',
+            link : 'https://www.nhs.uk/conditions/cardiomyopathy/#:~:text=In%20hypertrophic%20cardiomyopathy%2C%20the%20heart,the%20heart%20may%20be%20obstructed.'
           }
         ],
         currentUser

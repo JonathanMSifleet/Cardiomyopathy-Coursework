@@ -1,6 +1,6 @@
 <template>
   <div :class="[$style['information-wrapper'], user ? '' : $style['no-user']]">
-    <div :class="[$style['information-content']]">
+    <div :class="$style['information-content']">
       <div>
         <h2 v-if="post.WelcomeSection">
           {{ post.title }}
@@ -14,19 +14,17 @@
         <p v-else :class="[$style['content-preview']]">
           {{ post.description }}
         </p>
-        <!-- <div v-if="!post.user" v-on="post.user"> -->
         <router-link v-if="post.WelcomeSection" :class="[$style['link'], $style['link-light']]" :to="{name: 'Login'}">
           Login/Register
         </router-link>
-        <!-- </div> -->
         <div>
-          <router-link v-if="!post.WelcomeSection" :class="[$style['link']]" to="#">
+          <a v-if="!post.WelcomeSection" :class="$style['link']" :href="post.link">
             Read More
-          </router-link>
+          </a>
         </div>
       </div>
     </div>
-    <div :class="[$style['bg-photo']]">
+    <div :class="$style['bg-photo']">
       <img :src="require(`../../assets/imgs/${post.photo}.jpg`)">
     </div>
   </div>
