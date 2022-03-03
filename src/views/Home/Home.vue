@@ -10,7 +10,7 @@
   import { ref, onBeforeMount } from 'vue';
   import getUser from '../../composables/getUser';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import HomeComponent from '../../components/Home/HomeComponent.vue';
+  import HomeComponent from '../../components/HomeComponent/HomeComponent.vue';
   import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
 
   export default {

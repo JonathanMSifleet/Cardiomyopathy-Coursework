@@ -6,7 +6,7 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import HelpComponent from '../../components/Help/HelpComponent.vue';
+  import HelpComponent from '../../components/Help/Help.vue';
 
   export default {
     name: 'Help',

@@ -29,5 +29,5 @@
 </script>
 
 <style lang="scss" module scoped>
-  @import "../Home/HomeComponent.module.scss";
+  @import "../HomeComponent/HomeComponent.module.scss";
 </style>

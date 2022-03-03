@@ -25,14 +25,14 @@
       </div>
     </div>
     <div :class="$style['bg-photo']">
-      <img :src="`../../assets/imgs/${post.photo}.jpg`">
+      <img :src="require(`../../assets/imgs/${post.photo}.jpg`)">
     </div>
   </div>
 </template>
 
 <script>
   import getUser from '../../composables/getUser';
-  import { ref, onBeforeMount, watch } from 'vue';
+  import { ref, onBeforeMount } from 'vue';
 
   export default {
     name: 'HomeComponent',
