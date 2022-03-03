@@ -120,10 +120,9 @@
             ]"
             color="primary"
             @click="toggleTable"
-            v-html="
-              showTable ? 'Hide Experimental Data' : 'Display Experimental Data'
-            "
-          />
+          >
+            {{ showTable ? 'Hide Experimental Data' : 'Display Experimental Data' }}
+          </MDBBtn>
         </MDBCol>
       </MDBRow>
     </div>
