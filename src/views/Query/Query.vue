@@ -262,6 +262,7 @@
           cleanup();
 
           optionalTableHeaders.value = determineKeys(allDocuments);
+          delete optionalTableHeaders.value.userId;
 
           activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
         } catch (error) {
@@ -270,7 +271,7 @@
             errorMessage.value = 'Firebase details are setup incorrectly';
             break;
           case error.message.includes('multi-tab'):
-            errorMessage.value = 'Only one tab can be open at a time in development mode';
+            errorMessage.value = 'Only one tab can be open at a time in development mode due to Firebase persistence';
             break;
           case error.message.includes('No docs'):
             errorMessage.value = 'No documents were found in the database';

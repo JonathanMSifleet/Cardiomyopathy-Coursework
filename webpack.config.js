@@ -67,7 +67,7 @@ module.exports = {
         use: 'raw-loader'
       },
       {
-        test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+        test: /\.(png|jpg|woff|woff2|eot|ttf|svg)$/,
         type: 'asset/inline'
       }
     ]
@@ -75,14 +75,15 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: './public/index.html'
+      template: './public/index.html',
+      favicon: './public/favicon.ico'
     }),
     new VueLoaderPlugin(),
     // define process variables here:
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
-      'process.env.DEVELOPMENT': JSON.stringify(true),
+      'process.env.DEVELOPMENT': JSON.stringify(false),
       'process.env.API_KEY': JSON.stringify('AIzaSyDGrP1QWYsQqLFAoev-AHjAQKq4aal9q_M'),
       'process.env.AUTH_DOMAIN': JSON.stringify('advwebdevproject-7d239.firebaseapp.com'),
       'process.env.PROJECT_ID': JSON.stringify('advwebdevproject-7d239'),

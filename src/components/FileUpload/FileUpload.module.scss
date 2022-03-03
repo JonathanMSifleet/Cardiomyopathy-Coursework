@@ -4,11 +4,14 @@
 }
 
 .RadioGroup {
-  clear: both;
+  float: left;
+  clear: right;
   margin-bottom: 1%;
 }
+
 .FileUploadComponentWrapper {
   width: 20vw;
+  clear: both;
   float: left;
 }
 
@@ -21,9 +24,8 @@
 }
 
 .InstructionsWrapper {
-  clear: both;
   float: left;
-  margin-top: 1%;
+  text-align: left;
 }
 
 .CollapseButton {
@@ -31,9 +33,18 @@
   margin-bottom: 2%;
 }
 
-.InstructionText {
+.InstructionWrapper {
   clear: both;
+  float: left;
+  display: block;
+  text-align: center;
+  width: fit-content;
+}
+
+.InstructionText {
+  text-align: left;
   background-color: #F0F0F0;
+  padding: 1%;
 }
 
 .StatusMessage {

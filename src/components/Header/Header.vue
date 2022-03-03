@@ -13,20 +13,25 @@
         <MDBNavbarItem :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
+        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Query' }" active>
+          Query
+        </MDBNavbarItem>
+        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'ExperimentalData' }" active>
+          Experimental Data
+        </MDBNavbarItem>
+      </MDBNavbarNav>
+      <MDBNavbarNav right class="mb-2 mb-lg-0">
         <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Login' }" active>
           Login
         </MDBNavbarItem>
         <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Registration' }" active>
           Register
         </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'Query' }" active>
-          Query
-        </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'ExperimentalData' }" active>
-          Experimental Data
-        </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'UserProfile' }" active>
+        <MDBNavbarItem v-if="currentUser" :to="{ name: 'UserProfile' }" active>
           Profile
+        </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'Help' }" active>
+          Need Help?
         </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBBtn
