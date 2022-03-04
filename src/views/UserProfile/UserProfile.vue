@@ -33,9 +33,9 @@
     </MDBModal>
 
     <MDBModal
-      size="xl"
       id="experimentalDataModal"
       v-model="experimentalDataModal"
+      size="xl"
       tabindex="-1"
       labelledby="experimentalDataModalLabel"
       scrollable
@@ -49,7 +49,7 @@
           >
             Experimental Data
           </MDBModalTitle>
-          <h4 class="text-muted mt-2"></h4>
+          <h4 class="text-muted mt-2" />
         </div>
       </MDBModalHeader>
 
@@ -58,7 +58,7 @@
           <tbody>
             <tr
               v-for="key in Object.entries(currentEntity)"
-              v-bind:key="key[1]"
+              :key="key[1]"
             >
               <th scope="row" :style="{ fontWeight: 'bold' }">
                 {{ mapKeyToWords(key[0]) }}
@@ -90,9 +90,11 @@
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader :style="{ fontWeight: 'bold' }"
-          >User Profile</MDBCardHeader
+        <MDBCardHeader
+          :style="{ fontWeight: 'bold' }"
         >
+          User Profile
+        </MDBCardHeader>
         <MDBCardBody>
           <MDBCardText>
             <form @submit.prevent="updateUser">
@@ -104,7 +106,7 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="32"
                     :valueDefault="firstName"
                     required
                   />
@@ -116,7 +118,7 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    maxlength="20"
+                    :maxlength="32"
                     :valueDefault="lastName"
                     required
                   />
@@ -128,7 +130,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                maxlength="30"
+                :maxlength="320"
                 :valueDefault="email"
                 disabled
               />
@@ -138,7 +140,7 @@
                 type="number"
                 label="Phone Number"
                 wrapper-class="mb-4"
-                maxlength="15"
+                :maxlength="13"
                 :valueDefault="phoneNumber"
                 required
               />
@@ -148,12 +150,14 @@
                 type="text"
                 label="Address"
                 wrapper-class="mb-4"
-                maxlength="35"
+                :maxlength="35"
                 :valueDefault="address"
                 required
               />
 
-              <MDBBtn type="submit" color="primary"> Update </MDBBtn>
+              <MDBBtn type="submit" color="primary">
+                Update
+              </MDBBtn>
             </form>
           </MDBCardText>
         </MDBCardBody>
@@ -178,25 +182,30 @@
         </MDBBtn>
       </MDBCol>
     </MDBRow>
-    <MDBRow class="ms-5 mt-5" v-if="showCardContainer">
+    <MDBRow v-if="showCardContainer" class="ms-5 mt-5">
       <MDBCol
-        md="4"
         v-for="entity in experimentalData"
         :key="entity.documentId"
+        md="4"
       >
         <MDBCard
           text="center"
           class="mb-5 animate__animated"
           :class="[cardsVisible ? ' animate__bounceInUp' : ' animate__hinge']"
         >
-          <MDBCardHeader :style="{ fontWeight: 'bold' }"
-            >Gene Mutation: {{ entity.GeneMutation }}</MDBCardHeader
+          <MDBCardHeader
+            :style="{ fontWeight: 'bold' }"
           >
+            Gene Mutation: {{ entity.GeneMutation }}
+          </MDBCardHeader>
           <MDBCardBody>
-            <MDBCardText> </MDBCardText>
-            <MDBBtn @click="toggleExperimentalDataModal(entity)" color="primary"
-              >View</MDBBtn
+            <MDBCardText />
+            <MDBBtn
+              color="primary"
+              @click="toggleExperimentalDataModal(entity)"
             >
+              View
+            </MDBBtn>
             <MDBBtn
               :class="$style['delete-btn']"
               color="danger"
@@ -205,57 +214,36 @@
               <MDBIcon icon="trash" />
             </MDBBtn>
           </MDBCardBody>
-          <MDBCardFooter class="text-muted">{{
-            dateTime(entity.createdAt.toDate())
-          }}</MDBCardFooter>
+          <MDBCardFooter class="text-muted">
+            {{ dateTime(entity.createdAt.toDate()) }}
+          </MDBCardFooter>
         </MDBCard>
       </MDBCol>
     </MDBRow>
   </PageWrapper>
 </template>
 
-
 <script>
-import PageWrapper from "../../components/PageWrapper/PageWrapper.vue";
-import getUser from "../../composables/getUser";
-import mapKeyToWords from "../../utils/mapKeyToWords";
-import store from "../../services/store";
-import { auth } from "../../firebase/config";
-import { onMounted, reactive, ref, watchEffect } from "vue";
-import { updateProfile } from "firebase/auth";
-import { useRouter } from "vue-router";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  serverTimestamp,
-  updateDoc,
-  where,
-} from "firebase/firestore";
-import {
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBCardHeader,
-  MDBCardText,
-  MDBCardFooter,
-  MDBCol,
-  MDBIcon,
-  MDBInput,
-  MDBModal,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBRow,
-  MDBTable,
-} from "mdb-vue-ui-kit";
-
-export default {
-  components: {
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import getUser from '../../composables/getUser';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
+  import store from '../../services/store';
+  import { auth } from '../../firebase/config';
+  import { onMounted, reactive, ref, watchEffect } from 'vue';
+  import { updateProfile } from 'firebase/auth';
+  import { useRouter } from 'vue-router';
+  import {
+    collection,
+    deleteDoc,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    serverTimestamp,
+    updateDoc,
+    where
+  } from 'firebase/firestore';
+  import {
     MDBBtn,
     MDBCard,
     MDBCardBody,
@@ -271,184 +259,183 @@ export default {
     MDBModalHeader,
     MDBModalTitle,
     MDBRow,
-    MDBTable,
-    PageWrapper,
-  },
-  setup() {
-    const { currentUser } = getUser();
-    const firstName = ref("");
-    const lastName = ref("");
-    const address = ref("");
-    const email = ref("");
-    const phoneNumber = ref("");
-    const experimentalData = ref([]);
-    const deleteConfirmationModal = ref(false);
-    const currentDocId = ref("");
-    const currentEntity = ref([]);
-    const router = useRouter();
-    const cardsVisible = ref(false);
-    const showCardContainer = ref(false);
-    const experimentalDataModal = ref(false);
-    const tableHeaders = reactive([
-      "Gene Mutation",
-      "ledv",
-      "redv",
-      "lesv",
-      "resv",
-      "lvef",
-      "rvef",
-      "lvmass",
-      "lsv",
-      "rsv",
-      "Gender",
-      "Fibrosis",
-      "Age at MRI",
-      "Apical HCM",
-      "Sudden Cardiac Death",
-      "Hypertension",
-      "Diabetes",
-      "Myectomy",
-      "Date Created",
-      "Actions",
-    ]);
+    MDBTable
+  } from 'mdb-vue-ui-kit';
 
-    onMounted(() => {
-      userIdentity();
-      getExperimentalDataByUserId();
-    });
+  export default {
+    components: {
+      MDBBtn,
+      MDBCard,
+      MDBCardBody,
+      MDBCardHeader,
+      MDBCardText,
+      MDBCardFooter,
+      MDBCol,
+      MDBIcon,
+      MDBInput,
+      MDBModal,
+      MDBModalBody,
+      MDBModalFooter,
+      MDBModalHeader,
+      MDBModalTitle,
+      MDBRow,
+      MDBTable,
+      PageWrapper
+    },
+    setup() {
+      const { currentUser } = getUser();
+      const firstName = ref('');
+      const lastName = ref('');
+      const address = ref('');
+      const email = ref('');
+      const phoneNumber = ref('');
+      const experimentalData = ref([]);
+      const deleteConfirmationModal = ref(false);
+      const currentDocId = ref('');
+      const currentEntity = ref([]);
+      const router = useRouter();
+      const cardsVisible = ref(false);
+      const showCardContainer = ref(false);
+      const experimentalDataModal = ref(false);
+      const tableHeaders = reactive([
+        'Gene Mutation',
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'Gender',
+        'Fibrosis',
+        'Age at MRI',
+        'Apical HCM',
+        'Sudden Cardiac Death',
+        'Hypertension',
+        'Diabetes',
+        'Myectomy',
+        'Date Created',
+        'Actions'
+      ]);
 
-    const userIdentity = async () => {
-      const docRef = doc(await store.database, "users", currentUser.value.uid);
-      getDoc(docRef).then((docSnap) => {
-        if (!docSnap.exists()) return;
-
-        firstName.value = docSnap.data().firstName;
-        lastName.value = docSnap.data().lastName;
-        address.value = docSnap.data().address;
-        email.value = docSnap.data().email;
-        phoneNumber.value = docSnap.data().phone;
-
-        console.log("Document data:", docSnap.data());
-      });
-    };
-
-    const updateUser = async () => {
-      const currentUserRef = doc(
-        await store.database,
-        "users",
-        currentUser.value.uid
-      );
-
-      // Set the "capital" field of the city 'DC'
-      await updateDoc(currentUserRef, {
-        firstName: firstName.value,
-        lastName: lastName.value,
-        address: address.value,
-        email: email.value,
-        phone: phoneNumber.value,
+      onMounted(() => {
+        userIdentity();
+        getExperimentalDataByUserId();
       });
 
-      //set user display name
-      try {
-        updateProfile(auth.currentUser, {
-          displayName: firstName.value,
-        })
-          .then(alert("User profile updated."))
-          .then(() => {
-            router.push("/");
-          });
-      } catch (error) {
-        console.error(error);
-      }
-    };
+      const userIdentity = async () => {
+        const docRef = doc(await store.database, 'users', currentUser.value.uid);
+        getDoc(docRef).then((docSnap) => {
+          if (!docSnap.exists()) return;
 
-    const getExperimentalDataByUserId = async () => {
-      const firestoreQuery = query(
-        collection(await store.database, "hcmData"),
-        where("userId", "==", currentUser.value.uid)
-      );
+          firstName.value = docSnap.data().firstName;
+          lastName.value = docSnap.data().lastName;
+          address.value = docSnap.data().address;
+          email.value = docSnap.data().email;
+          phoneNumber.value = docSnap.data().phone;
 
-      const querySnapshot = await getDocs(firestoreQuery);
-      querySnapshot.forEach((doc) => {
-        // doc.data() is never undefined for query doc snapshots
-        experimentalData.value.push({ documentId: doc.id, ...doc.data() });
-        console.log(doc.id, " => ", doc.data());
-      });
-    };
+          if (process.env.DEVELOPMENT) console.log('Document data:', docSnap.data());
+        });
+      };
 
-    const deleteExperimentalDataDoc = async (docId) => {
-      //Update the deleted timestamp
-      const docRef = doc(await store.database, "hcmData", docId);
+      const updateUser = async () => {
+        const currentUserRef = doc(
+          await store.database,
+          'users',
+          currentUser.value.uid
+        );
 
-      // Update the timestamp field with the value from the server
-      await updateDoc(docRef, {
-        deletedAt: serverTimestamp(),
-      });
+        // Set the "capital" field of the city 'DC'
+        await updateDoc(currentUserRef, {
+          firstName: firstName.value,
+          lastName: lastName.value,
+          address: address.value,
+          email: email.value,
+          phone: phoneNumber.value
+        });
 
-      //Delete the document from the database
-      await deleteDoc(doc(await store.database, "hcmData", docId));
-      await (alert("Data has been successfully deleted."), router.push("/"));
-    };
+        //set user display name
+        try {
+          updateProfile(auth.currentUser, {
+            displayName: firstName.value
+          })
+            .then(alert('User profile updated.'))
+            .then(() => {
+              router.push('/');
+            });
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
-    const toggleModal = (docId) => {
-      deleteConfirmationModal.value = !deleteConfirmationModal.value;
-      currentDocId.value = docId;
-    };
+      const getExperimentalDataByUserId = async () => {
+        const firestoreQuery = query(
+          collection(await store.database, 'hcmData'),
+          where('userId', '==', currentUser.value.uid)
+        );
 
-    const showCards = () => {
-      showCardContainer.value = true;
-      cardsVisible.value = !cardsVisible.value;
-    };
+        const querySnapshot = await getDocs(firestoreQuery);
+        querySnapshot.forEach((doc) => {
+          // doc.data() is never undefined for query doc snapshots
+          experimentalData.value.push({ documentId: doc.id, ...doc.data() });
+          console.log(doc.id, ' => ', doc.data());
+        });
+      };
 
-    const toggleExperimentalDataModal = (entity) => {
-      experimentalDataModal.value = !experimentalDataModal.value;
-      //currentEntity.value = entity;
-      delete entity.deletedAt &&
-        delete entity.documentId &&
+      const deleteExperimentalDataDoc = async (docId) => {
+        //Update the deleted timestamp
+        const docRef = doc(await store.database, 'hcmData', docId);
+
+        // Update the timestamp field with the value from the server
+        await updateDoc(docRef, {
+          deletedAt: serverTimestamp()
+        });
+
+        //Delete the document from the database
+        await deleteDoc(doc(await store.database, 'hcmData', docId));
+        await (alert('Data has been successfully deleted.'), router.push('/'));
+      };
+
+      const toggleModal = (docId) => {
+        deleteConfirmationModal.value = !deleteConfirmationModal.value;
+        currentDocId.value = docId;
+      };
+
+      const showCards = () => {
+        showCardContainer.value = true;
+        cardsVisible.value = !cardsVisible.value;
+      };
+
+      const toggleExperimentalDataModal = (entity) => {
+        experimentalDataModal.value = !experimentalDataModal.value;
+        delete entity.deletedAt;
+        delete entity.documentId;
         delete entity.userId;
-      currentEntity.value = entity;
 
-      console.log(currentEntity.value);
-    };
+        currentEntity.value = entity;
+        if(process.env.DEVELOPMENT) console.log(currentEntity.value);
+      };
 
-    watchEffect(() => {
-      if (!currentUser.value) router.push("/login");
-    });
-
-    const dateTime = (value) =>
-      new Date(value).toLocaleDateString("en-GB", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
+      watchEffect(() => {
+        if (!currentUser.value) router.push('/login');
       });
 
-    return {
-      address,
-      currentDocId,
-      currentEntity,
-      deleteConfirmationModal,
-      experimentalDataModal,
-      deleteExperimentalDataDoc,
-      email,
-      experimentalData,
-      firstName,
-      getExperimentalDataByUserId,
-      lastName,
-      mapKeyToWords,
-      phoneNumber,
-      showCards,
-      showCardContainer,
-      cardsVisible,
-      tableHeaders,
-      toggleModal,
-      toggleExperimentalDataModal,
-      updateUser,
-      userIdentity,
-      dateTime,
-    };
-  },
-};
+      const dateTime = (value) =>
+        new Date(value).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+      return { address, cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal,
+               deleteExperimentalDataDoc, email, experimentalData, experimentalDataModal, firstName,
+               getExperimentalDataByUserId, lastName, mapKeyToWords, phoneNumber, showCardContainer, showCards,
+               tableHeaders, toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
+    }
+  };
 </script>
 
 <style lang="scss" module scoped>

@@ -26,7 +26,7 @@ const mapKeyToWords = (key) => {
       return 'Apical Hypertrophic Cardiomyopathy';
     case 'SuddenCardiacDeath':
       return 'Sudden Cardiac Death';
-      case 'createdAt':
+    case 'createdAt':
       return 'Created At';
     default:
       return key;
