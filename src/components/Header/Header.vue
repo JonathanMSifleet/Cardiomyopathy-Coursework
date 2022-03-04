@@ -59,17 +59,27 @@
     components: {
       MDBBtn,
       MDBNavbar,
-      MDBNavbarItem,
+      MDBNavbarToggler,
       MDBNavbarNav,
-      MDBNavbarToggler
+      MDBNavbarItem
     },
     setup () {
-      const auth = getAuth();
       const router = useRouter();
+      const auth = getAuth();
       const { currentUser } = getUser();
-
       //checks if user is logged in and also email verified
-      const loggedInAndVerif = () =>  currentUser.value && currentUser.value.emailVerified;
+
+      const loggedInAndVerif = ()=>{
+        return (currentUser.value && currentUser.value.emailVerified)
+          ? true
+          : false;
+      };
+
+      const showLoginRegister = ()=>{
+        return (!currentUser.value || !currentUser.value.emailVerified)
+          ? true
+          : false;
+      };
 
       //nav bar logout
       const logout = async () => {
@@ -81,9 +91,7 @@
         }
       };
 
-      const showLoginRegister = () => !currentUser.value || !currentUser.value.emailVerified;
-
-      return { currentUser, loggedInAndVerif, logout, showLoginRegister };
+      return { currentUser, logout, loggedInAndVerif, showLoginRegister };
     }
   };
 </script>

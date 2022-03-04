@@ -50,7 +50,7 @@
 
             <MDBRow :class="[$style.BottomRow, 'mb-5']">
               <MDBCol
-                v-for="input in dataInputs"
+                v-for="input in activeDataInputs"
                 :key="input"
                 md="4"
                 class="mb-4"
@@ -58,7 +58,7 @@
               >
                 <MDBInput
                   v-model="info[input]"
-                  type="number"
+                  :type="defaultInputs.includes(input) ? 'number' : 'text'"
                   :label="mapKeyToWords(input)"
                   :class="$style.ExperimentalDataInput"
                 />
@@ -86,28 +86,28 @@
             </MDBRow>
             <MDBRow class="mb-4">
               <MDBCol md="4">
-                <MDBCheckbox v-model="info.fibrosis" label="Fibrosis" />
+                <MDBCheckbox v-model="info.scar" label="Fibrosis" />
                 <MDBCheckbox
-                  v-model="info.apicalHcm"
+                  v-model="info.ApicalHCM"
                   label="Apical HCM"
                   wrapper-class="mb-2"
                 />
               </MDBCol>
               <MDBCol md="4">
                 <MDBCheckbox
-                  v-model="info.suddenCardiacDeath"
+                  v-model="info.SuddenCardiacDeath"
                   label="Sudden Cardiac Death"
                 />
                 <MDBCheckbox
-                  v-model="info.hypertension"
+                  v-model="info.Hypertension"
                   label="Hypertension"
                   wrapper-class="mb-2"
                 />
               </MDBCol>
               <MDBCol md="4">
-                <MDBCheckbox v-model="info.diabetes" label="Diabetes" />
+                <MDBCheckbox v-model="info.Diabetes" label="Diabetes" />
                 <MDBCheckbox
-                  v-model="info.myectomy"
+                  v-model="info.Myectomy"
                   label="Myectomy"
                   wrapper-class="mb-2"
                 />
@@ -173,7 +173,20 @@
       PageWrapper
     },
     setup() {
-      const dataInputs = reactive([
+      const { currentUser } = getUser();
+      const activeDataInputs = reactive([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'AgeatMRI'
+      ]);
+      const defaultInputs = reactive([
         'ledv',
         'redv',
         'lesv',
@@ -206,33 +219,31 @@
         lvef: '',
         rvef: '',
         lvmass: '',
-        rvmass: '',
         lsv: '',
         rsv: '',
-        gender: '',
-        fibrosis: false,
-        ageAtMri: false,
-        apicalHcm: false,
-        suddenCardiacDeath: false,
-        hypertension: false,
-        diabetes: false,
-        myectomy: false
+        Gender: '',
+        scar: false,
+        AgeatMRI: false,
+        ApicalHCM: false,
+        SuddenCardiacDeath: false,
+        Hypertension: false,
+        Diabetes: false,
+        Myectomy: false
       });
       let newInput = ref('');
       const router = useRouter();
       const selectedMutation = ref('Please select');
       let showGenderInput = ref(true);
-      const { currentUser } = getUser();
 
       const createNewInput = () => {
-        if (newInput.value) dataInputs.push(newInput.value);
+        if (newInput.value) activeDataInputs.push(newInput.value);
         newInput.value = '';
       };
 
       const deleteInput = (key) => {
-        if (!dataInputs.includes(key)) return;
+        if (!activeDataInputs.includes(key)) return;
 
-        dataInputs.splice(dataInputs.indexOf(key), 1);
+        activeDataInputs.splice(activeDataInputs.indexOf(key), 1);
         delete info[key];
       };
 
@@ -249,9 +260,10 @@
           ...info,
           GeneMutation: selectedMutation.value,
           createdAt: serverTimestamp(),
+          createdByUser: true,
           deletedAt: null
         });
-        console.log('Document written with ID: ', docRef.id);
+        if (process.env.DEVELOPMENT) console.log('Document written with ID: ', docRef.id);
 
         alert('A new document has been added.');
         router.push('/');
@@ -263,8 +275,8 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return { createNewInput, dataInputs, deleteInput, geneMutations, info, mapKeyToWords, newInput,
-               selectedMutation, showGenderInput, submitExperimentalData };
+      return { activeDataInputs, createNewInput, defaultInputs, deleteInput, geneMutations, info, mapKeyToWords,
+               newInput, selectedMutation, showGenderInput, submitExperimentalData };
     }
   };
 </script>

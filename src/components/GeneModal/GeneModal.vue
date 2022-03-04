@@ -69,8 +69,8 @@
         if (geneData === null) return;
 
         currentGene.value = props.selectedGene;
-        console.log(currentGene);
-        console.log(geneData);
+        if (process.env.DEVELOPMENT) console.log(currentGene);
+        if (process.env.DEVELOPMENT) console.log(geneData);
 
         const geneObj = geneData.filter((gene) => gene.symbol === currentGene.value);
 
