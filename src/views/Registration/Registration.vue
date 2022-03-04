@@ -191,11 +191,12 @@
         //povides url to continue to after clicking on verif link
         const actionCodeSettings = {
           //change to domain address of production site
-          url: 'http://localhost:8080/'
+          url: 'https://advwebdevproject-7d239.web.app/'
         };
+        if (process.env.DEVELOPMENT) actionCodeSettings.url = 'http://localhost:8080/';
 
         //send email for the user to verify email
-        await sendEmailVerification(actionCodeSettings, auth.currentUser);
+        await sendEmailVerification(auth.currentUser, actionCodeSettings);
         alert('Verification email sent.');
 
         //get currently signed in user
@@ -225,7 +226,7 @@
           await signOut(auth);
           //redirect to login
           router.push('/');
-        } catch (error) {
+        } catch (error){
           console.error(error);
         }
       };

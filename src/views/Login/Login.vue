@@ -10,7 +10,6 @@
           <MDBCardText>
             <form @submit.prevent="login">
               <!-- Email input -->
-
               <MDBInput
                 id="form2Email"
                 v-model="email"
@@ -19,6 +18,7 @@
                 wrapper-class="mb-4"
                 :maxlength="30"
               />
+
               <!-- Password input -->
               <MDBInput
                 id="form2Password"
@@ -68,7 +68,7 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser.js';
-  import { getAuth, sendEmailVerification, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+  import { getAuth, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import {
@@ -83,7 +83,6 @@
     MDBInput,
     MDBRow
   } from 'mdb-vue-ui-kit';
-
   export default {
     name: 'Login',
     components: {
@@ -100,7 +99,7 @@
       PageWrapper
     },
     setup() {
-      //povides url to continue to after clicking on verif link
+      //provides url to continue to after clicking on verif link
       let actionCodeSettings = {
         url: 'https://advwebdevproject-7d239.web.app/'
       };
@@ -121,6 +120,7 @@
 
           if (!currentUser.value.emailVerified) {
             await sendEmailVerification(auth.currentUser, actionCodeSettings);
+            if (process.env.DEVELOPMENT) console.log(auth.currentUser);
             await signOut(auth);
 
             if (process.env.DEVELOPMENT) console.log('SIGNED OUT');
@@ -155,7 +155,7 @@
         }
       };
 
-      return { email, errorMessage, login, password };
+      return { login, email, errorMessage, password };
     }
   };
 </script>
