@@ -184,7 +184,6 @@
       const addressLineTwo = ref(null);
       let canRegister = ref(false);
       const city = ref('');
-      const country = ref('');
       const email = ref('');
       const firstName = ref('');
       const lastName = ref('');
@@ -246,7 +245,8 @@
           address: {
             addressLineOne: addressLineOne.value,
             addressLineTwo: addressLineTwo.value,
-            city: city.value
+            city: city.value,
+            postcode: postcode.value
           },
           email: email.value,
           phone: phone.value
@@ -282,8 +282,8 @@
         const passwordValMessages = validatePassword(password.value);
         const phoneValMessages = validatePhoneNumber(phone.value);
         const addressLineOneValMessages = validateAddressLineOne(addressLineOne.value);
-        const addressLineTwoValMessages = validateAddressLineTwo(addressLineOne.value);
-        const cityValMessages = validateCity(addressLineOne.value);
+        const addressLineTwoValMessages = validateAddressLineTwo(addressLineTwo.value);
+        const cityValMessages = validateCity(city.value);
         const postcodeValMessages = validatePostcode(postcode.value);
 
         if (

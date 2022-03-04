@@ -23,7 +23,10 @@
         <MDBBtn color="primary" @click="deleteConfirmationModal = false">
           No
         </MDBBtn>
-        <MDBBtn color="primary" @click="deleteExperimentalDataDoc(currentDocId)">
+        <MDBBtn
+          color="primary"
+          @click="deleteExperimentalDataDoc(currentDocId)"
+        >
           Yes
         </MDBBtn>
       </MDBModalFooter>
@@ -92,19 +95,40 @@
                 required
               />
               <MDBInput
-                id="form2Address"
-                v-model="address"
+                id="form2AddressLineOne"
+                v-model.trim="addressLineOne"
                 type="text"
-                label="Address"
+                label="Address line 1"
                 wrapper-class="mb-4"
                 :maxlength="35"
-                :valueDefault="address"
                 required
               />
+              <MDBInput
+                id="form2AddressLineTwo"
+                v-model.trim="addressLineTwo"
+                type="text"
+                label="Address line 2"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2city"
+                v-model.trim="city"
+                type="text"
+                label="Town / city"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2postcode"
+                v-model.trim="postcode"
+                type="text"
+                label="Postcode"
+                wrapper-class="mb-4"
+                :maxlength="8"
+              />
 
-              <MDBBtn type="submit" color="primary">
-                Update
-              </MDBBtn>
+              <MDBBtn type="submit" color="primary"> Update </MDBBtn>
             </form>
           </MDBCardText>
         </MDBCardBody>
@@ -135,69 +159,27 @@
         >
           <thead>
             <tr>
-              <th scope="col">
-                Gene Mutation
-              </th>
-              <th scope="col">
-                LEDV
-              </th>
-              <th scope="col">
-                REDV
-              </th>
-              <th scope="col">
-                LESV
-              </th>
-              <th scope="col">
-                RESV
-              </th>
-              <th scope="col">
-                LVEF
-              </th>
-              <th scope="col">
-                RVEF
-              </th>
-              <th scope="col">
-                LVMASS
-              </th>
-              <th scope="col">
-                RVMASS
-              </th>
-              <th scope="col">
-                LSV
-              </th>
-              <th scope="col">
-                RSV
-              </th>
-              <th scope="col">
-                Gender
-              </th>
-              <th scope="col">
-                Fibrosis
-              </th>
-              <th scope="col">
-                Age at MRI
-              </th>
-              <th scope="col">
-                Apical HCM
-              </th>
-              <th scope="col">
-                Sudden Cardiac Death
-              </th>
-              <th scope="col">
-                Hypertension
-              </th>
-              <th scope="col">
-                Diabetes
-              </th>
-              <th scope="col">
-                Myectomy
-              </th>
-              <th scope="col">
-                Date Created
-              </th>
-              <th scope="col">
-                Actions
-              </th>
+              <th scope="col">Gene Mutation</th>
+              <th scope="col">LEDV</th>
+              <th scope="col">REDV</th>
+              <th scope="col">LESV</th>
+              <th scope="col">RESV</th>
+              <th scope="col">LVEF</th>
+              <th scope="col">RVEF</th>
+              <th scope="col">LVMASS</th>
+              <th scope="col">RVMASS</th>
+              <th scope="col">LSV</th>
+              <th scope="col">RSV</th>
+              <th scope="col">Gender</th>
+              <th scope="col">Fibrosis</th>
+              <th scope="col">Age at MRI</th>
+              <th scope="col">Apical HCM</th>
+              <th scope="col">Sudden Cardiac Death</th>
+              <th scope="col">Hypertension</th>
+              <th scope="col">Diabetes</th>
+              <th scope="col">Myectomy</th>
+              <th scope="col">Date Created</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -263,25 +245,43 @@
 
 
 <script>
-  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import getUser from '../../composables/getUser';
-  import store from '../../services/store';
-  import { auth } from '../../firebase/config';
-  import { ref, watchEffect, onMounted } from 'vue';
-  import { updateProfile } from 'firebase/auth';
-  import { useRouter } from 'vue-router';
-  import {
-    collection,
-    deleteDoc,
-    doc,
-    getDoc,
-    getDocs,
-    query,
-    serverTimestamp,
-    updateDoc,
-    where
-  } from 'firebase/firestore';
-  import {
+import PageWrapper from "../../components/PageWrapper/PageWrapper.vue";
+import getUser from "../../composables/getUser";
+import store from "../../services/store";
+import { auth } from "../../firebase/config";
+import { ref, watchEffect, onMounted } from "vue";
+import { updateProfile } from "firebase/auth";
+import { useRouter } from "vue-router";
+import {
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  serverTimestamp,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import {
+  MDBBtn,
+  MDBCard,
+  MDBCardBody,
+  MDBCardHeader,
+  MDBCardText,
+  MDBCol,
+  MDBIcon,
+  MDBInput,
+  MDBModal,
+  MDBModalBody,
+  MDBModalFooter,
+  MDBModalHeader,
+  MDBModalTitle,
+  MDBRow,
+} from "mdb-vue-ui-kit";
+
+export default {
+  components: {
     MDBBtn,
     MDBCard,
     MDBCardBody,
@@ -295,153 +295,145 @@
     MDBModalFooter,
     MDBModalHeader,
     MDBModalTitle,
-    MDBRow
-  } from 'mdb-vue-ui-kit';
+    MDBRow,
+    PageWrapper,
+  },
+  setup() {
+    const { currentUser } = getUser();
+    const firstName = ref("");
+    const lastName = ref("");
+    const addressLineOne = ref("");
+    const addressLineTwo = ref(null);
+    const city = ref("");
+    const postcode = ref("");
+    const email = ref("");
+    const phoneNumber = ref("");
+    const experimentalData = ref([]);
+    const deleteConfirmationModal = ref(false);
+    const currentDocId = ref("");
+    const router = useRouter();
+    const showTable = ref(false);
 
-  export default {
-    components: {
-      MDBBtn,
-      MDBCard,
-      MDBCardBody,
-      MDBCardHeader,
-      MDBCardText,
-      MDBCol,
-      MDBIcon,
-      MDBInput,
-      MDBModal,
-      MDBModalBody,
-      MDBModalFooter,
-      MDBModalHeader,
-      MDBModalTitle,
-      MDBRow,
-      PageWrapper
-    },
-    setup() {
-      const { currentUser } = getUser();
-      const firstName = ref('');
-      const lastName = ref('');
-      const address = ref('');
-      const email = ref('');
-      const phoneNumber = ref('');
-      const experimentalData = ref([]);
-      const deleteConfirmationModal = ref(false);
-      const currentDocId = ref('');
-      const router = useRouter();
-      const showTable = ref(false);
+    onMounted(() => {
+      userIdentity();
+      getExperimentalDataByUserId();
+    });
 
-      onMounted( () => {
-        userIdentity();
-        getExperimentalDataByUserId();
-      });
+    async function userIdentity() {
+      const docRef = doc(await store.database, "users", currentUser.value.uid);
+      getDoc(docRef).then((docSnap) => {
+        if (docSnap.exists()) {
+          firstName.value = docSnap.data().firstName;
+          lastName.value = docSnap.data().lastName;
+          addressLineOne.value = docSnap.data().address.addressLineOne;
+          addressLineTwo.value = docSnap.data().address.addressLineTwo;
+          city.value = docSnap.data().address.city;
+          postcode.value = docSnap.data().address.postcode;
+          email.value = docSnap.data().email;
+          phoneNumber.value = docSnap.data().phone;
 
-      async function userIdentity() {
-        const docRef = doc(await store.database, 'users', currentUser.value.uid);
-        getDoc(docRef).then((docSnap) => {
-          if (docSnap.exists()) {
-            firstName.value = docSnap.data().firstName;
-            lastName.value = docSnap.data().lastName;
-            address.value = docSnap.data().address;
-            email.value = docSnap.data().email;
-            phoneNumber.value = docSnap.data().phone;
-
-            console.log('Document data:', docSnap.data());
-          } else {
-            console.log('No such document!');
-          }
-        });
-      }
-
-      async function updateUser() {
-        const currentUserRef = doc(
-          await store.database,
-          'users',
-          currentUser.value.uid
-        );
-
-        // Set the "capital" field of the city 'DC'
-        await updateDoc(currentUserRef, {
-          firstName: firstName.value,
-          lastName: lastName.value,
-          address: address.value,
-          email: email.value,
-          phone: phoneNumber.value
-        });
-
-        //set user display name
-        try {
-          updateProfile(auth.currentUser, {
-            displayName: firstName.value
-          })
-            .then(alert('User profile updated.'))
-            .then(router.push('/'));
-        } catch (error) {
-          console.log(error);
+          console.log("Document data:", docSnap.data());
+        } else {
+          console.log("No such document!");
         }
-      }
+      });
+    }
 
-      async function getExperimentalDataByUserId() {
-        const q = query(
-          collection(await store.database, 'hcmData'),
-          where('userId', '==', currentUser.value.uid)
-        );
+    async function updateUser() {
+      const currentUserRef = doc(
+        await store.database,
+        "users",
+        currentUser.value.uid
+      );
 
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
-          experimentalData.value.push({ documentId: doc.id, ...doc.data() });
-          console.log(doc.id, ' => ', doc.data());
-        });
-      }
-
-      async function deleteExperimentalDataDoc(docId) {
-        //Update the deleted timestamp
-        const docRef = doc(await store.database, 'hcmData', docId);
-
-        // Update the timestamp field with the value from the server
-        await updateDoc(docRef, {
-          deletedAt: serverTimestamp()
-        });
-
-        //Delete the document from the database
-        await deleteDoc(doc(await store.database, 'hcmData', docId))
-          .then(alert('Data has been successfully deleted.'))
-          .then(router.push('/'));
-      }
-
-      const toggleModal = (docId) => {
-        deleteConfirmationModal.value = !deleteConfirmationModal.value;
-        currentDocId.value = docId;
-      };
-
-      watchEffect(() => {
-        if (!currentUser.value) router.push('/login');
+      await updateDoc(currentUserRef, {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        address: {
+          addressLineOne: addressLineOne.value,
+          addressLineTwo: addressLineTwo.value,
+          city: city.value,
+          postcode: postcode.value
+        },
+        email: email.value,
+        phone: phoneNumber.value,
       });
 
-      const toggleTable = () => {
-        showTable.value = !showTable.value;
-      };
-      return {
-        userIdentity,
-        updateUser,
-        getExperimentalDataByUserId,
-        deleteExperimentalDataDoc,
-        toggleModal,
-        toggleTable,
-        showTable,
-        deleteConfirmationModal,
-        experimentalData,
-        firstName,
-        lastName,
-        email,
-        address,
-        phoneNumber,
-        currentDocId
-      };
+      //set user display name
+      try {
+        updateProfile(auth.currentUser, {
+          displayName: firstName.value,
+        })
+          .then(alert("User profile updated."))
+          .then(router.push("/"));
+      } catch (error) {
+        console.log(error);
+      }
     }
-  };
+
+    async function getExperimentalDataByUserId() {
+      const q = query(
+        collection(await store.database, "hcmData"),
+        where("userId", "==", currentUser.value.uid)
+      );
+
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        experimentalData.value.push({ documentId: doc.id, ...doc.data() });
+        console.log(doc.id, " => ", doc.data());
+      });
+    }
+
+    async function deleteExperimentalDataDoc(docId) {
+      //Update the deleted timestamp
+      const docRef = doc(await store.database, "hcmData", docId);
+
+      // Update the timestamp field with the value from the server
+      await updateDoc(docRef, {
+        deletedAt: serverTimestamp(),
+      });
+
+      //Delete the document from the database
+      await deleteDoc(doc(await store.database, "hcmData", docId))
+        .then(alert("Data has been successfully deleted."))
+        .then(router.push("/"));
+    }
+
+    const toggleModal = (docId) => {
+      deleteConfirmationModal.value = !deleteConfirmationModal.value;
+      currentDocId.value = docId;
+    };
+
+    watchEffect(() => {
+      if (!currentUser.value) router.push("/login");
+    });
+
+    const toggleTable = () => {
+      showTable.value = !showTable.value;
+    };
+    return {
+      userIdentity,
+      updateUser,
+      getExperimentalDataByUserId,
+      deleteExperimentalDataDoc,
+      toggleModal,
+      toggleTable,
+      showTable,
+      deleteConfirmationModal,
+      experimentalData,
+      firstName,
+      lastName,
+      email,
+      address,
+      phoneNumber,
+      currentDocId,
+    };
+  },
+};
 </script>
 
 <style lang="scss" module scoped>
-  @import "../../assets/styles/Authentication.scss";
-  @import "./UserProfile.module.scss";
+@import "../../assets/styles/Authentication.scss";
+@import "./UserProfile.module.scss";
 </style>
