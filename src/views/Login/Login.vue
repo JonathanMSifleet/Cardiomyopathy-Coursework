@@ -101,10 +101,10 @@
     },
     setup() {
       //povides url to continue to after clicking on verif link
-      const actionCodeSettings = {
-        //change to domain address of production site
-        url: 'http://localhost:8080/'
+      let actionCodeSettings = {
+        url: 'https://advwebdevproject-7d239.web.app/'
       };
+      if (process.env.DEVELOPMENT) actionCodeSettings.url = 'http://localhost:8080/';
       const auth = getAuth();
       const email = ref('');
       const errorMessage = ref();
