@@ -17,7 +17,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                :maxlength="255"
+                :maxlength="320"
               />
               <!-- Password input -->
               <MDBInput
