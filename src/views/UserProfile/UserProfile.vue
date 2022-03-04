@@ -56,10 +56,7 @@
       <MDBModalBody>
         <MDBTable variant="primary" striped>
           <tbody>
-            <tr
-              v-for="key in Object.entries(currentEntity)"
-              :key="key[1]"
-            >
+            <tr v-for="key in Object.entries(currentEntity)" :key="key[1]">
               <th scope="row" :style="{ fontWeight: 'bold' }">
                 {{ mapKeyToWords(key[0]) }}
               </th>
@@ -90,9 +87,7 @@
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader
-          :style="{ fontWeight: 'bold' }"
-        >
+        <MDBCardHeader :style="{ fontWeight: 'bold' }">
           User Profile
         </MDBCardHeader>
         <MDBCardBody>
@@ -165,7 +160,11 @@
     </div>
     <MDBRow>
       <MDBCol md="12" class="text-center">
-        <MDBBtn color="primary" @click="showCards">
+        <MDBBtn
+          color="primary"
+          :disabled="experimentalData.length === 0"
+          @click="showCards"
+        >
           <p
             :class="[
               cardsVisible
@@ -193,9 +192,7 @@
           class="mb-5 animate__animated"
           :class="[cardsVisible ? ' animate__bounceInUp' : ' animate__hinge']"
         >
-          <MDBCardHeader
-            :style="{ fontWeight: 'bold' }"
-          >
+          <MDBCardHeader :style="{ fontWeight: 'bold' }">
             Gene Mutation: {{ entity.GeneMutation }}
           </MDBCardHeader>
           <MDBCardBody>
@@ -336,7 +333,8 @@
           email.value = docSnap.data().email;
           phoneNumber.value = docSnap.data().phone;
 
-          if (process.env.DEVELOPMENT) console.log('Document data:', docSnap.data());
+          if (process.env.DEVELOPMENT)
+            console.log('Document data:', docSnap.data());
         });
       };
 
@@ -413,9 +411,10 @@
         delete entity.deletedAt;
         delete entity.documentId;
         delete entity.userId;
+        delete entity.createdByUser;
 
         currentEntity.value = entity;
-        if(process.env.DEVELOPMENT) console.log(currentEntity.value);
+        if (process.env.DEVELOPMENT) console.log(currentEntity.value);
       };
 
       watchEffect(() => {
@@ -432,8 +431,8 @@
 
       return { address, cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal,
                deleteExperimentalDataDoc, email, experimentalData, experimentalDataModal, firstName,
-               getExperimentalDataByUserId, lastName, mapKeyToWords, phoneNumber, showCardContainer, showCards,
-               tableHeaders, toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
+               getExperimentalDataByUserId, lastName, mapKeyToWords, phoneNumber, showCardContainer,
+               showCards, tableHeaders, toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
     }
   };
 </script>
