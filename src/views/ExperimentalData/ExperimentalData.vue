@@ -50,7 +50,7 @@
 
             <MDBRow :class="[$style.BottomRow, 'mb-5']">
               <MDBCol
-                v-for="input in dataInputs"
+                v-for="input in activeDataInputs"
                 :key="input"
                 md="4"
                 class="mb-4"
@@ -58,7 +58,7 @@
               >
                 <MDBInput
                   v-model="info[input]"
-                  type="number"
+                  :type="defaultInputs.includes(input) ? 'number' : 'text'"
                   :label="mapKeyToWords(input)"
                   :class="$style.ExperimentalDataInput"
                 />
@@ -173,7 +173,20 @@
       PageWrapper
     },
     setup() {
-      const dataInputs = reactive([
+      const { currentUser } = getUser();
+      const activeDataInputs = reactive([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'AgeatMRI'
+      ]);
+      const defaultInputs = reactive([
         'ledv',
         'redv',
         'lesv',
@@ -221,17 +234,16 @@
       const router = useRouter();
       const selectedMutation = ref('Please select');
       let showGenderInput = ref(true);
-      const { currentUser } = getUser();
 
       const createNewInput = () => {
-        if (newInput.value) dataInputs.push(newInput.value);
+        if (newInput.value) activeDataInputs.push(newInput.value);
         newInput.value = '';
       };
 
       const deleteInput = (key) => {
-        if (!dataInputs.includes(key)) return;
+        if (!activeDataInputs.includes(key)) return;
 
-        dataInputs.splice(dataInputs.indexOf(key), 1);
+        activeDataInputs.splice(activeDataInputs.indexOf(key), 1);
         delete info[key];
       };
 
@@ -248,9 +260,10 @@
           ...info,
           GeneMutation: selectedMutation.value,
           createdAt: serverTimestamp(),
+          createdByUser: true,
           deletedAt: null
         });
-        console.log('Document written with ID: ', docRef.id);
+        if (process.env.DEVELOPMENT) console.log('Document written with ID: ', docRef.id);
 
         alert('A new document has been added.');
         router.push('/');
@@ -262,8 +275,8 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return { createNewInput, dataInputs, deleteInput, geneMutations, info, mapKeyToWords, newInput,
-               selectedMutation, showGenderInput, submitExperimentalData };
+      return { activeDataInputs, createNewInput, defaultInputs, deleteInput, geneMutations, info, mapKeyToWords,
+               newInput, selectedMutation, showGenderInput, submitExperimentalData };
     }
   };
 </script>

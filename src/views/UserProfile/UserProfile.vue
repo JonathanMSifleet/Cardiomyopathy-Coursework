@@ -380,7 +380,7 @@
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           experimentalData.value.push({ documentId: doc.id, ...doc.data() });
-          console.log(doc.id, ' => ', doc.data());
+          if (process.env.DEVELOPMENT) console.log(doc.id, ' => ', doc.data());
         });
       };
 
