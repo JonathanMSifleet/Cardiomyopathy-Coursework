@@ -11,7 +11,8 @@
   "dependencies": {
     "animate.css": "^4.1.1",
     "csvtojson": "^2.0.10",
-    "fast-xml-parser": "^4.0.4",
+    "email-validator": "^2.0.4",
+    "fast-xml-parser": "^4.0.3",
     "firebase": "^9.6.7",
     "google-charts": "^2.0.0",
     "is-number": "^7.0.0",

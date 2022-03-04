@@ -140,14 +140,37 @@
                 required
               />
               <MDBInput
-                id="form2Address"
-                v-model="address"
+                id="form2AddressLineOne"
+                v-model.trim="addressLineOne"
                 type="text"
-                label="Address"
+                label="Address line 1"
                 wrapper-class="mb-4"
                 :maxlength="35"
-                :valueDefault="address"
                 required
+              />
+              <MDBInput
+                id="form2AddressLineTwo"
+                v-model.trim="addressLineTwo"
+                type="text"
+                label="Address line 2"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2city"
+                v-model.trim="city"
+                type="text"
+                label="Town / city"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2postcode"
+                v-model.trim="postcode"
+                type="text"
+                label="Postcode"
+                wrapper-class="mb-4"
+                :maxlength="8"
               />
 
               <MDBBtn type="submit" color="primary">
@@ -226,7 +249,7 @@
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import store from '../../services/store';
   import { auth } from '../../firebase/config';
-  import { onMounted, reactive, ref, watchEffect } from 'vue';
+  import { onMounted, ref, watchEffect } from 'vue';
   import { updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
@@ -244,9 +267,9 @@
     MDBBtn,
     MDBCard,
     MDBCardBody,
+    MDBCardFooter,
     MDBCardHeader,
     MDBCardText,
-    MDBCardFooter,
     MDBCol,
     MDBIcon,
     MDBInput,
@@ -264,9 +287,9 @@
       MDBBtn,
       MDBCard,
       MDBCardBody,
+      MDBCardFooter,
       MDBCardHeader,
       MDBCardText,
-      MDBCardFooter,
       MDBCol,
       MDBIcon,
       MDBInput,
@@ -280,42 +303,23 @@
       PageWrapper
     },
     setup() {
-      const { currentUser } = getUser();
-      const firstName = ref('');
-      const lastName = ref('');
-      const address = ref('');
-      const email = ref('');
-      const phoneNumber = ref('');
-      const experimentalData = ref([]);
-      const deleteConfirmationModal = ref(false);
+      const addressLineOne = ref('');
+      const addressLineTwo = ref(null);
+      const cardsVisible = ref(false);
+      const city = ref('');
       const currentDocId = ref('');
       const currentEntity = ref([]);
-      const router = useRouter();
-      const cardsVisible = ref(false);
-      const showCardContainer = ref(false);
+      const deleteConfirmationModal = ref(false);
+      const email = ref('');
+      const experimentalData = ref([]);
       const experimentalDataModal = ref(false);
-      const tableHeaders = reactive([
-        'Gene Mutation',
-        'ledv',
-        'redv',
-        'lesv',
-        'resv',
-        'lvef',
-        'rvef',
-        'lvmass',
-        'lsv',
-        'rsv',
-        'Gender',
-        'Fibrosis',
-        'Age at MRI',
-        'Apical HCM',
-        'Sudden Cardiac Death',
-        'Hypertension',
-        'Diabetes',
-        'Myectomy',
-        'Date Created',
-        'Actions'
-      ]);
+      const firstName = ref('');
+      const lastName = ref('');
+      const phoneNumber = ref('');
+      const postcode = ref('');
+      const router = useRouter();
+      const showCardContainer = ref(false);
+      const { currentUser } = getUser();
 
       onMounted(() => {
         userIdentity();
@@ -325,16 +329,20 @@
       const userIdentity = async () => {
         const docRef = doc(await store.database, 'users', currentUser.value.uid);
         getDoc(docRef).then((docSnap) => {
-          if (!docSnap.exists()) return;
+          if (docSnap.exists()) {
+            firstName.value = docSnap.data().firstName;
+            lastName.value = docSnap.data().lastName;
+            addressLineOne.value = docSnap.data().address.addressLineOne;
+            addressLineTwo.value = docSnap.data().address.addressLineTwo;
+            city.value = docSnap.data().address.city;
+            postcode.value = docSnap.data().address.postcode;
+            email.value = docSnap.data().email;
+            phoneNumber.value = docSnap.data().phone;
 
-          firstName.value = docSnap.data().firstName;
-          lastName.value = docSnap.data().lastName;
-          address.value = docSnap.data().address;
-          email.value = docSnap.data().email;
-          phoneNumber.value = docSnap.data().phone;
-
-          if (process.env.DEVELOPMENT)
-            console.log('Document data:', docSnap.data());
+            if (process.env.DEVELOPMENT) console.log('Document data:', docSnap.data());
+          } else {
+            if (process.env.DEVELOPMENT) console.log('No such document!');
+          }
         });
       };
 
@@ -345,11 +353,15 @@
           currentUser.value.uid
         );
 
-        // Set the "capital" field of the city 'DC'
         await updateDoc(currentUserRef, {
           firstName: firstName.value,
           lastName: lastName.value,
-          address: address.value,
+          address: {
+            addressLineOne: addressLineOne.value,
+            addressLineTwo: addressLineTwo.value,
+            city: city.value,
+            postcode: postcode.value
+          },
           email: email.value,
           phone: phoneNumber.value
         });
@@ -429,10 +441,10 @@
           day: 'numeric'
         });
 
-      return { address, cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal,
-               deleteExperimentalDataDoc, email, experimentalData, experimentalDataModal, firstName,
-               getExperimentalDataByUserId, lastName, mapKeyToWords, phoneNumber, showCardContainer,
-               showCards, tableHeaders, toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
+      return { cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal, deleteExperimentalDataDoc,
+               email, experimentalData, experimentalDataModal, firstName, getExperimentalDataByUserId, lastName,
+               mapKeyToWords, phoneNumber, showCardContainer, showCards, toggleExperimentalDataModal, toggleModal,
+               updateUser, userIdentity };
     }
   };
 </script>
