@@ -439,6 +439,6 @@
 </script>
 
 <style lang="scss" module scoped>
-@import "../../assets/styles/Authentication.scss";
-@import "./UserProfile.module.scss";
+  @import "../../assets/styles/Authentication.scss";
+  @import "./UserProfile.module.scss";
 </style>
