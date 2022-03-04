@@ -80,13 +80,6 @@
                   step="0.00000000001"
                 />
                 <MDBInput
-                  v-model="info.rvmass"
-                  type="number"
-                  label="RVMASS"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
                   v-model="info.lsv"
                   type="number"
                   label="LSV"
@@ -229,7 +222,6 @@
         lvef: '',
         rvef: '',
         lvmass: '',
-        rvmass: '',
         lsv: '',
         rsv: '',
         Gender: '',
