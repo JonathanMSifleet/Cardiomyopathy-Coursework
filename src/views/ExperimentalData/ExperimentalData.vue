@@ -86,28 +86,28 @@
             </MDBRow>
             <MDBRow class="mb-4">
               <MDBCol md="4">
-                <MDBCheckbox v-model="info.fibrosis" label="Fibrosis" />
+                <MDBCheckbox v-model="info.scar" label="Fibrosis" />
                 <MDBCheckbox
-                  v-model="info.apicalHcm"
+                  v-model="info.ApicalHCM"
                   label="Apical HCM"
                   wrapper-class="mb-2"
                 />
               </MDBCol>
               <MDBCol md="4">
                 <MDBCheckbox
-                  v-model="info.suddenCardiacDeath"
+                  v-model="info.SuddenCardiacDeath"
                   label="Sudden Cardiac Death"
                 />
                 <MDBCheckbox
-                  v-model="info.hypertension"
+                  v-model="info.Hypertension"
                   label="Hypertension"
                   wrapper-class="mb-2"
                 />
               </MDBCol>
               <MDBCol md="4">
-                <MDBCheckbox v-model="info.diabetes" label="Diabetes" />
+                <MDBCheckbox v-model="info.Diabetes" label="Diabetes" />
                 <MDBCheckbox
-                  v-model="info.myectomy"
+                  v-model="info.Myectomy"
                   label="Myectomy"
                   wrapper-class="mb-2"
                 />
@@ -206,17 +206,16 @@
         lvef: '',
         rvef: '',
         lvmass: '',
-        rvmass: '',
         lsv: '',
         rsv: '',
-        gender: '',
-        fibrosis: false,
-        ageAtMri: false,
-        apicalHcm: false,
-        suddenCardiacDeath: false,
-        hypertension: false,
-        diabetes: false,
-        myectomy: false
+        Gender: '',
+        scar: false,
+        AgeatMRI: false,
+        ApicalHCM: false,
+        SuddenCardiacDeath: false,
+        Hypertension: false,
+        Diabetes: false,
+        Myectomy: false
       });
       let newInput = ref('');
       const router = useRouter();
