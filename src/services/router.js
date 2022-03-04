@@ -3,7 +3,8 @@ import { auth } from '../firebase/config';
 
 
 // if user redirect to home, otherwise continue to original route
-const requireSignedOut = (to, from, next) => auth.currentUser ? next({ name: 'Home' }) : next();
+const requireSignedOut = (to, from, next) => (auth.currentUser && auth.currentUser.emailVerified)
+  ? next({ name: 'Home' }) : next();
 const requireSignedIn = (to, from, next) => !auth.currentUser ? next({ name: 'Login' }) : next();
 
 //route guard functions

@@ -123,6 +123,8 @@
             await sendEmailVerification(auth.currentUser, actionCodeSettings);
             await signOut(auth);
 
+            if (process.env.DEVELOPMENT) console.log('SIGNED OUT');
+            if (process.env.DEVELOPMENT) console.log(auth.currentUser);
             const verifError = new Error();
             verifError.code = 'email-not-verif';
             throw verifError;
