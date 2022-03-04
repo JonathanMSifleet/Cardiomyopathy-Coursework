@@ -263,6 +263,8 @@
 
           optionalTableHeaders.value = determineKeys(allDocuments);
           delete optionalTableHeaders.value.userId;
+          delete optionalTableHeaders.value.createdAt;
+          delete optionalTableHeaders.value.deletedAt;
 
           activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
         } catch (error) {
@@ -418,7 +420,7 @@
         }
       };
 
-      watch(filters, async () => {
+      watch(filters, () => {
         let intermediateResults = allDocuments;
         filters.forEach(filter => {
           intermediateResults = intermediateResults.filter(doc => {
