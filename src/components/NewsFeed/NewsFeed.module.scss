@@ -21,3 +21,12 @@
     float: right;
     width: 15.625rem;
 }
+
+.left-arrow, .right-arrow {
+    color: #bbbbbb !important;
+}
+
+.left-arrow:hover, .right-arrow:hover {
+    transition: 0.4s;
+    color: #1266f1 !important;
+}

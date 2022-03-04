@@ -1,6 +1,7 @@
 import 'mdb-vue-ui-kit/css/mdb.min.css'; // must go first
 import './assets/styles/global.scss';
 import './assets/styles/main.module.css';
+import 'animate.css';
 import App from './App.vue';
 import router from './services/router.js';
 import { auth } from './firebase/config';
