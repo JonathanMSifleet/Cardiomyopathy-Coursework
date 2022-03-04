@@ -87,7 +87,7 @@
           alert(err.message);
         }
       };
-      
+
       return { currentUser, logout, loggedInAndVerif, showLoginRegister };
     }
   };
