@@ -112,7 +112,7 @@ const getGeneIdString = (geneObjArray) => {
 };
 
 //returns array of gene objects with symbol, name, and description
-const fetchGeneDetails = async () =>{
+const fetchGeneDetails = async () => {
   const geneIDString = getGeneIdString(geneData);
   const baseURL = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils/';
 
@@ -136,7 +136,7 @@ const fetchGeneDetails = async () =>{
 
       //checks if id of geneElement in fetched xml matches that of a gene in geneData array
       const correspondingGene = geneData.find(gene => gene.entrezId === geneElemId);
-      if(correspondingGene === undefined) return;
+      if (correspondingGene === undefined) return;
 
       let i = geneData.indexOf(correspondingGene);
       geneData[i].name = geneElement.getElementsByTagName('Gene-ref_desc')[0].innerHTML;

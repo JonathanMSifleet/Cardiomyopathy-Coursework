@@ -11,17 +11,15 @@ import { onAuthStateChanged } from 'firebase/auth';
 let app;
 
 //establishes user state (logged in/out) before rendering components
-onAuthStateChanged(auth, () =>{
-  if (!app){
-    app = createApp(App);
-    app.use(router);
+onAuthStateChanged(auth, () => {
+  if (app) return;
 
-    if(!process.env.DEVELOPMENT) {
-      app.config.errorHandler = () => null;
-      app.config.warnHandler = () => null;
-    }
-    app.mount('#app');
+  app = createApp(App);
+  app.use(router);
+
+  if (!process.env.DEVELOPMENT) {
+    app.config.errorHandler = () => null;
+    app.config.warnHandler = () => null;
   }
+  app.mount('#app');
 });
-
-

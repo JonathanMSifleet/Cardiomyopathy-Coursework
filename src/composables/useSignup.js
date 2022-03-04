@@ -1,9 +1,9 @@
-import { ref } from 'vue';
 import { auth } from '../firebase/config';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { ref } from 'vue';
 
-const signupError = ref(null);
 const pending = ref(false);
+const signupError = ref(null);
 
 //creates firebase user email/pass auth entry
 const signup = async (email, password) => {

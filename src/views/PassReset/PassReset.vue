@@ -1,42 +1,46 @@
 <template>
-  <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-    <MDBCard :class="$style['authentication-card']" text="center">
-      <MDBCardHeader>Reset Password</MDBCardHeader>
-      <MDBCardBody>
-        <MDBCardTitle v-if="error" :class="[$style['error-message'], 'mb-4']">
-          {{ error }}
-        </MDBCardTitle>
-        <MDBCardText>
-          <form @submit.prevent="handleSubmit">
-            <MDBInput
-              id="form2Email"
-              v-model="email"
-              type="email"
-              label="Email address"
-              wrapper-class="mb-4"
-            />
-            <MDBBtn type="submit" color="primary">
-              Send reset email
-            </MDBBtn>
-          </form>
-        </MDBCardText>
-      </MDBCardBody>
-    </MDBCard>
-  </div>
+  <PageWrapper>
+    <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
+      <MDBCard :class="$style['authentication-card']" text="center">
+        <MDBCardHeader>Reset Password</MDBCardHeader>
+        <MDBCardBody>
+          <MDBCardTitle v-if="error" :class="[$style['error-message'], 'mb-4']">
+            {{ error }}
+          </MDBCardTitle>
+          <MDBCardText>
+            <form @submit.prevent="handleSubmit">
+              <MDBInput
+                id="form2Email"
+                v-model="email"
+                type="email"
+                label="Email address"
+                wrapper-class="mb-4"
+              />
+              <MDBBtn type="submit" color="primary">
+                Send reset email
+              </MDBBtn>
+            </form>
+          </MDBCardText>
+        </MDBCardBody>
+      </MDBCard>
+    </div>
+  </PageWrapper>
 </template>
 
 <script>
-  import { ref } from 'vue';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import usePassReset from '../../composables/passReset';
+  import { ref } from 'vue';
   import {
-    MDBInput,
     MDBBtn,
     MDBCard,
-    MDBCardHeader,
     MDBCardBody,
+    MDBCardHeader,
+    MDBCardText,
     MDBCardTitle,
-    MDBCardText
+    MDBInput
   } from 'mdb-vue-ui-kit';
+
   export default {
     name: 'PassReset',
     components: {
@@ -46,9 +50,10 @@
       MDBCardHeader,
       MDBCardBody,
       MDBCardTitle,
-      MDBCardText
+      MDBCardText,
+      PageWrapper
     },
-    setup(){
+    setup() {
       const email = ref('');
       const { error, passReset } = usePassReset();
 
@@ -57,7 +62,8 @@
         await passReset(email.value);
         if (!error.value ) alert('Password reset email sent');
       };
-      return { email, handleSubmit, error };
+
+      return { email, error, handleSubmit };
     }
   };
 </script>

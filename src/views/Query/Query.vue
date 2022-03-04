@@ -99,12 +99,12 @@
       <div :class="$style.CheckboxWrapper">
         <p>Selected columns:</p>
         <MDBCheckbox
-          v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableKeys)).sort(Intl.Collator().compare)"
+          v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
           :key="index"
           v-model="activeCheckboxes[key]"
           :label="mapKeyToWords(key)"
           inline
-          @change="toggleKey(key)"
+          @change="toggleHeader(key)"
         />
       </div>
 
@@ -134,16 +134,16 @@
           <thead>
             <tr>
               <th
-                v-for="(key, index) in activeTableKeys"
-                :key="index"
+                v-for="header in activeTableHeaders"
+                :key="header"
                 scope="col"
                 :class="$style.TableHeaderCell"
-                @click="selectGraphKey(key)"
+                @click="selectGraphKey(header)"
               >
                 <p :class="$style.TableHeaderText">
-                  {{ mapKeyToWords(key) }}
-                  {{ key[0] !== mapKeyToWords(key)
-                    ? `(${key})`
+                  {{ mapKeyToWords(header) }}
+                  {{ header[0] !== mapKeyToWords(header)
+                    ? `(${header})`
                     : null
                   }}
                 </p>
@@ -152,7 +152,7 @@
           </thead>
           <tbody>
             <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
-              <td v-for="(key, innerIndex) in activeTableKeys" :key="innerIndex">
+              <td v-for="(key, innerIndex) in activeTableHeaders" :key="innerIndex">
                 {{ dataItem[key] }}
               </td>
             </tr>
@@ -192,7 +192,7 @@
     },
     setup() {
       let activeCheckboxes = ref({});
-      const activeTableKeys = ref([
+      const activeTableHeaders = ref([
         'ledv',
         'redv',
         'lesv',
@@ -240,7 +240,7 @@
         'MYL2',
         'TTN'
       ]);
-      let optionalTableKeys = ref([]);
+      let optionalTableHeaders = ref([]);
       const pageSize = 15;
       let queryInput = ref('');
       let queryOperand = ref('');
@@ -257,29 +257,36 @@
 
         try {
           allDocuments = await fetchDocuments();
-          filteredResults.value = allDocuments;
-          renderableResults.value = filteredResults.value.slice(0, pageSize);
-          optionalTableKeys.value = determineKeys(allDocuments);
+          if (allDocuments.length === 0) throw new Error('No docs');
 
-          activeTableKeys.value.forEach(key => activeCheckboxes.value[key] = true);
+          cleanup();
+
+          optionalTableHeaders.value = determineKeys(allDocuments);
+          delete optionalTableHeaders.value.userId;
+
+          activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
         } catch (error) {
           switch(true) {
           case error.message.includes('Network Error'):
             errorMessage.value = 'Firebase details are setup incorrectly';
             break;
           case error.message.includes('multi-tab'):
-            errorMessage.value = 'Only one tab can be open at a time in development mode';
+            errorMessage.value = 'Only one tab can be open at a time in development mode due to Firebase persistence';
+            break;
+          case error.message.includes('No docs'):
+            errorMessage.value = 'No documents were found in the database';
             break;
           default:
             console.error(error);
             errorMessage.value = error.message;
           }
+        } finally {
+          isFetchingData.value = false;
         }
-        isFetchingData.value = false;
       })();
 
       const addFilter = () => {
-        if(optionalTableKeys.value[queryInput.value] === undefined) {
+        if (optionalTableHeaders.value[queryInput.value] === undefined) {
           alert('Attribute not found in database'); return;
         }
 
@@ -293,6 +300,12 @@
           opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
           value: convertValueToType(queryOperand.value)
         });
+      };
+
+      const cleanup = () => {
+        filteredResults.value = allDocuments;
+        selectedTablePage.value = 1;
+        renderableResults.value = resetTablePage(filteredResults.value);
       };
 
       const convertValueToType = (value) => {
@@ -389,14 +402,18 @@
         displayChart.value = true;
       };
 
+      const resetTablePage = (array) => {
+        return array.slice(0, pageSize);
+      };
+
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
-      const toggleKey = (key) => {
-        if(activeTableKeys.value.includes(key)) {
-          activeTableKeys.value.slice(activeTableKeys.value.indexOf(key), 1);
+      const toggleHeader = (key) => {
+        if (activeTableHeaders.value.includes(key)) {
+          activeTableHeaders.value.slice(activeTableHeaders.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
-          activeTableKeys.value.push(key);
+          activeTableHeaders.value.push(key);
           activeCheckboxes[key] = true;
         }
       };
@@ -426,12 +443,11 @@
         });
 
         filteredResults.value = intermediateResults;
-        filteredResults.value.forEach(doc => console.log(doc['ledv']));
+        selectedTablePage.value = 1;
+        renderableResults.value = resetTablePage(filteredResults.value);
 
         if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
-
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
 
       watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
         (queryInput.value !== '' && selectedOperator.value !== 'Please select' && queryOperand.value !== '')
@@ -441,8 +457,11 @@
         filters = [];
         filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
-        selectedTablePage.value = 1;
+
+        cleanup();
       });
+
+      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
 
       // paginate table:
       watch(selectedTablePage, () => {
@@ -451,17 +470,19 @@
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
       });
 
+      watch(useAdvancedMode, () => cleanup());
+
       const { currentUser } = getUser();
 
       watchEffect(() => {
         if (!currentUser.value) router.push('/login');
       });
 
-      return { activeCheckboxes, activeTableKeys, addFilter, canSubmitFilter, deleteFilter, displayChart, errorMessage,
-               filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
-               isLoadingGraph, mapKeyToWords, optionalTableKeys, pageSize, queryInput, queryOperand,
+      return { activeCheckboxes, activeTableHeaders, addFilter, canSubmitFilter, deleteFilter, displayChart,
+               errorMessage, filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
+               isLoadingGraph, mapKeyToWords, optionalTableHeaders, pageSize, queryInput, queryOperand,
                renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
-               toggleKey, useAdvancedMode };
+               toggleHeader, useAdvancedMode };
     }
   };
 </script>

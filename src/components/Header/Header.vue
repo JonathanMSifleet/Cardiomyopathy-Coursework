@@ -13,24 +13,29 @@
         <MDBNavbarItem :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Login' }" active>
-          Login
-        </MDBNavbarItem>
-        <MDBNavbarItem v-if="!currentUser" :to="{ name: 'Registration' }" active>
-          Register
-        </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'Query' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'ExperimentalData' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'ExperimentalData' }" active>
           Experimental Data
         </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'UserProfile' }" active>
+      </MDBNavbarNav>
+      <MDBNavbarNav right class="mb-2 mb-lg-0">
+        <MDBNavbarItem v-if="showLoginRegister()" :to="{ name: 'Login' }" active>
+          Login
+        </MDBNavbarItem>
+        <MDBNavbarItem v-if="showLoginRegister()" :to="{ name: 'Registration' }" active>
+          Register
+        </MDBNavbarItem>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'UserProfile' }" active>
           Profile
+        </MDBNavbarItem>
+        <MDBNavbarItem :to="{ name: 'Help' }" active>
+          Need Help?
         </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBBtn
-        v-if="currentUser"
+        v-if="loggedInAndVerif()"
         class="logout"
         color="light"
         @click="logout"
@@ -42,23 +47,26 @@
 </template>
 
 <script>
-  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
-  import { useRouter } from 'vue-router';
-  import { getAuth, signOut }  from 'firebase/auth';
   import getUser from '../../composables/getUser';
+  import { MDBBtn, MDBNavbar, MDBNavbarToggler, MDBNavbarNav, MDBNavbarItem } from 'mdb-vue-ui-kit';
+  import { getAuth, signOut }  from 'firebase/auth';
+  import { useRouter } from 'vue-router';
 
   export default {
     components: {
       MDBBtn,
       MDBNavbar,
-      MDBNavbarToggler,
+      MDBNavbarItem,
       MDBNavbarNav,
-      MDBNavbarItem
+      MDBNavbarToggler
     },
     setup () {
-      const router = useRouter();
       const auth = getAuth();
+      const router = useRouter();
       const { currentUser } = getUser();
+
+      //checks if user is logged in and also email verified
+      const loggedInAndVerif = () =>  currentUser.value && currentUser.value.emailVerified;
 
       //nav bar logout
       const logout = async () => {
@@ -69,7 +77,10 @@
           alert(err.message);
         }
       };
-      return { currentUser, logout };
+
+      const showLoginRegister = () => !currentUser.value || !currentUser.value.emailVerified;
+
+      return { currentUser, loggedInAndVerif, logout, showLoginRegister };
     }
   };
 </script>

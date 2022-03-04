@@ -34,34 +34,34 @@
 </template>
 
 <script>
+  import fetchGeneDetails from '../../composables/getGeneInfo.js';
+  import { onMounted, ref } from 'vue';
   import {
+    MDBBtn,
     MDBModal,
-    MDBModalHeader,
-    MDBModalTitle,
     MDBModalBody,
     MDBModalFooter,
-    MDBBtn
+    MDBModalHeader,
+    MDBModalTitle
   } from 'mdb-vue-ui-kit';
-  import { onMounted, ref } from 'vue';
-  import fetchGeneDetails from '../../composables/getGeneInfo.js';
 
   export default {
     components: {
+      MDBBtn,
       MDBModal,
-      MDBModalHeader,
-      MDBModalTitle,
       MDBModalBody,
       MDBModalFooter,
-      MDBBtn
+      MDBModalHeader,
+      MDBModalTitle
     },
     props: ['selectedGene'],
     setup (props) {
-      const geneModal = ref(false);
-      let geneData = null;
       const currentGene = ref('');
+      let geneData = null;
       const geneDesc = ref('');
-      const geneSymbol = ref('');
+      const geneModal = ref(false);
       const geneName = ref('');
+      const geneSymbol = ref('');
 
       //modal is blank for a few seconds on first open
       //maybe add loading spinner?

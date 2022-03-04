@@ -25,9 +25,6 @@
     >
       Submit
     </MDBBtn>
-  </div>
-
-  <div :class="$style.InstructionsWrapper">
     <MDBBtn
       color="primary"
       aria-controls="collapsibleContent1"
@@ -37,6 +34,8 @@
     >
       How to format {{ radioFormat }}
     </MDBBtn>
+  </div>
+  <div :class="$style.ExampleWrapper">
     <!-- do not format this pre tag! -->
     <pre
       v-if="showFormatInstructions"
@@ -45,7 +44,10 @@
     >{{ determineFormatInstructions() }}</pre>
   </div>
 
-  <p v-if="statusMessage !== ''" :class="$style.StatusMessage">
+  <p
+    v-if="statusMessage !== ''"
+    :class="$style.StatusMessage"
+  >
     {{ statusMessage }}
   </p>
 </template>
@@ -61,9 +63,7 @@
   import { ref, watch } from 'vue';
 
   export default {
-    components: {
-      ButtonSpinner, MDBBtn, MDBFile, MDBRadio
-    },
+    components: { ButtonSpinner, MDBBtn, MDBFile, MDBRadio },
     setup() {
       let fileUpload = ref([]);
       const formatTypes = ref([

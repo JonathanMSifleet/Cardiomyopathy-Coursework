@@ -19,8 +19,8 @@ const router = createRouter({
     name: 'Query',
     path: '/Query/',
     base: '/',
-    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue'),
-    beforeEnter: requireSignedIn
+    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
+    // beforeEnter: requireSignedIn
   },
   {
     name: 'Registration',
@@ -58,6 +58,12 @@ const router = createRouter({
     component: () =>
       import (/* webpackChunkName: "Profile" */ '../views/UserProfile/UserProfile.vue'),
     beforeEnter: requireSignedIn
+  },
+  {
+    path: '/help',
+    name: 'Help',
+    component: () =>
+      import(/* webpackChunkName: "Help" */ '../views/Help/Help.vue')
   },
   // no route, route:
   {

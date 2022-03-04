@@ -1,18 +1,28 @@
 <template>
   <PageWrapper>
-    <MDBCard text="center" class="mt-5">
-      <MDBCardHeader>Featured</MDBCardHeader>
-      <MDBCardBody>
-        <MDBCardTitle>Gene Mutation Data</MDBCardTitle>
+    <MDBCard text="center" :class="[$style.MainCard, 'mt-5']">
+      <MDBCardBody :class="$style.CardBody">
+        <MDBCardTitle :class="$style.CardTitle">
+          Gene Mutation Data
+        </MDBCardTitle>
         <MDBCardText>
+          <p :class="$style.UploadFileInstructions">
+            Upload a file containing experimental data:
+          </p>
+          <div :class="$style.FileUploadWrapper">
+            <FileUpload />
+          </div>
+          <p :class="$style.ManualDataInstructions">
+            Or, insert it manually:
+          </p>
           <form>
-            <MDBRow>
-              <MDBCol md="4">
+            <MDBRow :class="[$style.Row, 'mt-5', 'mb-5']">
+              <MDBCol md="6">
                 <select
                   id="geneMutations"
                   v-model="selectedMutation"
                   name="gene-mutations"
-                  class="form-select mb-4"
+                  :class="[$style.MutationSelect, 'form-select', 'mb-4']"
                   aria-label="Default select example"
                   required
                 >
@@ -26,86 +36,52 @@
                   </option>
                 </select>
               </MDBCol>
+
+              <MDBCol v-if="showGenderInput" md="6">
+                <MDBInput v-model="info.gender" type="text" label="Gender" />
+                <span
+                  :class="$style.DeleteInput"
+                  @click="showGenderInput = !showGenderInput"
+                >
+                  x
+                </span>
+              </MDBCol>
             </MDBRow>
-            <MDBRow class="mb-3">
-              <MDBCol>
+
+            <MDBRow :class="[$style.BottomRow, 'mb-5']">
+              <MDBCol
+                v-for="input in dataInputs"
+                :key="input"
+                md="4"
+                class="mb-4"
+                :class="$style.InputWrapper"
+              >
                 <MDBInput
-                  id="form2Email"
-                  v-model="info.ledv"
+                  v-model="info[input]"
                   type="number"
-                  label="LEDV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
+                  :label="mapKeyToWords(input)"
+                  :class="$style.ExperimentalDataInput"
                 />
+                <span :class="$style.DeleteInput" @click="deleteInput(input)">
+                  x
+                </span>
+              </MDBCol>
+              <MDBCol md="4">
                 <MDBInput
-                  v-model="info.redv"
-                  type="number"
-                  label="REDV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lesv"
-                  type="number"
-                  label="LESV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.resv"
-                  type="number"
-                  label="RESV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lvef"
-                  type="number"
-                  label="LVEF "
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rvef"
-                  type="number"
-                  label="RVEF"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lvmass"
-                  type="number"
-                  label="LVMASS"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.lsv"
-                  type="number"
-                  label="LSV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.rsv"
-                  type="number"
-                  label="RSV"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.AgeatMRI"
-                  type="number"
-                  label="Age at MRI"
-                  wrapper-class="mb-4"
-                  step="0.00000000001"
-                />
-                <MDBInput
-                  v-model="info.Gender"
+                  v-model="newInput"
                   type="text"
-                  label="Gender"
-                  wrapper-class="mb-4"
+                  label="New input name"
                 />
+              </MDBCol>
+              <MDBCol md="2">
+                <MDBBtn
+                  color="primary"
+                  :disabled="newInput.length === 0"
+                  :class="$style.AddInputButton"
+                  @click="createNewInput"
+                >
+                  Add new input
+                </MDBBtn>
               </MDBCol>
             </MDBRow>
             <MDBRow class="mb-4">
@@ -139,15 +115,13 @@
             </MDBRow>
             <MDBCardFooter>
               <div
-                class="
-                  w-100
-                  p-4
-                  d-flex
-                  align-items-center
-                  justify-content-center
-                "
+                :class="[$style.Footer, 'w-100', 'p-4', 'd-flex', 'align-items-center', 'justify-content-center']"
               >
-                <MDBBtn color="primary" @click="experimentalData">
+                <MDBBtn
+                  :disabled="selectedMutation === 'Please select'"
+                  color="primary"
+                  @click="submitExperimentalData"
+                >
                   Submit
                 </MDBBtn>
               </div>
@@ -160,35 +134,36 @@
 </template>
 
 <script>
+  import FileUpload from '../../components/FileUpload/FileUpload.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import store from '../../services/store';
   import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
   import { ref, reactive } from '@vue/reactivity';
   import { useRouter } from 'vue-router';
   import { watchEffect } from 'vue';
   import {
-    MDBRow,
-    MDBCol,
-    MDBInput,
-    MDBCheckbox,
     MDBBtn,
     MDBCard,
     MDBCardBody,
-    MDBCardHeader,
-    MDBCardTitle,
+    MDBCardFooter,
     MDBCardText,
-    MDBCardFooter
+    MDBCardTitle,
+    MDBCheckbox,
+    MDBCol,
+    MDBInput,
+    MDBRow
   } from 'mdb-vue-ui-kit';
 
   export default {
     name: 'ExperimentalData',
     components: {
+      FileUpload,
       MDBBtn,
       MDBCard,
       MDBCardBody,
       MDBCardFooter,
-      MDBCardHeader,
       MDBCardText,
       MDBCardTitle,
       MDBCheckbox,
@@ -198,8 +173,18 @@
       PageWrapper
     },
     setup() {
-      const { currentUser } = getUser();
-      const router = useRouter();
+      const dataInputs = reactive([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'AgeatMRI'
+      ]);
       const geneMutations = reactive([
         'Please select',
         'MYH7',
@@ -212,7 +197,6 @@
         'MYL2',
         'TTN'
       ]);
-      const selectedMutation = ref('Please select');
       const info = reactive({
         userId: currentUser.value.uid,
         ledv: '',
@@ -233,14 +217,31 @@
         Diabetes: false,
         Myectomy: false
       });
+      let newInput = ref('');
+      const router = useRouter();
+      const selectedMutation = ref('Please select');
+      let showGenderInput = ref(true);
+      const { currentUser } = getUser();
 
-      const experimentalData = async () => {
-        for (const key in info) {
-          if (info[key] === '' || info[key] === undefined) delete info[key];
+      const createNewInput = () => {
+        if (newInput.value) dataInputs.push(newInput.value);
+        newInput.value = '';
+      };
+
+      const deleteInput = (key) => {
+        if (!dataInputs.includes(key)) return;
+
+        dataInputs.splice(dataInputs.indexOf(key), 1);
+        delete info[key];
+      };
+
+      const submitExperimentalData = async () => {
+        if (info.gender.toLowerCase() !== 'male' && info.gender.toLowerCase() !== 'female') {
+          alert('Gender must me \'male\' or \'female\''); return;
         }
 
-        if (document.getElementById('geneMutations').value === 'Please select') {
-          alert('Please select a valid Gene mutation'); return;
+        for (const key in info) {
+          if (info[key] === '' || info[key] === undefined) delete info[key];
         }
 
         const docRef = await addDoc(collection(await store.database, 'hcmData'), {
@@ -261,7 +262,8 @@
         if (!currentUser.value) router.push('/login');
       });
 
-      return { info, geneMutations, selectedMutation, experimentalData };
+      return { createNewInput, dataInputs, deleteInput, geneMutations, info, mapKeyToWords, newInput,
+               selectedMutation, showGenderInput, submitExperimentalData };
     }
   };
 </script>
