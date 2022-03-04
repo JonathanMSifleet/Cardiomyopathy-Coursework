@@ -23,8 +23,54 @@
         <MDBBtn color="primary" @click="deleteConfirmationModal = false">
           No
         </MDBBtn>
-        <MDBBtn color="primary" @click="deleteExperimentalDataDoc(currentDocId)">
+        <MDBBtn
+          color="primary"
+          @click="deleteExperimentalDataDoc(currentDocId)"
+        >
           Yes
+        </MDBBtn>
+      </MDBModalFooter>
+    </MDBModal>
+
+    <MDBModal
+      id="experimentalDataModal"
+      v-model="experimentalDataModal"
+      size="xl"
+      tabindex="-1"
+      labelledby="experimentalDataModalLabel"
+      scrollable
+      staticBackdrop
+    >
+      <MDBModalHeader>
+        <div class="text-center">
+          <MDBModalTitle
+            id="experimentalDataModalLabel"
+            :style="{ fontWeight: 'bold' }"
+          >
+            Experimental Data
+          </MDBModalTitle>
+          <h4 class="text-muted mt-2" />
+        </div>
+      </MDBModalHeader>
+
+      <MDBModalBody>
+        <MDBTable variant="primary" striped>
+          <tbody>
+            <tr v-for="key in Object.entries(currentEntity)" :key="key[1]">
+              <th scope="row" :style="{ fontWeight: 'bold' }">
+                {{ mapKeyToWords(key[0]) }}
+              </th>
+              <td>
+                {{ key[0] == "createdAt" ? key[1].toDate() : key[1] }}
+              </td>
+            </tr>
+          </tbody>
+        </MDBTable>
+      </MDBModalBody>
+
+      <MDBModalFooter>
+        <MDBBtn color="primary" @click="experimentalDataModal = false">
+          Close
         </MDBBtn>
       </MDBModalFooter>
     </MDBModal>
@@ -41,7 +87,9 @@
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader>User Profile</MDBCardHeader>
+        <MDBCardHeader :style="{ fontWeight: 'bold' }">
+          User Profile
+        </MDBCardHeader>
         <MDBCardBody>
           <MDBCardText>
             <form @submit.prevent="updateUser">
@@ -53,7 +101,7 @@
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    :maxlength="20"
+                    :maxlength="32"
                     :valueDefault="firstName"
                     required
                   />
@@ -65,7 +113,7 @@
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    :maxlength="20"
+                    :maxlength="32"
                     :valueDefault="lastName"
                     required
                   />
@@ -77,7 +125,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                :maxlength="30"
+                :maxlength="320"
                 :valueDefault="email"
                 disabled
               />
@@ -87,7 +135,7 @@
                 type="number"
                 label="Phone Number"
                 wrapper-class="mb-4"
-                :maxlength="15"
+                :maxlength="13"
                 :valueDefault="phoneNumber"
                 required
               />
@@ -110,164 +158,75 @@
         </MDBCardBody>
       </MDBCard>
     </div>
-
-    <div class="d-flex justify-content-center mt-5">
-      <MDBRow>
-        <MDBCol md="12">
-          <MDBBtn
-            :class="[
-              showTable ? $style['display-tbl-btn'] : $style['hide-tbl-btn'],
-            ]"
-            color="primary"
-            @click="toggleTable"
-            v-html="
-              showTable ? 'Hide Experimental Data' : 'Display Experimental Data'
-            "
-          />
-        </MDBCol>
-      </MDBRow>
-    </div>
-    <div class="d-flex justify-content-center mt-5">
-      <MDBRow>
-        <table
-          v-if="experimentalData.length > 0 && showTable"
-          :class="$style['styled-table']"
+    <MDBRow>
+      <MDBCol md="12" class="text-center">
+        <MDBBtn
+          color="primary"
+          :disabled="experimentalData.length === 0"
+          @click="showCards"
         >
-          <thead>
-            <tr>
-              <th scope="col">
-                Gene Mutation
-              </th>
-              <th scope="col">
-                LEDV
-              </th>
-              <th scope="col">
-                REDV
-              </th>
-              <th scope="col">
-                LESV
-              </th>
-              <th scope="col">
-                RESV
-              </th>
-              <th scope="col">
-                LVEF
-              </th>
-              <th scope="col">
-                RVEF
-              </th>
-              <th scope="col">
-                LVMASS
-              </th>
-              <th scope="col">
-                RVMASS
-              </th>
-              <th scope="col">
-                LSV
-              </th>
-              <th scope="col">
-                RSV
-              </th>
-              <th scope="col">
-                Gender
-              </th>
-              <th scope="col">
-                Fibrosis
-              </th>
-              <th scope="col">
-                Age at MRI
-              </th>
-              <th scope="col">
-                Apical HCM
-              </th>
-              <th scope="col">
-                Sudden Cardiac Death
-              </th>
-              <th scope="col">
-                Hypertension
-              </th>
-              <th scope="col">
-                Diabetes
-              </th>
-              <th scope="col">
-                Myectomy
-              </th>
-              <th scope="col">
-                Date Created
-              </th>
-              <th scope="col">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="entity in experimentalData" :key="entity.documentId">
-              <td>{{ entity.GeneMutation }}</td>
-              <td>{{ entity.ledv == undefined ? "N/A" : entity.ledv }}</td>
-              <td>{{ entity.redv == undefined ? "N/A" : entity.redv }}</td>
-              <td>{{ entity.lesv == undefined ? "N/A" : entity.lesv }}</td>
-              <td>{{ entity.resv == undefined ? "N/A" : entity.resv }}</td>
-              <td>{{ entity.lvef == undefined ? "N/A" : entity.lvef }}</td>
-              <td>{{ entity.rvef == undefined ? "N/A" : entity.rvef }}</td>
-              <td>{{ entity.lvmass == undefined ? "N/A" : entity.lvmass }}</td>
-              <td>{{ entity.rvmass == undefined ? "N/A" : entity.rvmass }}</td>
-              <td>{{ entity.lsv == undefined ? "N/A" : entity.lsv }}</td>
-              <td>{{ entity.rsv == undefined ? "N/A" : entity.rsv }}</td>
-              <td>{{ entity.gender == undefined ? "N/A" : entity.gender }}</td>
-              <td>
-                {{ entity.fibrosis == undefined ? "N/A" : entity.fibrosis }}
-              </td>
-              <td>
-                {{ entity.ageAtMri == undefined ? "N/A" : entity.ageAtMri }}
-              </td>
-              <td>
-                {{ entity.apicalHcm == undefined ? "N/A" : entity.apicalHcm }}
-              </td>
-              <td>
-                {{
-                  entity.suddenCardiacDeath == undefined
-                    ? "N/A"
-                    : entity.suddenCardiacDeath
-                }}
-              </td>
-              <td>
-                {{
-                  entity.hypertension == undefined ? "N/A" : entity.hypertension
-                }}
-              </td>
-              <td>
-                {{ entity.diabetes == undefined ? "N/A" : entity.diabetes }}
-              </td>
-              <td>
-                {{ entity.myectomy == undefined ? "N/A" : entity.myectomy }}
-              </td>
-              <td>
-                {{ entity.createdAt.toDate() }}
-              </td>
-              <td>
-                <MDBBtn
-                  :class="$style['delete-btn']"
-                  color="danger"
-                  @click="toggleModal(entity.documentId)"
-                >
-                  <MDBIcon icon="trash" />
-                </MDBBtn>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </MDBRow>
-    </div>
+          <p
+            :class="[
+              cardsVisible
+                ? 'animate__animated animate__flash'
+                : 'animate__animated animate__headShake',
+            ]"
+          >
+            {{
+              cardsVisible
+                ? "Hide Experimental Data"
+                : "Display Experimental Data"
+            }}
+          </p>
+        </MDBBtn>
+      </MDBCol>
+    </MDBRow>
+    <MDBRow v-if="showCardContainer" class="ms-5 mt-5">
+      <MDBCol
+        v-for="entity in experimentalData"
+        :key="entity.documentId"
+        md="4"
+      >
+        <MDBCard
+          text="center"
+          class="mb-5 animate__animated"
+          :class="[cardsVisible ? ' animate__bounceInUp' : ' animate__hinge']"
+        >
+          <MDBCardHeader :style="{ fontWeight: 'bold' }">
+            Gene Mutation: {{ entity.GeneMutation }}
+          </MDBCardHeader>
+          <MDBCardBody>
+            <MDBCardText />
+            <MDBBtn
+              color="primary"
+              @click="toggleExperimentalDataModal(entity)"
+            >
+              View
+            </MDBBtn>
+            <MDBBtn
+              :class="$style['delete-btn']"
+              color="danger"
+              @click="toggleModal(entity.documentId)"
+            >
+              <MDBIcon icon="trash" />
+            </MDBBtn>
+          </MDBCardBody>
+          <MDBCardFooter class="text-muted">
+            {{ dateTime(entity.createdAt.toDate()) }}
+          </MDBCardFooter>
+        </MDBCard>
+      </MDBCol>
+    </MDBRow>
   </PageWrapper>
 </template>
-
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
   import store from '../../services/store';
   import { auth } from '../../firebase/config';
-  import { ref, watchEffect, onMounted } from 'vue';
+  import { onMounted, reactive, ref, watchEffect } from 'vue';
   import { updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
   import {
@@ -287,6 +246,7 @@
     MDBCardBody,
     MDBCardHeader,
     MDBCardText,
+    MDBCardFooter,
     MDBCol,
     MDBIcon,
     MDBInput,
@@ -295,7 +255,8 @@
     MDBModalFooter,
     MDBModalHeader,
     MDBModalTitle,
-    MDBRow
+    MDBRow,
+    MDBTable
   } from 'mdb-vue-ui-kit';
 
   export default {
@@ -305,6 +266,7 @@
       MDBCardBody,
       MDBCardHeader,
       MDBCardText,
+      MDBCardFooter,
       MDBCol,
       MDBIcon,
       MDBInput,
@@ -314,6 +276,7 @@
       MDBModalHeader,
       MDBModalTitle,
       MDBRow,
+      MDBTable,
       PageWrapper
     },
     setup() {
@@ -326,32 +289,56 @@
       const experimentalData = ref([]);
       const deleteConfirmationModal = ref(false);
       const currentDocId = ref('');
+      const currentEntity = ref([]);
       const router = useRouter();
-      const showTable = ref(false);
+      const cardsVisible = ref(false);
+      const showCardContainer = ref(false);
+      const experimentalDataModal = ref(false);
+      const tableHeaders = reactive([
+        'Gene Mutation',
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'Gender',
+        'Fibrosis',
+        'Age at MRI',
+        'Apical HCM',
+        'Sudden Cardiac Death',
+        'Hypertension',
+        'Diabetes',
+        'Myectomy',
+        'Date Created',
+        'Actions'
+      ]);
 
-      onMounted( () => {
+      onMounted(() => {
         userIdentity();
         getExperimentalDataByUserId();
       });
 
-      async function userIdentity() {
+      const userIdentity = async () => {
         const docRef = doc(await store.database, 'users', currentUser.value.uid);
         getDoc(docRef).then((docSnap) => {
-          if (docSnap.exists()) {
-            firstName.value = docSnap.data().firstName;
-            lastName.value = docSnap.data().lastName;
-            address.value = docSnap.data().address;
-            email.value = docSnap.data().email;
-            phoneNumber.value = docSnap.data().phone;
+          if (!docSnap.exists()) return;
 
+          firstName.value = docSnap.data().firstName;
+          lastName.value = docSnap.data().lastName;
+          address.value = docSnap.data().address;
+          email.value = docSnap.data().email;
+          phoneNumber.value = docSnap.data().phone;
+
+          if (process.env.DEVELOPMENT)
             console.log('Document data:', docSnap.data());
-          } else {
-            console.log('No such document!');
-          }
         });
-      }
+      };
 
-      async function updateUser() {
+      const updateUser = async () => {
         const currentUserRef = doc(
           await store.database,
           'users',
@@ -373,27 +360,29 @@
             displayName: firstName.value
           })
             .then(alert('User profile updated.'))
-            .then(router.push('/'));
+            .then(() => {
+              router.push('/');
+            });
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
-      }
+      };
 
-      async function getExperimentalDataByUserId() {
-        const q = query(
+      const getExperimentalDataByUserId = async () => {
+        const firestoreQuery = query(
           collection(await store.database, 'hcmData'),
           where('userId', '==', currentUser.value.uid)
         );
 
-        const querySnapshot = await getDocs(q);
+        const querySnapshot = await getDocs(firestoreQuery);
         querySnapshot.forEach((doc) => {
           // doc.data() is never undefined for query doc snapshots
           experimentalData.value.push({ documentId: doc.id, ...doc.data() });
-          console.log(doc.id, ' => ', doc.data());
+          if (process.env.DEVELOPMENT) console.log(doc.id, ' => ', doc.data());
         });
-      }
+      };
 
-      async function deleteExperimentalDataDoc(docId) {
+      const deleteExperimentalDataDoc = async (docId) => {
         //Update the deleted timestamp
         const docRef = doc(await store.database, 'hcmData', docId);
 
@@ -403,40 +392,47 @@
         });
 
         //Delete the document from the database
-        await deleteDoc(doc(await store.database, 'hcmData', docId))
-          .then(alert('Data has been successfully deleted.'))
-          .then(router.push('/'));
-      }
+        await deleteDoc(doc(await store.database, 'hcmData', docId));
+        await (alert('Data has been successfully deleted.'), router.push('/'));
+      };
 
       const toggleModal = (docId) => {
         deleteConfirmationModal.value = !deleteConfirmationModal.value;
         currentDocId.value = docId;
       };
 
+      const showCards = () => {
+        showCardContainer.value = true;
+        cardsVisible.value = !cardsVisible.value;
+      };
+
+      const toggleExperimentalDataModal = (entity) => {
+        experimentalDataModal.value = !experimentalDataModal.value;
+        delete entity.deletedAt;
+        delete entity.documentId;
+        delete entity.userId;
+        delete entity.createdByUser;
+
+        currentEntity.value = entity;
+        if (process.env.DEVELOPMENT) console.log(currentEntity.value);
+      };
+
       watchEffect(() => {
         if (!currentUser.value) router.push('/login');
       });
 
-      const toggleTable = () => {
-        showTable.value = !showTable.value;
-      };
-      return {
-        userIdentity,
-        updateUser,
-        getExperimentalDataByUserId,
-        deleteExperimentalDataDoc,
-        toggleModal,
-        toggleTable,
-        showTable,
-        deleteConfirmationModal,
-        experimentalData,
-        firstName,
-        lastName,
-        email,
-        address,
-        phoneNumber,
-        currentDocId
-      };
+      const dateTime = (value) =>
+        new Date(value).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+      return { address, cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal,
+               deleteExperimentalDataDoc, email, experimentalData, experimentalDataModal, firstName,
+               getExperimentalDataByUserId, lastName, mapKeyToWords, phoneNumber, showCardContainer,
+               showCards, tableHeaders, toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
     }
   };
 </script>
