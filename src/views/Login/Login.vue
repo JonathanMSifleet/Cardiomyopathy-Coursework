@@ -121,7 +121,10 @@
           console.log(currentUser.value.emailVerified);
           if (!currentUser.value.emailVerified){
             await sendEmailVerification(auth.currentUser, actionCodeSettings);
+            console.log(auth.currentUser);
             await signOut(auth);
+            console.log('SIGNED OUT');
+            console.log(auth.currentUser);
             const verifError = new Error();
             verifError.code = 'email-not-verif';
             throw verifError;
