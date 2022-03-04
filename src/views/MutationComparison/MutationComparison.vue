@@ -25,8 +25,7 @@
 
     <p> Please click a item from the list to view the data of both mutations: </p>
 
-    <!-- <MDBRow v-if="hasFetchedKeys">
-      <p>All associated attributes with gene mutation {{ selectedGeneMutation }}.</p>
+    <MDBRow>
       <p>Please click an attribute to view its data:</p>
 
       <MDBCol v-for="index in chunkedKeys.length" :key="index" md="3">
@@ -34,14 +33,13 @@
           <li
             v-for="key in chunkedKeys[--index]"
             :key="key"
-            :class="[$style.Key]"
             @click="generateGraph(key)"
           >
             {{ key }}
           </li>
         </ul>
       </MDBCol>
-    </MDBRow> -->
+    </MDBRow>
   </PageWrapper>
 </template>
 
@@ -60,7 +58,7 @@
       const allDocuments = [];
       const availableMutationsOne = ref([]);
       const availableMutationsTwo = ref([]);
-      const chunkedKeys = [];
+      const chunkedKeys = ref([]);
       const geneMutations = [
         'Please select',
         'MYH7',
@@ -73,18 +71,14 @@
         'MYL2',
         'TTN'
       ];
-      let hasFetchedKeys = ref(false);
       let selectedGeneMutationOne = ref('Please select');
       let selectedGeneMutationTwo = ref('Please select');
       let tableKeys = [];
 
       (async () => {
         const documents = await fetchDocuments();
-        console.log('🚀 ~ file: MutationComparison.vue ~ line 82 ~ documents', documents);
 
         documents.forEach(doc => allDocuments.push(doc));
-
-        hasFetchedKeys.value = true;
 
         geneMutations.forEach(geneMutation => {
           availableMutationsOne.value.push(geneMutation);
@@ -109,15 +103,15 @@
           return doc[selectedGeneMutationOne.value] === true || doc[selectedGeneMutationTwo.value] === true;
         });
 
-        tableKeys = determineKeys(filteredDocuments);
-        console.log('🚀 ~ file: MutationComparison.vue ~ line 112 ~ watch ~ tableKeys', tableKeys);
-        tableKeys = chunk(...tableKeys, Math.ceil(tableKeys.length / 4));
+        tableKeys = Object.keys(determineKeys(filteredDocuments));
+        // insensitive sort:
+        tableKeys = tableKeys.sort(Intl.Collator().compare);
 
-        hasFetchedKeys.value = true;
+        chunkedKeys.value = chunk(tableKeys, Math.ceil(tableKeys.length / 4));
       });
 
-      return { availableMutationsOne, availableMutationsTwo, hasFetchedKeys, selectedGeneMutationOne,
-               selectedGeneMutationTwo };
+      return { availableMutationsOne, availableMutationsTwo, chunkedKeys,
+               selectedGeneMutationOne, selectedGeneMutationTwo };
     }
   };
 </script>
