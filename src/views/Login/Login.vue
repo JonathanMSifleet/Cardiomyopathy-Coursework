@@ -118,13 +118,18 @@
           if (process.env.DEVELOPMENT) console.log(currentUser.value.emailVerified);
           await currentUser.value.reload();
           if (process.env.DEVELOPMENT) console.log(currentUser.value.emailVerified);
-          if (currentUser.value.emailVerified) router.push('/');
 
-          await sendEmailVerification(auth.currentUser, actionCodeSettings);
-          await signOut(auth);
-          const verifError = new Error();
-          verifError.code = 'email-not-verif';
-          throw verifError;
+          if (!currentUser.value.emailVerified) {
+            await sendEmailVerification(auth.currentUser, actionCodeSettings);
+            await signOut(auth);
+
+            const verifError = new Error();
+            verifError.code = 'email-not-verif';
+            throw verifError;
+          } else {
+            router.push('/');
+          }
+
         } catch (error) {
           //custom error messages
           switch (error.code) {
@@ -141,7 +146,7 @@
             errorMessage.value = 'Please verify your email before login. Email resent.';
             break;
           default:
-            if (process.env.DEVELOPMENT) console.log('DEFAULT');
+            console.log('DEFAULT');
             errorMessage.value = error.message;
             break;
           }
