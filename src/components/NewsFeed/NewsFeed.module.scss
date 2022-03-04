@@ -14,10 +14,29 @@
 
 .read-more-link {
     font-size: 0.875rem;
+    opacity: 0.6;
+    transition: 0.3s;
     text-decoration: underline;
+}
+
+.read-more-link:hover {
+    transition: 0.3s;
+    opacity: 1;
 }
 
 .carousel {
     float: right;
     width: 15.625rem;
+}
+
+.left-arrow,
+.right-arrow {
+    color: #bbbbbb !important;
+    transition: 0.3s;
+}
+
+.left-arrow:hover,
+.right-arrow:hover {
+    transition: 0.4s;
+    color: #1266f1 !important;
 }
