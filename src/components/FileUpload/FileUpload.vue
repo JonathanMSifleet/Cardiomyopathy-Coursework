@@ -15,7 +15,7 @@
       <MDBFile v-model="fileUpload" :class="$style.FileUpload" />
     </div>
 
-    <ButtonSpinner v-if="isSubmitting" />
+    <ButtonSpinner v-if="isSubmitting" :class="$style.ButtonSpinner" />
     <MDBBtn
       v-else
       color="primary"
@@ -56,15 +56,17 @@
   import ButtonSpinner from '../ButtonSpinner/ButtonSpinner.vue';
   import YAML from 'yaml';
   import csv from 'csvtojson';
+  import getUser from '../../composables/getUser';
   import store from '../../services/store';
   import { MDBBtn, MDBFile, MDBRadio } from 'mdb-vue-ui-kit';
   import { XMLParser } from 'fast-xml-parser';
-  import { collection, addDoc } from 'firebase/firestore';
+  import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
   import { ref, watch } from 'vue';
 
   export default {
     components: { ButtonSpinner, MDBBtn, MDBFile, MDBRadio },
     setup() {
+      const { currentUser } = getUser();
       let fileUpload = ref([]);
       const formatTypes = ref([
         'JSON',
@@ -107,7 +109,12 @@
         const database = await store.database;
         const tasks = [];
 
-        data.forEach(doc => tasks.push(addDoc(collection(database, 'experimentalData'), doc)));
+        data.forEach(doc => tasks.push(addDoc(collection(database, 'hcmData'), {
+          ...doc,
+          createdAt: serverTimestamp(),
+          createdByUser: true,
+          userId: currentUser.value.uid
+        })));
 
         await Promise.all(tasks);
 
@@ -115,7 +122,7 @@
         fileUpload.value = [];
 
         isSubmitting.value = false;
-        statusMessage.value = 'Data uploaded successfully';
+        alert('Data uploaded successfully');
       };
 
       watch([fileUpload, shouldSubmitData], () => {
