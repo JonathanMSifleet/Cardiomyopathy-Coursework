@@ -177,10 +177,9 @@
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
-  import extractDataFromResults from '../../utils/extractDataFromResults';
   import getUser from '../../composables/getUser';
+  import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
-  import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { isValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch, watchEffect } from 'vue';
@@ -324,43 +323,6 @@
 
       const deleteFilter = (index) => filters = filters.slice(index, 1);
 
-      const generateGraph = (keyName) => {
-        isLoadingGraph.value = true;
-
-        const { data, type } = extractDataFromResults(filteredResults.value, keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase());
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
-      };
-
-      const renderGraph = (data, keyName, type) => {
-        const chartHelper = GoogleCharts.api.visualization;
-        const chartData = chartHelper.arrayToDataTable(data);
-        chartData.sort([{ column: 1, asc: true }]);
-
-        const divToRenderChart = document.getElementById('chart');
-
-        const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
-          new chartHelper.ColumnChart(divToRenderChart);
-
-        chart.draw(chartData, {
-          title: mapKeyToWords(keyName),
-          is3D: true,
-          vAxis: {
-            title: 'Value'
-          },
-          hAxis: {
-            title: 'Record from database'
-          },
-          chartArea: { width: '82%', height: '80%' }
-        });
-        isLoadingGraph.value = false;
-        displayChart.value = true;
-      };
-
       const resetTablePage = (array) => {
         return array.slice(0, pageSize);
       };
@@ -405,7 +367,8 @@
         selectedTablePage.value = 1;
         renderableResults.value = resetTablePage(filteredResults.value);
 
-        if (displayChart.value) generateGraph(selectedGraphKey.value);
+        if (displayChart.value)
+          generateGraph(displayChart.value, 'chart', isLoadingGraph.value, selectedGraphKey.value, filteredResults.value);
       });
 
       watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
@@ -420,7 +383,9 @@
         cleanup();
       });
 
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+      watch(selectedGraphKey, () =>
+        generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
+                      selectedGraphKey.value, filteredResults.value));
 
       // paginate table:
       watch(selectedTablePage, () => {
