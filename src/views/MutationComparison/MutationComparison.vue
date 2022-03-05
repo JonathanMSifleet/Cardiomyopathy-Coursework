@@ -23,17 +23,16 @@
       </option>
     </select>
 
-    <p> Please click a item from the list to view the data of both mutations: </p>
-
-    <MDBRow>
-      <p>Please click an attribute to view its data:</p>
+    <MDBRow v-if="selectedGeneMutationOne !== 'Please select' && selectedGeneMutationTwo !== 'Please select'">
+      <p> Please click a item from the list to view the data of both mutations: </p>
 
       <MDBCol v-for="index in chunkedKeys.length" :key="index" md="3">
         <ul>
           <li
             v-for="key in chunkedKeys[--index]"
             :key="key"
-            @click="generateGraph(key)"
+            :class="$style.Key"
+            @click="selectedKey = key"
           >
             {{ key }}
           </li>
@@ -46,19 +45,29 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import chunk from 'chunk';
-  import { ref, watch } from 'vue';
-  import { MDBCol, MDBRow } from 'mdb-vue-ui-kit';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
+  import { MDBCol, MDBRow } from 'mdb-vue-ui-kit';
+  import { ref, watch } from 'vue';
+  import extractDataFromResults from '../../utils/extractDataFromResults';
 
   export default {
     name: 'MutationComparison',
     components: { MDBCol, MDBRow, PageWrapper },
     setup() {
       const allDocuments = [];
-      const availableMutationsOne = ref([]);
-      const availableMutationsTwo = ref([]);
-      const chunkedKeys = ref([]);
+      let availableMutationsOne = ref([]);
+      let availableMutationsTwo = ref([]);
+      let chartData = ref({
+        labels: [],
+        datasets: [{
+          data: [],
+          backgroundColor: []
+        }]
+      });
+      let chunkedKeys = ref([]);
+      const doughnutRef = ref();
       const geneMutations = [
         'Please select',
         'MYH7',
@@ -71,8 +80,11 @@
         'MYL2',
         'TTN'
       ];
+      let mutationOneDocuments = [];
+      let mutationTwoDocuments = [];
       let selectedGeneMutationOne = ref('Please select');
       let selectedGeneMutationTwo = ref('Please select');
+      let selectedKey = ref('');
       let tableKeys = [];
 
       (async () => {
@@ -98,20 +110,39 @@
           mutation !== selectedGeneMutationTwo.value);
       });
 
-      watch([selectedGeneMutationOne, selectedGeneMutationTwo], () => {
-        const filteredDocuments = allDocuments.filter(doc => {
-          return doc[selectedGeneMutationOne.value] === true || doc[selectedGeneMutationTwo.value] === true;
-        });
+      watch(selectedGeneMutationOne, () => {
+        mutationOneDocuments = allDocuments.filter(doc =>
+          doc[selectedGeneMutationOne.value] === true);
 
-        tableKeys = Object.keys(determineKeys(filteredDocuments));
+        refreshKeys();
+      });
+
+      watch(selectedGeneMutationTwo, () => {
+        mutationTwoDocuments = allDocuments.filter(doc =>
+          doc[selectedGeneMutationTwo.value] === true);
+
+        refreshKeys();
+      });
+
+      const refreshKeys = () => {
+        tableKeys = Object.keys(determineKeys([...mutationOneDocuments, ...mutationTwoDocuments]));
         // insensitive sort:
         tableKeys = tableKeys.sort(Intl.Collator().compare);
 
         chunkedKeys.value = chunk(tableKeys, Math.ceil(tableKeys.length / 4));
+      };
+
+      watch(selectedKey, () => {
+        mutationOneDocuments = extractDataFromResults(mutationOneDocuments, selectedKey.value);
+        mutationTwoDocuments = extractDataFromResults(mutationTwoDocuments, selectedKey.value);
       });
 
-      return { availableMutationsOne, availableMutationsTwo, chunkedKeys,
-               selectedGeneMutationOne, selectedGeneMutationTwo };
+      return { availableMutationsOne, availableMutationsTwo, chartData, chunkedKeys, doughnutRef, mapKeyToWords,
+               selectedGeneMutationOne, selectedGeneMutationTwo, selectedKey };
     }
   };
 </script>
+
+<style scoped lang="scss" module>
+  @import './MutationComparison.module.scss';
+</style>
