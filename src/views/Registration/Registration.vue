@@ -19,74 +19,98 @@
                 <MDBCol md="6">
                   <MDBInput
                     id="form2FirstName"
-                    v-model="firstName"
+                    v-model.trim="firstName"
                     type="text"
                     label="First Name"
                     wrapper-class="mb-4"
-                    :maxlength="20"
+                    :maxlength="32"
                     required
                   />
                 </MDBCol>
                 <MDBCol md="6">
                   <MDBInput
                     id="form2LastName"
-                    v-model="lastName"
+                    v-model.trim="lastName"
                     type="text"
                     label="Last Name"
                     wrapper-class="mb-4"
-                    :maxlength="20"
+                    :maxlength="32"
                     required
                   />
                 </MDBCol>
               </MDBRow>
               <MDBInput
                 id="form2Email"
-                v-model="email"
+                v-model.trim="email"
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                :maxlength="30"
+                :maxlength="320"
                 required
               />
               <!-- Password input -->
               <MDBInput
                 id="form2Password"
-                v-model="password"
+                v-model.trim="password"
                 type="password"
                 label="Password"
                 wrapper-class="mb-4"
-                :maxlength="30"
+                :maxlength="64"
                 required
               />
               <MDBInput
-                id="form2Password"
-                v-model="passConfirm"
+                id="form2PasswordConfirm"
+                v-model.trim="passConfirm"
                 type="password"
                 label="Confirm Password"
                 wrapper-class="mb-4"
-                :maxlength="30"
+                :maxlength="64"
                 required
               />
               <MDBInput
                 id="form2Phone"
-                v-model="phone"
-                type="number"
+                v-model.trim="phone"
+                type="text"
                 label="Phone Number"
                 wrapper-class="mb-4"
                 :maxlength="15"
                 required
               />
               <MDBInput
-                id="form2Address"
-                v-model="address"
+                id="form2AddressLineOne"
+                v-model.trim="addressLineOne"
                 type="text"
-                label="Address"
+                label="Address line 1"
                 wrapper-class="mb-4"
                 :maxlength="35"
                 required
               />
+              <MDBInput
+                id="form2AddressLineTwo"
+                v-model.trim="addressLineTwo"
+                type="text"
+                label="Address line 2"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2city"
+                v-model.trim="city"
+                type="text"
+                label="Town / city"
+                wrapper-class="mb-4"
+                :maxlength="35"
+              />
+              <MDBInput
+                id="form2postcode"
+                v-model.trim="postcode"
+                type="text"
+                label="Postcode"
+                wrapper-class="mb-4"
+                :maxlength="8"
+              />
 
-              <MDBBtn type="submit" color="primary">
+              <MDBBtn type="submit" color="primary" :disabled="!canRegister">
                 Register
               </MDBBtn>
             </form>
@@ -115,9 +139,18 @@
   import useSignup from '../../composables/useSignup';
   import { auth } from '../../firebase/config';
   import { doc, setDoc } from 'firebase/firestore';
-  import { ref } from 'vue';
+  import { ref, watch } from 'vue';
   import { sendEmailVerification, signOut, updateProfile } from 'firebase/auth';
   import { useRouter } from 'vue-router';
+  import { validateAddressLineOne,
+           validateAddressLineTwo,
+           validateCity,
+           validateEmail,
+           validateName,
+           validatePassword,
+           validatePhoneNumber,
+           validatePostcode }
+    from '../../utils/validationFunctions';
   import {
     MDBBtn,
     MDBCard,
@@ -147,7 +180,10 @@
       PageWrapper
     },
     setup() {
-      const address = ref('');
+      const addressLineOne = ref('');
+      const addressLineTwo = ref(null);
+      let canRegister = ref(false);
+      const city = ref('');
       const email = ref('');
       const firstName = ref('');
       const lastName = ref('');
@@ -155,6 +191,7 @@
       const passMatchErr = ref('');
       const password = ref('');
       const phone = ref('');
+      const postcode = ref ('');
       const router = useRouter();
       const { signupError, signup } = useSignup();
 
@@ -181,8 +218,8 @@
 
       //submit registration data and create account
       const handleSubmit = async () => {
-        //exit function if password confirmation does not match
-        if (!checkPasswordsMatch()) return;
+        // check all inputs are valid:
+        if (!validateInputs()) return;
 
         //create user acc
         await signup(email.value, password.value);
@@ -202,19 +239,23 @@
         //get currently signed in user
         const { currentUser } = getUser();
 
-        //add user info to firestore db
         await addUserInfo({
           uid: currentUser.value.uid,
           firstName: firstName.value,
           lastName: lastName.value,
-          address: address.value,
+          address: {
+            addressLineOne: addressLineOne.value,
+            addressLineTwo: addressLineTwo.value,
+            city: city.value,
+            postcode: postcode.value
+          },
           email: email.value,
           phone: phone.value
         });
 
-        //set user display name
         try {
-          updateProfile(auth.currentUser, {
+          //set user display name
+          await updateProfile(auth.currentUser, {
             displayName: firstName.value
           });
         } catch (error) {
@@ -231,8 +272,50 @@
         }
       };
 
-      return { address, email, firstName, handleSubmit, lastName, passConfirm,
-               passMatchErr, password, phone, signupError };
+      const validateInputs = () => {
+        let inputsValid = true;
+
+        if(!checkPasswordsMatch()) inputsValid = false;
+
+        const firstNameValMessages = validateName(firstName.value);
+        const lastNameValMessages = validateName(lastName.value);
+        const emailValMessages = validateEmail(email.value);
+        const passwordValMessages = validatePassword(password.value);
+        const phoneValMessages = validatePhoneNumber(phone.value);
+        const addressLineOneValMessages = validateAddressLineOne(addressLineOne.value);
+        const addressLineTwoValMessages = validateAddressLineTwo(addressLineTwo.value);
+        const cityValMessages = validateCity(city.value);
+        const postcodeValMessages = validatePostcode(postcode.value);
+
+        if (
+          firstNameValMessages.length !== 0 ||
+          lastNameValMessages.length !== 0 ||
+          emailValMessages.length !== 0 ||
+          passwordValMessages.length !== 0 ||
+          phoneValMessages.length !== 0 ||
+          addressLineOneValMessages.length !== 0 ||
+          addressLineTwoValMessages.length !== 0 ||
+          cityValMessages.length !== 0 ||
+          postcodeValMessages.length !== 0
+        ) inputsValid = false;
+
+        return inputsValid;
+      };
+
+      watch([addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
+        canRegister.value =
+          addressLineOne.value !== '' &&
+          city.value !== '' &&
+          email.value !== '' &&
+          firstName.value !== '' &&
+          lastName.value !== '' &&
+          passConfirm.value !== '' &&
+          password.value !== '' &&
+          phone.value !== '';
+      });
+
+      return { addressLineOne, addressLineTwo, canRegister, city, country, email, firstName, handleSubmit, lastName,
+               passConfirm, passMatchErr, password, phone, postcode, signupError };
     }
   };
 </script>

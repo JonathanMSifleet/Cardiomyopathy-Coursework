@@ -181,7 +181,7 @@
   import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
-  import { isValid } from '../../utils/validationFunctions';
+  import { operandIsValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch, watchEffect } from 'vue';
   import { useRouter } from 'vue-router';
 
@@ -292,7 +292,7 @@
           alert('Attribute not found in database'); return;
         }
 
-        const operandValidationMessage = isValid(queryOperand.value);
+        const operandValidationMessage = operandIsValid(queryOperand.value);
         if (!operandValidationMessage) {
           alert('Input must be a number or equal to true or false'); return;
         }
