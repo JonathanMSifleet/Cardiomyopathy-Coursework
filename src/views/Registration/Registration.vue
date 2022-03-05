@@ -302,7 +302,7 @@
         return inputsValid;
       };
 
-      watch([addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
+      watch([addressLineOne, city, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
         canRegister.value =
           addressLineOne.value !== '' &&
           city.value !== '' &&
@@ -314,7 +314,7 @@
           phone.value !== '';
       });
 
-      return { addressLineOne, addressLineTwo, canRegister, city, country, email, firstName, handleSubmit, lastName,
+      return { addressLineOne, addressLineTwo, canRegister, city, email, firstName, handleSubmit, lastName,
                passConfirm, passMatchErr, password, phone, postcode, signupError };
     }
   };
