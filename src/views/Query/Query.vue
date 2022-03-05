@@ -331,7 +331,7 @@
 
       const toggleHeader = (key) => {
         if (activeTableHeaders.value.includes(key)) {
-          activeTableHeaders.value.slice(activeTableHeaders.value.indexOf(key), 1);
+          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
           activeTableHeaders.value.push(key);
