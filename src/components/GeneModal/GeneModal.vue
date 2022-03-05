@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import fetchGeneDetails from '../../composables/getGeneInfo.js';
+  import fetchGeneDetails from '../../composables/getGeneInfo';
   import { onMounted, ref } from 'vue';
   import {
     MDBBtn,

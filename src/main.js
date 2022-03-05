@@ -3,7 +3,7 @@ import 'animate.css';
 import './assets/styles/global.scss';
 import './assets/styles/main.module.css';
 import App from './App.vue';
-import router from './services/router.js';
+import router from './services/router';
 import { auth } from './firebase/config';
 import { createApp } from 'vue';
 import { onAuthStateChanged } from 'firebase/auth';
