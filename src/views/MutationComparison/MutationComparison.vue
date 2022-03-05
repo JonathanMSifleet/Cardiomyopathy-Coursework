@@ -23,6 +23,10 @@
       </option>
     </select>
 
+    <Spinner v-if="isLoadingGraphs" />
+    <div id="graphOne" />
+    <div id="graphTwo" />
+
     <MDBRow v-if="selectedGeneMutationOne !== 'Please select' && selectedGeneMutationTwo !== 'Please select'">
       <p> Please click a item from the list to view the data of both mutations: </p>
 
@@ -44,29 +48,24 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import Spinner from '../../components/Spinner/Spinner.vue';
   import chunk from 'chunk';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import { MDBCol, MDBRow } from 'mdb-vue-ui-kit';
   import { ref, watch } from 'vue';
-  import extractDataFromResults from '../../utils/extractDataFromResults';
 
   export default {
     name: 'MutationComparison',
-    components: { MDBCol, MDBRow, PageWrapper },
+    components: { MDBCol, MDBRow, PageWrapper, Spinner },
     setup() {
       const allDocuments = [];
       let availableMutationsOne = ref([]);
       let availableMutationsTwo = ref([]);
-      let chartData = ref({
-        labels: [],
-        datasets: [{
-          data: [],
-          backgroundColor: []
-        }]
-      });
       let chunkedKeys = ref([]);
+      let displayCharts = ref(false);
       const doughnutRef = ref();
       const geneMutations = [
         'Please select',
@@ -80,6 +79,7 @@
         'MYL2',
         'TTN'
       ];
+      let isLoadingGraphs = ref(false);
       let mutationOneDocuments = [];
       let mutationTwoDocuments = [];
       let selectedGeneMutationOne = ref('Please select');
@@ -133,11 +133,11 @@
       };
 
       watch(selectedKey, () => {
-        mutationOneDocuments = extractDataFromResults(mutationOneDocuments, selectedKey.value);
-        mutationTwoDocuments = extractDataFromResults(mutationTwoDocuments, selectedKey.value);
+        generateGraph(displayCharts, 'graphOne', isLoadingGraphs.value, selectedKey, mutationOneDocuments);
+        generateGraph(displayCharts, 'graphTwo', isLoadingGraphs.value, selectedKey, mutationTwoDocuments);
       });
 
-      return { availableMutationsOne, availableMutationsTwo, chartData, chunkedKeys, doughnutRef, mapKeyToWords,
+      return { availableMutationsOne, availableMutationsTwo, chunkedKeys, doughnutRef, isLoadingGraphs, mapKeyToWords,
                selectedGeneMutationOne, selectedGeneMutationTwo, selectedKey };
     }
   };
