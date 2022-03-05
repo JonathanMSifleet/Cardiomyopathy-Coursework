@@ -1,13 +1,13 @@
 import { GoogleCharts } from 'google-charts';
 import mapKeyToWords from './mapKeyToWords';
 
-export default (displayChart, divId, isLoadingGraph, keyName, results) => {
+export default (displayChart, divId, isLoadingGraph, keyName, mutationName, results, isComparing) => {
   isLoadingGraph = true;
 
   const { data, type } = prepareGraphData(results, keyName);
 
   GoogleCharts.load(() => {
-    drawChart(data, divId, keyName, type,);
+    drawChart(data, divId, keyName, type, isComparing, mutationName);
 
     isLoadingGraph = false;
     displayChart = true;
@@ -24,7 +24,7 @@ const prepareGraphData = (results, keyName) => {
   return { data, type };
 };
 
-const drawChart = (data, divId, keyName, type ) => {
+const drawChart = (data, divId, keyName, type, isComparing, mutationName) => {
   const chartHelper = GoogleCharts.api.visualization;
   const chartData = chartHelper.arrayToDataTable(data);
   chartData.sort([{ column: 1, asc: true }]);
@@ -34,7 +34,7 @@ const drawChart = (data, divId, keyName, type ) => {
   const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
     new chartHelper.ColumnChart(divToRenderChart);
 
-  chart.draw(chartData, {
+  let chartOptions = {
     title: mapKeyToWords(keyName),
     is3D: true,
     vAxis: {
@@ -44,7 +44,11 @@ const drawChart = (data, divId, keyName, type ) => {
       title: 'Record from database'
     },
     chartArea: { width: '82%', height: '80%' }
-  });
+  };
+
+  if (isComparing) chartOptions.title = `${mutationName} - ${chartOptions.title}`;
+
+  chart.draw(chartData, chartOptions);
 };
 
 const extractDataFromResults = (results, keyName) => {

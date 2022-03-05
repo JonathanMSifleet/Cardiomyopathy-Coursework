@@ -368,7 +368,8 @@
         renderableResults.value = resetTablePage(filteredResults.value);
 
         if (displayChart.value)
-          generateGraph(displayChart.value, 'chart', isLoadingGraph.value, selectedGraphKey.value, filteredResults.value);
+          generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
+                        selectedGraphKey.value, null, filteredResults.value, false);
       });
 
       watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
@@ -385,7 +386,7 @@
 
       watch(selectedGraphKey, () =>
         generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
-                      selectedGraphKey.value, filteredResults.value));
+                      selectedGraphKey.value, null, filteredResults.value, false));
 
       // paginate table:
       watch(selectedTablePage, () => {

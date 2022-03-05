@@ -1,48 +1,70 @@
 <template>
   <PageWrapper>
-    <p> Please select two gene mutations in order to compare them: </p>
-    <p> Gene mutation one: </p>
-    <select v-model="selectedGeneMutationOne" :class="'form-select'">
-      <option
-        v-for="(geneMutation, index) in availableMutationsOne"
-        :key="index"
-        :disabled="geneMutation === 'Please select'"
-      >
-        {{ geneMutation }}
-      </option>
-    </select>
+    <h1 :class="$style.Heading">
+      Comparison of Gene Mutation data
+    </h1>
 
-    <p> Gene mutation two: </p>
-    <select v-model="selectedGeneMutationTwo" :class="'form-select'">
-      <option
-        v-for="(geneMutation, index) in availableMutationsTwo"
-        :key="index"
-        :disabled="geneMutation === 'Please select'"
-      >
-        {{ geneMutation }}
-      </option>
-    </select>
+    <p :class="$style.GeneSelectionInstructionText">
+      Please select two gene mutations in order to compare them:
+    </p>
 
-    <Spinner v-if="isLoadingGraphs" />
-    <div id="graphOne" />
-    <div id="graphTwo" />
-
-    <MDBRow v-if="selectedGeneMutationOne !== 'Please select' && selectedGeneMutationTwo !== 'Please select'">
-      <p> Please click a item from the list to view the data of both mutations: </p>
-
-      <MDBCol v-for="index in chunkedKeys.length" :key="index" md="3">
-        <ul>
-          <li
-            v-for="key in chunkedKeys[--index]"
-            :key="key"
-            :class="$style.Key"
-            @click="selectedKey = key"
+    <div :class="$style.OuterSelectWrapper">
+      <div :class="$style.SelectWrapper">
+        <p> Gene mutation one: </p>
+        <select v-model="selectedGeneMutationOne" :class="'form-select'">
+          <option
+            v-for="(geneMutation, index) in availableMutationsOne"
+            :key="index"
+            :disabled="geneMutation === 'Please select'"
           >
-            {{ key }}
-          </li>
-        </ul>
-      </MDBCol>
-    </MDBRow>
+            {{ geneMutation }}
+          </option>
+        </select>
+      </div>
+
+      <div :class="$style.SelectWrapper">
+        <p> Gene mutation two: </p>
+        <select v-model="selectedGeneMutationTwo" :class="'form-select'">
+          <option
+            v-for="(geneMutation, index) in availableMutationsTwo"
+            :key="index"
+            :disabled="geneMutation === 'Please select'"
+          >
+            {{ geneMutation }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div :class="$style.GraphAndKeyWrapper">
+      <Spinner v-if="isLoadingGraphs" />
+
+      <div :class="$style.ChartWrapper">
+        <div id="graphOne" :class="$style.Chart" />
+        <div id="graphTwo" :class="$style.Chart" />
+      </div>
+
+      <div :class="$style.KeyWrapper">
+        <MDBRow v-if="selectedGeneMutationOne !== 'Please select' && selectedGeneMutationTwo !== 'Please select'">
+          <p :class="$style.ClickKeyInstructionText">
+            Please click a item from the list to view the data of both mutations:
+          </p>
+
+          <MDBCol v-for="index in chunkedKeys.length" :key="index" md="3">
+            <ul>
+              <li
+                v-for="key in chunkedKeys[--index]"
+                :key="key"
+                :class="$style.Key"
+                @click="selectedKey = key"
+              >
+                {{ key }}
+              </li>
+            </ul>
+          </MDBCol>
+        </MDBRow>
+      </div>
+    </div>
   </PageWrapper>
 </template>
 
@@ -115,6 +137,11 @@
           doc[selectedGeneMutationOne.value] === true);
 
         refreshKeys();
+        if (selectedGeneMutationOne.value !== 'Please select' &&
+          selectedGeneMutationTwo.value !== 'Please select' &&
+          selectedKey.value !== '')
+          generateGraph(displayCharts, 'graphOne', isLoadingGraphs.value, selectedKey.value,
+                        mapKeyToWords(selectedGeneMutationOne.value), mutationOneDocuments, true);
       });
 
       watch(selectedGeneMutationTwo, () => {
@@ -122,6 +149,11 @@
           doc[selectedGeneMutationTwo.value] === true);
 
         refreshKeys();
+        if (selectedGeneMutationOne.value !== 'Please select' &&
+          selectedGeneMutationTwo.value !== 'Please select' &&
+          selectedKey.value !== '')
+          generateGraph(displayCharts, 'graphTwo', isLoadingGraphs.value, selectedKey.value,
+                        mapKeyToWords(selectedGeneMutationTwo.value), mutationTwoDocuments, true);
       });
 
       const refreshKeys = () => {
@@ -133,8 +165,10 @@
       };
 
       watch(selectedKey, () => {
-        generateGraph(displayCharts, 'graphOne', isLoadingGraphs.value, selectedKey, mutationOneDocuments);
-        generateGraph(displayCharts, 'graphTwo', isLoadingGraphs.value, selectedKey, mutationTwoDocuments);
+        generateGraph(displayCharts, 'graphOne', isLoadingGraphs.value, selectedKey.value,
+                      mapKeyToWords(selectedGeneMutationOne.value), mutationOneDocuments, true);
+        generateGraph(displayCharts, 'graphTwo', isLoadingGraphs.value, selectedKey.value,
+                      mapKeyToWords(selectedGeneMutationTwo.value), mutationTwoDocuments, true);
       });
 
       return { availableMutationsOne, availableMutationsTwo, chunkedKeys, doughnutRef, isLoadingGraphs, mapKeyToWords,
