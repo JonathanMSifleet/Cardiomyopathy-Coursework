@@ -109,10 +109,11 @@
         const database = await store.database;
         const tasks = [];
 
-        data.forEach(doc => tasks.push(addDoc(collection(database, 'hcmData'), { ...doc,
-                                                                                 createdAt: serverTimestamp(),
-                                                                                 createdByUser: true,
-                                                                                 userId: currentUser.value.uid
+        data.forEach(doc => tasks.push(addDoc(collection(database, 'hcmData'), {
+          ...doc,
+          createdAt: serverTimestamp(),
+          createdByUser: true,
+          userId: currentUser.value.uid
         })));
 
         await Promise.all(tasks);
@@ -121,7 +122,7 @@
         fileUpload.value = [];
 
         isSubmitting.value = false;
-        statusMessage.value = 'Data uploaded successfully';
+        alert('Data uploaded successfully');
       };
 
       watch([fileUpload, shouldSubmitData], () => {
