@@ -15,7 +15,7 @@
       <MDBFile v-model="fileUpload" :class="$style.FileUpload" />
     </div>
 
-    <ButtonSpinner v-if="isSubmitting" />
+    <ButtonSpinner v-if="isSubmitting" :class="$style.ButtonSpinner" />
     <MDBBtn
       v-else
       color="primary"
