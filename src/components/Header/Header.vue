@@ -3,20 +3,23 @@
     <MDBNavbar
       :class="[$style.Header, 'header']"
       expand="lg"
-      light
-      bg="primary"
+      dark
+      bg="info"
       container
       position="sticky"
     >
       <MDBNavbarToggler target="#navbarExample01" />
-      <MDBNavbarNav collapse="navbarExample01" class="mb-2 mb-lg-0">
-        <MDBNavbarItem :to="{ name: 'Home' }" active>
+      <MDBNavbarNav left collapse="navbarExample01" class="mb-2 mb-lg-0">
+        <MDBNavbarItem>
+          <img src="../../assets/imgs/logo.png" >
+        </MDBNavbarItem>
+        <MDBNavbarItem :class="$style['link']" :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'Query' }" active>
+        <MDBNavbarItem :class="$style['link']" v-if="loggedInAndVerif()" :to="{ name: 'Query' }" active>
           Query
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'ExperimentalData' }" active>
+        <MDBNavbarItem :class="$style['link']" v-if="loggedInAndVerif()" :to="{ name: 'ExperimentalData' }" active>
           Experimental Data
         </MDBNavbarItem>
       </MDBNavbarNav>
@@ -36,6 +39,7 @@
       </MDBNavbarNav>
       <MDBBtn
         v-if="loggedInAndVerif()"
+        :class="$style['logout']"
         class="logout"
         color="light"
         @click="logout"

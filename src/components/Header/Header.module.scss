@@ -4,4 +4,21 @@ $headerHeight: 6vh;
   height: $headerHeight;
   position: fixed;
   width: 100%;
+  height: 6vh;
+  font-size: 150%;
+
+  .link {
+    margin: 1vh 0;
+  }
+
+  .logout {
+    height: 4vh;
+    width: 6vw;
+    font-size: 70%;
+    font-weight: 700;
+  }
+}
+
+img {
+  height: 5vh;
 }

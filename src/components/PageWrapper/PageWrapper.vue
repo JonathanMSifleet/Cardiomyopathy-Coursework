@@ -6,7 +6,11 @@
       <MDBCol :class="$style.MainContent" md="8">
         <slot />
       </MDBCol>
-      <MDBCol :class="$style.SideColumn" md="2" />
+      <MDBCol :class="$style.SideColumn" md="2">
+        <div :class="$style['Newsfeed']">
+          <NewsFeed />
+        </div>
+      </MDBCol>
     </MDBRow>
     <Footer />
   </MDBContainer>
@@ -15,6 +19,7 @@
 <script>
   import Footer from '../../components/Footer/Footer.vue';
   import Header from '../../components/Header/Header.vue';
+  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
   import { MDBContainer, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
 
   export default {
@@ -23,7 +28,8 @@
       Header,
       MDBCol,
       MDBContainer,
-      MDBRow
+      MDBRow,
+      NewsFeed
     }
   };
 </script>
