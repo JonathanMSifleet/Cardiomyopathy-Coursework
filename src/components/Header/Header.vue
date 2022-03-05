@@ -11,15 +11,25 @@
       <MDBNavbarToggler target="#navbarExample01" />
       <MDBNavbarNav left collapse="navbarExample01" class="mb-2 mb-lg-0">
         <MDBNavbarItem>
-          <img src="../../assets/imgs/logo.png" >
+          <img src="../../assets/imgs/logo.png">
         </MDBNavbarItem>
         <MDBNavbarItem :class="$style['link']" :to="{ name: 'Home' }" active>
           Home
         </MDBNavbarItem>
-        <MDBNavbarItem :class="$style['link']" v-if="loggedInAndVerif()" :to="{ name: 'Query' }" active>
+        <MDBNavbarItem
+          v-if="loggedInAndVerif()"
+          :class="$style['link']"
+          :to="{ name: 'Query' }"
+          active
+        >
           Query
         </MDBNavbarItem>
-        <MDBNavbarItem :class="$style['link']" v-if="loggedInAndVerif()" :to="{ name: 'ExperimentalData' }" active>
+        <MDBNavbarItem
+          v-if="loggedInAndVerif()"
+          :class="$style['link']"
+          :to="{ name: 'ExperimentalData' }"
+          active
+        >
           Experimental Data
         </MDBNavbarItem>
       </MDBNavbarNav>

@@ -2,20 +2,18 @@
   <PageWrapper>
     <HomeComponent v-if="!currentUser" :post="Welcome" />
     <HomeComponent v-for="(post, index) in HCM" :key="index" :post="post" />
-    <!-- <NewsFeed /> -->
   </PageWrapper>
 </template>
 
 <script>
   import HomeComponent from '../../components/HomeComponent/HomeComponent.vue';
-  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
   import { ref, onBeforeMount } from 'vue';
 
   export default {
     name: 'Home',
-    components: { HomeComponent, NewsFeed, PageWrapper },
+    components: { HomeComponent, PageWrapper },
     setup() {
       const { currentUser } = getUser();
       const name = ref('');
