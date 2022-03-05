@@ -177,6 +177,7 @@
   import Spinner from '../../components/Spinner/Spinner.vue';
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import extractDataFromResults from '../../utils/extractDataFromResults';
   import getUser from '../../composables/getUser';
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import { GoogleCharts } from 'google-charts';
@@ -323,54 +324,10 @@
 
       const deleteFilter = (index) => filters = filters.slice(index, 1);
 
-      const extractDataFromResults = (keyName) => {
-        let data = {};
-        let type;
-
-        switch(typeof(filteredResults.value[0][keyName])) {
-        case 'boolean':
-          type = 'pie';
-          break;
-        case 'number':
-          type = 'bar';
-          break;
-        case 'string':
-          type = 'pie';
-          break;
-        }
-
-        let counter = 0;
-        filteredResults.value.forEach((doc) => {
-          const keyValue = doc[keyName];
-
-          switch (typeof keyValue) {
-          case 'boolean':
-            // add key to object if it doesn't exist
-            if (!data[keyValue]) data[keyValue] = [];
-
-            data[keyValue] = ++data[keyValue];
-            break;
-          case 'number':
-            if (!data[counter]) data[counter] = [];
-
-            data[counter] = keyValue;
-            counter++;
-            break;
-          case 'string':
-            if (!data[keyValue]) data[keyValue] = 0;
-
-            data[keyValue] = ++data[keyValue];
-            break;
-          }
-        });
-
-        return { data: Object.entries(data), type };
-      };
-
       const generateGraph = (keyName) => {
         isLoadingGraph.value = true;
 
-        const { data, type } = extractDataFromResults(keyName);
+        const { data, type } = extractDataFromResults(filteredResults.value, keyName);
         data.unshift(['Test', 'Value']);
 
         data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
