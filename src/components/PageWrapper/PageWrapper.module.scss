@@ -21,10 +21,21 @@
       height: 100%;
     }
 
-    .SideColumn {
+    .SideColumnLeft {
       display: flex;
-      height: 100vh;
+      height: 0;
       padding: 0;
+      @media(min-width: 800px){
+        height: 100vh;
+      }
+    }
+    .SideColumnRight {
+      display: flex;
+      height: 0vh;
+      padding: 0;
+      @media(min-width: 800px){
+        height: 100vh;
+      }
     }
   }
 }

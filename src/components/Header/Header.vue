@@ -24,7 +24,7 @@
         >
           Query
         </MDBNavbarItem>
-        <MDBNavbarItem :class="$style['link']" :to="{ name: 'MutationComparison' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :class="$style['link']" :to="{ name: 'MutationComparison' }" active>
           Mutation Comparison
         </MDBNavbarItem>
         <MDBNavbarItem v-if="loggedInAndVerif()" :class="$style['link']" :to="{ name: 'ExperimentalData' }" active>
