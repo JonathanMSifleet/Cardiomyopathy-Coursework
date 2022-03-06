@@ -54,13 +54,13 @@
 
 <script>
   import ButtonSpinner from '../ButtonSpinner/ButtonSpinner.vue';
-  import YAML from 'yaml';
   import csv from 'csvtojson';
   import getUser from '../../composables/getUser';
   import store from '../../services/store';
   import { MDBBtn, MDBFile, MDBRadio } from 'mdb-vue-ui-kit';
   import { XMLParser } from 'fast-xml-parser';
   import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+  import { parse as parseYaml } from 'yaml';
   import { ref, watch } from 'vue';
 
   export default {
@@ -91,7 +91,7 @@
         try {
           switch (radioFormat.value) {
           case 'YAML':
-            return uploadData(YAML.parse(parsableData));
+            return uploadData(parseYaml(parsableData));
           case 'XML':
             return uploadData(new XMLParser().parse(parsableData).root.row);
           case 'CSV':
