@@ -54,7 +54,7 @@
                     {{ message }}
                   </div>
                   
-                </MDBRow>
+              </MDBRow>
               </MDBRow>
               <MDBInput
                 id="form2Email"
@@ -288,7 +288,6 @@
       const cityValMessages = ref(null);
       const postcodeValMessages = ref(null);
 
-      const validationErrors = ref([]);
       const inputsValid = ref(true);
 
 
@@ -314,7 +313,6 @@
       };
 
       const validateInputs = () => {
-        //inputsValid.value = true;
         checkPasswordsMatch();
 
         firstNameValMessages.value = validateName(firstName.value);
@@ -338,19 +336,7 @@
           cityValMessages.value.length !== 0 ||
           postcodeValMessages.value.length !== 0 ||
           passMatchErr.value
-        ) {
-          validationErrors.value.push(
-            firstNameValMessages.value,
-            lastNameValMessages.value,
-            emailValMessages.value,
-            passwordValMessages.value,
-            phoneValMessages.value,
-            addressLineOneValMessages.value,
-            addressLineTwoValMessages.value,
-            cityValMessages.value,
-            postcodeValMessages.value
-          );
-          inputsValid.value = false;}
+        ) {inputsValid.value = false;}
         else{
           inputsValid.value = true;
         }
@@ -413,7 +399,7 @@
         }
       };
 
-      watch([addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
+      watch([addressLineOne, city, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
         canRegister.value =
           addressLineOne.value !== '' &&
           city.value !== '' &&
@@ -425,11 +411,11 @@
           phone.value !== '';
       });
 
-      return { addressLineOne, addressLineTwo, canRegister, city, country, email, firstName, handleSubmit, lastName,
+      return { addressLineOne, addressLineTwo, canRegister, city, email, firstName, handleSubmit, lastName,
                passConfirm, passMatchErr, password, phone, postcode, signupError, firstNameValMessages,
                lastNameValMessages,emailValMessages, passwordValMessages, phoneValMessages,
                addressLineOneValMessages, addressLineTwoValMessages,
-               cityValMessages, postcodeValMessages, validationErrors, validateInputs, inputsValid };
+               cityValMessages, postcodeValMessages, validateInputs, inputsValid };
     }
   };
 </script>
