@@ -11,7 +11,7 @@
       <MDBNavbarToggler target="#navbarExample01" />
       <MDBNavbarNav left collapse="navbarExample01" class="mb-2 mb-lg-0">
         <MDBNavbarItem>
-          <img src="../../assets/imgs/logo.png">
+          <img :class="$style['header-img']" src="../../assets/imgs/logo.png">
         </MDBNavbarItem>
         <MDBNavbarItem :class="$style['link']" :to="{ name: 'Home' }" active>
           Home
@@ -32,16 +32,16 @@
         </MDBNavbarItem>
       </MDBNavbarNav>
       <MDBNavbarNav right class="mb-2 mb-lg-0">
-        <MDBNavbarItem v-if="showLoginRegister()" :to="{ name: 'Login' }" active>
+        <MDBNavbarItem v-if="showLoginRegister()" :class="$style['link']" :to="{ name: 'Login' }" active>
           Login
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="showLoginRegister()" :to="{ name: 'Registration' }" active>
+        <MDBNavbarItem v-if="showLoginRegister()" :class="$style['link']" :to="{ name: 'Registration' }" active>
           Register
         </MDBNavbarItem>
-        <MDBNavbarItem v-if="loggedInAndVerif()" :to="{ name: 'UserProfile' }" active>
+        <MDBNavbarItem v-if="loggedInAndVerif()" :class="$style['link']" :to="{ name: 'UserProfile' }" active>
           Profile
         </MDBNavbarItem>
-        <MDBNavbarItem :to="{ name: 'Help' }" active>
+        <MDBNavbarItem :class="$style['link']" :to="{ name: 'Help' }" active>
           Need Help?
         </MDBNavbarItem>
       </MDBNavbarNav>

@@ -5,20 +5,20 @@ $headerHeight: 6vh;
   position: fixed;
   width: 100%;
   height: 6vh;
-  font-size: 150%;
 
   .link {
-    margin: 1vh 0;
+    align-self: center;
+    font-size: 120%;
   }
 
   .logout {
-    height: 4vh;
-    width: 6vw;
+    padding: 1vh 1.5vw;
     font-size: 70%;
     font-weight: 700;
   }
 }
 
-img {
+.header-img {
+  margin: 1vw 0;
   height: 5vh;
 }
