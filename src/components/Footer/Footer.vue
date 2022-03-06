@@ -4,7 +4,7 @@
     :text="['center', 'white', 'lg-start']"
   >
     <div class="text-center p-3">
-      <a class="text-dark" href="https://github.com/JonathanMSifleet/AdvancedWebDevelopmentProj">
+      <a class="text-light" href="https://github.com/JonathanMSifleet/AdvancedWebDevelopmentProj">
         Advanced Web Development Project
       </a>
     </div>
