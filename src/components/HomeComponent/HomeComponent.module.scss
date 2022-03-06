@@ -31,17 +31,17 @@
       }
 
       h2 {
-        font-size: 32px;
+        font-size: 1.5rem;
         font-weight: 300;
         margin-bottom: 24px;
         line-height: 1.2; 
         @media(min-width: 700px) {
-          font-size: 35px;
+          font-size: 2rem;
         }
       }
 
       p {
-        font-size: 20px;
+        font-size: 1.3rem;
         font-weight: 300;
         line-height: 1.7;
       }
@@ -53,7 +53,7 @@
         padding-bottom: 4px;
         border-bottom: 1px solid transparent;
         transition: .5s ease-in all;
-        font-size: 20px;
+        font-size: 1.3rem;
 
         &:hover {
           border-bottom-color: #303030;
