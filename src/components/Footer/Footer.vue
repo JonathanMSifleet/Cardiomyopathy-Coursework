@@ -1,6 +1,6 @@
 <template>
   <MDBFooter
-    bg="info"
+    bg="primary"
     :text="['center', 'white', 'lg-start']"
   >
     <div class="text-center p-3">
