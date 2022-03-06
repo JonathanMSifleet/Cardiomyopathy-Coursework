@@ -43,7 +43,7 @@
           {
             title: 'Profile',
             description: 'In Profile, you can view your profile as well as;ss view and delete the data you have uploaded. Login is required to have access to this page',
-            photo: 'experimental-data',
+            photo: 'profile',
             link: 'UserProfile'
           }
         ]
