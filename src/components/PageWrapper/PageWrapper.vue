@@ -7,7 +7,7 @@
         <slot />
       </MDBCol>
       <MDBCol :class="$style.SideColumn" md="2">
-        <div :class="$style['Newsfeed']">
+        <div :class="$style.Newsfeed">
           <NewsFeed v-if="path" />
         </div>
       </MDBCol>
@@ -20,9 +20,9 @@
   import Footer from '../../components/Footer/Footer.vue';
   import Header from '../../components/Header/Header.vue';
   import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
-  import { useRoute } from 'vue-router';
-  import { computed, ref } from 'vue';
   import { MDBContainer, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
+  import { computed, ref } from 'vue';
+  import { useRoute } from 'vue-router';
 
   export default {
     components: {
@@ -33,16 +33,14 @@
       MDBRow,
       NewsFeed
     },
-    setup(){
+    setup() {
       const path = ref(false);
-      const route=useRoute();
+      const route = useRoute();
 
-      const commpPath = computed(() =>route.path);
-      if(commpPath.value == '/'){
-        path.value = true;
-      }
+      const commpPath = computed(() => route.path);
+      if(commpPath.value == '/') path.value = true;
 
-      return{ path };
+      return { path };
     }
   };
 </script>
