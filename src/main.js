@@ -1,9 +1,10 @@
 import 'mdb-vue-ui-kit/css/mdb.min.css'; // must go first
-import 'animate.css';
+import '@fontsource/roboto';
 import './assets/styles/global.scss';
 import './assets/styles/main.module.css';
+import 'animate.css';
 import App from './App.vue';
-import router from './services/router.js';
+import router from './services/router';
 import { auth } from './firebase/config';
 import { createApp } from 'vue';
 import { onAuthStateChanged } from 'firebase/auth';

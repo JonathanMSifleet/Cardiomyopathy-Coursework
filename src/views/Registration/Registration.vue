@@ -218,7 +218,7 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
-  import store from '../../services/store.js';
+  import store from '../../services/store';
   import useSignup from '../../composables/useSignup';
   import { auth } from '../../firebase/config';
   import { doc, setDoc } from 'firebase/firestore';
@@ -267,7 +267,6 @@
       const addressLineTwo = ref(null);
       let canRegister = ref(false);
       const city = ref('');
-      const country = ref('');
       const email = ref('');
       const firstName = ref('');
       const lastName = ref('');
@@ -388,7 +387,8 @@
           address: {
             addressLineOne: addressLineOne.value,
             addressLineTwo: addressLineTwo.value,
-            city: city.value
+            city: city.value,
+            postcode: postcode.value
           },
           email: email.value,
           phone: phone.value

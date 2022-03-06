@@ -16,7 +16,7 @@
                 type="email"
                 label="Email address"
                 wrapper-class="mb-4"
-                :maxlength="255"
+                :maxlength="320"
               />
 
               <!-- Password input -->
@@ -67,7 +67,7 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import getUser from '../../composables/getUser.js';
+  import getUser from '../../composables/getUser';
   import { getAuth, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
