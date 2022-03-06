@@ -1,8 +1,8 @@
-import { enableIndexedDbPersistence, getFirestore } from 'firebase/firestore';
+import { enableMultiTabIndexedDbPersistence, getFirestore } from 'firebase/firestore';
 
 const initDatabase = async (app) => {
   const db = getFirestore(app);
-  if (process.env.DEVELOPMENT) await enableIndexedDbPersistence(db);
+  await enableMultiTabIndexedDbPersistence(db);
 
   return db;
 };
