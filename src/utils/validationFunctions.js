@@ -50,9 +50,14 @@ export const validatePhoneNumber = (input) => {
 
 export const validateAddressLineOne = (input) => {
   const valMessages = [];
+  console.log('address1');
 
   if(!validateLength(input, 4, 255)) valMessages.push('Address must be between 4 and 255 characters');
-  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  console.log('address2');
+  //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
+  //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  console.log('address3');
+  return valMessages;
 };
 
 export const validateAddressLineTwo = (input) => {
@@ -60,15 +65,22 @@ export const validateAddressLineTwo = (input) => {
   const valMessages = [];
 
   if(!validateLength(input, 0, 255)) valMessages.push('Address must be between 4 and 255 characters');
-  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
+  //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  return valMessages;
 };
 
 export const validateCity = (input) => {
   const valMessages = [];
+  console.log('city1');
 
   if(!validateRegex(input, /^[a-zA-Z0-9_]+$/)) valMessages.push('City must only contain letters a-z and A-Z');
+  console.log('city2');
   if(!validateLength(input, 4, 35)) valMessages.push('City must be between 4 and 35 characters');
-  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  console.log('city3');
+  //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
+  //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  console.log('city4');
 
   return valMessages;
 };
