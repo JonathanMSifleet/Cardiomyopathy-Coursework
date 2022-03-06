@@ -178,8 +178,8 @@
   import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
   import getUser from '../../composables/getUser';
+  import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
-  import { GoogleCharts } from 'google-charts';
   import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
   import { operandIsValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch, watchEffect } from 'vue';
@@ -323,87 +323,6 @@
 
       const deleteFilter = (index) => filters = filters.slice(index, 1);
 
-      const extractDataFromResults = (keyName) => {
-        let data = {};
-        let type;
-
-        switch(typeof(filteredResults.value[0][keyName])) {
-        case 'boolean':
-          type = 'pie';
-          break;
-        case 'number':
-          type = 'bar';
-          break;
-        case 'string':
-          type = 'pie';
-          break;
-        }
-
-        let counter = 0;
-        filteredResults.value.forEach((doc) => {
-          const keyValue = doc[keyName];
-
-          switch (typeof keyValue) {
-          case 'boolean':
-            // add key to object if it doesn't exist
-            if (!data[keyValue]) data[keyValue] = [];
-
-            data[keyValue] = ++data[keyValue];
-            break;
-          case 'number':
-            if (!data[counter]) data[counter] = [];
-
-            data[counter] = keyValue;
-            counter++;
-            break;
-          case 'string':
-            if (!data[keyValue]) data[keyValue] = 0;
-
-            data[keyValue] = ++data[keyValue];
-            break;
-          }
-        });
-
-        return { data: Object.entries(data), type };
-      };
-
-      const generateGraph = (keyName) => {
-        isLoadingGraph.value = true;
-
-        const { data, type } = extractDataFromResults(keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase());
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
-      };
-
-      const renderGraph = (data, keyName, type) => {
-        const chartHelper = GoogleCharts.api.visualization;
-        const chartData = chartHelper.arrayToDataTable(data);
-        chartData.sort([{ column: 1, asc: true }]);
-
-        const divToRenderChart = document.getElementById('chart');
-
-        const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
-          new chartHelper.ColumnChart(divToRenderChart);
-
-        chart.draw(chartData, {
-          title: mapKeyToWords(keyName),
-          is3D: true,
-          vAxis: {
-            title: 'Value'
-          },
-          hAxis: {
-            title: 'Record from database'
-          },
-          chartArea: { width: '82%', height: '80%' }
-        });
-        isLoadingGraph.value = false;
-        displayChart.value = true;
-      };
-
       const resetTablePage = (array) => {
         return array.slice(0, pageSize);
       };
@@ -412,7 +331,7 @@
 
       const toggleHeader = (key) => {
         if (activeTableHeaders.value.includes(key)) {
-          activeTableHeaders.value.slice(activeTableHeaders.value.indexOf(key), 1);
+          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
           delete activeCheckboxes[key];
         } else {
           activeTableHeaders.value.push(key);
@@ -448,7 +367,9 @@
         selectedTablePage.value = 1;
         renderableResults.value = resetTablePage(filteredResults.value);
 
-        if (displayChart.value) generateGraph(selectedGraphKey.value);
+        if (displayChart.value)
+          generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
+                        selectedGraphKey.value, null, filteredResults.value, false);
       });
 
       watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
@@ -463,7 +384,9 @@
         cleanup();
       });
 
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+      watch(selectedGraphKey, () =>
+        generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
+                      selectedGraphKey.value, null, filteredResults.value, false));
 
       // paginate table:
       watch(selectedTablePage, () => {

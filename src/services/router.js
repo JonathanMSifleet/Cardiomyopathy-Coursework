@@ -18,9 +18,16 @@ const router = createRouter({
   },
   {
     name: 'Query',
-    path: '/Query/',
+    path: '/query',
     base: '/',
-    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue')
+    component: () => import (/* webpackChunkName: "Query" */ '../views/Query/Query.vue'),
+    beforeEnter: requireSignedIn
+  },
+  {
+    name: 'MutationComparison',
+    path: '/mutation-comparison',
+    component: () =>
+      import (/* webpackChunkName: "MutationComparison" */ '../views/MutationComparison/MutationComparison.vue')
     // beforeEnter: requireSignedIn
   },
   {
@@ -40,8 +47,8 @@ const router = createRouter({
     beforeEnter: requireSignedOut
   },
   {
-    path: '/login',
     name: 'Login',
+    path: '/login',
     component: () =>
       import (/* webpackChunkName: "Login" */ '../views/Login/Login.vue'),
     beforeEnter: requireSignedOut

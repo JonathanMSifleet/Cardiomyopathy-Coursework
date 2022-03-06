@@ -1,8 +1,8 @@
-//// credit: https://www.npmjs.com/package/scss-reset
 @import './reset.scss';
-@import './variables.scss';
-@import './typography';
-////
+
+body {
+  font-family: "Roboto";
+}
 
 * {
   margin: 0;

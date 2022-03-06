@@ -135,7 +135,7 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
-  import store from '../../services/store.js';
+  import store from '../../services/store';
   import useSignup from '../../composables/useSignup';
   import { auth } from '../../firebase/config';
   import { doc, setDoc } from 'firebase/firestore';
