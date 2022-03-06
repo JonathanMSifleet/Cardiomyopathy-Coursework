@@ -1,6 +1,6 @@
 <template>
   <PageWrapper>
-    <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
+    <div class="login w-100 p-4 d-flex align-items-center justify-content-center">
       <MDBCard :class="$style['authentication-card']" text="center">
         <MDBCardHeader>User Registration</MDBCardHeader>
         <MDBCardBody>
