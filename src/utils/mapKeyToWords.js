@@ -20,6 +20,8 @@ const mapKeyToWords = (key) => {
       return 'Right ventricular systolic volume';
     case 'scar':
       return 'Scarring';
+    case 'gender': 
+      return 'Gender';
     case 'AgeatMRI':
       return 'Age at MRI';
     case 'ApicalHCM':

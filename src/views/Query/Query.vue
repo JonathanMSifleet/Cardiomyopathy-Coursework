@@ -1,10 +1,8 @@
 <template>
   <PageWrapper>
-    <h1 :class="$style.Heading">
-      Gene mutation data
-    </h1>
+    <h1 :class="[[$style.Heading], 'mt-4', 'pb-3']">Query data</h1>
 
-    <div :class="$style.AdvancedModeSwitchWrapper">
+    <div :class="[[$style.AdvancedModeSwitchWrapper], 'mt-4', 'me-4']">
       <MDBSwitch
         v-model="useAdvancedMode"
         :class="$style.AdvancedModeSwitch"
@@ -17,7 +15,7 @@
       <div v-if="useAdvancedMode">
         <div v-if="!isFetchingData" :class="$style.ComponentWrapper">
           <div v-if="filters.length !== 0" :class="$style.FiltersWrapper">
-            <p> Filters: </p>
+            <p>Filters:</p>
             <ul>
               <li
                 v-for="(filter, index) in filters"
@@ -26,78 +24,60 @@
                 @click="deleteFilter(index)"
               >
                 {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
-                <span :class="$style.DeleteFilterSpan">x</span>
+                <span
+                  :class="$style.DeleteFilterSpan"
+                >x</span>
               </li>
             </ul>
           </div>
 
-          <p>
+          <p :class="[[$style.filterHeading], 'mt-4']">
             Please add a filter
-            <span :class="$style.FilterInstruction">(using text in brackets if it is a default column)</span>:
+            <span
+              :class="$style.FilterInstruction"
+            >(using text in brackets if it is a default column)</span>:
           </p>
 
-          <div :class="$style.FilterWrapper">
-            <div :class="$style.InputWrapper">
-              <MDBInput
-                v-model="queryInput"
-                label="Attribute"
-                type="text"
-                :class="$style.Input"
-              />
+          <div :class="[[$style.FilterWrapper], 'mb-4']">
+            <div :class="[[$style.InputWrapper], 'me-2']">
+              <MDBInput v-model="queryInput" label="Attribute" type="text" :class="$style.Input" />
             </div>
 
-            <div :class="$style.SelectWrapper">
+            <div :class="[[$style.SelectWrapper], 'me-4']">
               <select v-model="selectedOperator" :class="[$style.Select, 'form-select']">
                 <option
                   v-for="operation in Object.entries(fireStoreOperators)"
                   :key="operation"
                   :disabled="operation[1] === 'Please select'"
-                >
-                  {{ operation[1] }}
-                </option>
+                >{{ operation[1] }}</option>
               </select>
             </div>
 
-            <div :class="$style.InputWrapper">
-              <MDBInput
-                v-model="queryOperand"
-                label="Value"
-                type="text"
-                :class="$style.Input"
-              />
+            <div :class="[[$style.InputWrapper], 'me-2']">
+              <MDBInput v-model="queryOperand" label="Value" type="text" :class="$style.Input" />
             </div>
 
-            <MDBBtn
-              color="primary"
-              :disabled="!canSubmitFilter"
-              @click="addFilter"
-            >
-              Add filter
-            </MDBBtn>
+            <MDBBtn color="primary" :disabled="!canSubmitFilter" @click="addFilter">Add filter</MDBBtn>
           </div>
         </div>
       </div>
 
       <div v-else :class="$style.ComponentWrapper">
-        <p :class="$style.GeneMutationSelection">
-          Select a gene mutation:
-        </p>
-        <div :class="[$style.SelectWrapper]">
+        <p :class="[[$style.GeneMutationSelection], 'mt-2']">Gene mutation:</p>
+        <div :class="[[$style.SelectWrapper], 'ms-2', 'mb-4']">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
             <option
               v-for="geneMutation in geneMutations"
               :key="geneMutation"
               :disabled="geneMutation === 'Please select'"
-            >
-              {{ geneMutation }}
-            </option>
+            >{{ geneMutation }}</option>
           </select>
         </div>
         <GeneModal :selectedGene="selectedGeneMutation" />
       </div>
 
       <div :class="$style.CheckboxWrapper">
-        <p>Selected columns:</p>
+        <p :class="$style.checkboxTitle">Selected columns:</p>
         <MDBCheckbox
           v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
           :key="index"
@@ -108,29 +88,23 @@
         />
       </div>
 
-      <p :class="$style.GraphPrompt">
-        Click a table header to view a graph on the data
-      </p>
+      <p :class="[[$style.GraphPrompt], 'mt-5']">Click a table header to view a graph on the data</p>
       <div :class="$style.TableWrapper">
-        <p>Results ({{ filteredResults.length }}):</p>
+        <p :class="[[$style.ResultsIndicator], 'mb-4']">Results ({{ filteredResults.length }}):</p>
 
         <Spinner v-if="isLoadingGraph" />
         <div id="chart" />
 
-        <p
-          v-for="index in Math.ceil(filteredResults.length / pageSize)"
-          :key="index"
-          :class="[$style.PaginationOptions, index === selectedTablePage ? $style.SelectedPaginationOption : '']"
-          @click="selectedTablePage = index"
-        >
-          {{ index }}
-        </p>
+        <MDBPagination circle>
+          <MDBPageItem
+            v-for="index in Math.ceil(filteredResults.length / pageSize)"
+            :key="index"
+            :class="[$style.PaginationOptions, index === selectedTablePage ? ' icon active': '']"
+            @click="selectedTablePage = index"
+          >{{ index }}</MDBPageItem>
+        </MDBPagination>
 
-        <MDBTable
-          bordered
-          striped
-          :class="$style.Table"
-        >
+        <MDBTable bordered striped :class="$style.Table">
           <thead>
             <tr>
               <th
@@ -143,8 +117,8 @@
                 <p :class="$style.TableHeaderText">
                   {{ mapKeyToWords(header) }}
                   {{ header[0] !== mapKeyToWords(header)
-                    ? `(${header})`
-                    : null
+                  ? `(${header})`
+                  : null
                   }}
                 </p>
               </th>
@@ -152,343 +126,405 @@
           </thead>
           <tbody>
             <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
-              <td v-for="(key, innerIndex) in activeTableHeaders" :key="innerIndex">
-                {{ dataItem[key] }}
-              </td>
+              <td
+                v-for="(key, innerIndex) in activeTableHeaders"
+                :key="innerIndex"
+              >{{ dataItem[key] }}</td>
             </tr>
           </tbody>
         </MDBTable>
       </div>
     </div>
     <div v-else>
-      <p :class="$style.ErrorOccuredText">
-        An error occured while fetching data:
-      </p>
-      <p :class="$style.ErrorOccuredText">
-        {{ errorMessage }}
-      </p>
+      <p :class="$style.ErrorOccuredText">An error occured while fetching data:</p>
+      <p :class="$style.ErrorOccuredText">{{ errorMessage }}</p>
     </div>
   </PageWrapper>
 </template>
 
 <script>
-  import GeneModal from '../../components/GeneModal/GeneModal.vue';
-  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import Spinner from '../../components/Spinner/Spinner.vue';
-  import determineKeys from '../../utils/determineKeys';
-  import fetchDocuments from '../../utils/fetchDocuments';
-  import getUser from '../../composables/getUser';
-  import mapKeyToWords from '../../utils/mapKeyToWords';
-  import { GoogleCharts } from 'google-charts';
-  import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
-  import { operandIsValid } from '../../utils/validationFunctions';
-  import { reactive, ref, watch, watchEffect } from 'vue';
-  import { useRouter } from 'vue-router';
+import GeneModal from "../../components/GeneModal/GeneModal.vue";
+import PageWrapper from "../../components/PageWrapper/PageWrapper.vue";
+import Spinner from "../../components/Spinner/Spinner.vue";
+import determineKeys from "../../utils/determineKeys";
+import fetchDocuments from "../../utils/fetchDocuments";
+import getUser from "../../composables/getUser";
+import mapKeyToWords from "../../utils/mapKeyToWords";
+import { GoogleCharts } from "google-charts";
+import {
+  MDBBtn,
+  MDBCheckbox,
+  MDBInput,
+  MDBSwitch,
+  MDBTable,
+  MDBPagination,
+  MDBPageNav,
+  MDBPageItem
+} from "mdb-vue-ui-kit";
+import { operandIsValid } from "../../utils/validationFunctions";
+import { reactive, ref, watch, watchEffect } from "vue";
+import { useRouter } from "vue-router";
 
-  export default {
-    name: 'Query',
-    components: {
-      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
-    },
-    setup() {
-      let activeCheckboxes = ref({});
-      const activeTableHeaders = ref([
-        'ledv',
-        'redv',
-        'lesv',
-        'resv',
-        'lvef',
-        'rvef',
-        'lvmass',
-        'lsv',
-        'rsv',
-        'scar',
-        'Gender',
-        'AgeatMRI',
-        'ApicalHCM',
-        'SuddenCardiacDeath',
-        'Hypertension',
-        'Diabetes',
-        'Myectomy'
-      ]);
-      let allDocuments = [];
-      let displayChart = ref(false);
-      let errorMessage = ref('');
-      const fireStoreOperators = {
-        '': 'Please select',
-        '==': 'equal to',
-        '<': 'less than',
-        '<=': 'less than or equal to',
-        '>': 'greater than',
-        '>=': 'greater than or equal to',
-        '!=': 'not equal to'
-      };
-      let filters = reactive([]);
-      let isFetchingData = ref(false);
-      let isLoadingGraph = ref(false);
-      let canSubmitFilter = ref(false);
-      let filteredResults = ref([]);
-      const geneMutations = ref([
-        'Please select',
-        'MYH7',
-        'MYBPC3',
-        'TNNT2',
-        'ACTC',
-        'TPM1',
-        'TNNCI',
-        'TNNI3',
-        'MYL2',
-        'TTN'
-      ]);
-      let optionalTableHeaders = ref([]);
-      const pageSize = 15;
-      let queryInput = ref('');
-      let queryOperand = ref('');
-      let renderableResults = ref([]);
-      const router = useRouter();
-      let selectedGeneMutation = ref('Please select');
-      let selectedGraphKey = ref();
-      let selectedOperator = ref('Please select');
-      let selectedTablePage = ref(1);
-      let useAdvancedMode = ref(false);
+export default {
+  name: "Query",
+  components: {
+    MDBBtn,
+    MDBCheckbox,
+    MDBInput,
+    MDBSwitch,
+    MDBTable,
+    MDBPagination,
+    MDBPageNav,
+    MDBPageItem,
+    PageWrapper,
+    Spinner,
+    GeneModal
+  },
+  setup() {
+    let activeCheckboxes = ref({});
+    const activeTableHeaders = ref([
+      "ledv",
+      "redv",
+      "lesv",
+      "resv",
+      "lvef",
+      "rvef",
+      "lvmass",
+      "lsv",
+      "rsv",
+      "scar",
+      "Gender",
+      "AgeatMRI",
+      "ApicalHCM",
+      "SuddenCardiacDeath",
+      "Hypertension",
+      "Diabetes",
+      "Myectomy"
+    ]);
+    let allDocuments = [];
+    let displayChart = ref(false);
+    let errorMessage = ref("");
+    const fireStoreOperators = {
+      "": "Please select",
+      "==": "equal to",
+      "<": "less than",
+      "<=": "less than or equal to",
+      ">": "greater than",
+      ">=": "greater than or equal to",
+      "!=": "not equal to"
+    };
+    let filters = reactive([]);
+    let isFetchingData = ref(false);
+    let isLoadingGraph = ref(false);
+    let canSubmitFilter = ref(false);
+    let filteredResults = ref([]);
+    const geneMutations = ref([
+      "Please select",
+      "MYH7",
+      "MYBPC3",
+      "TNNT2",
+      "ACTC",
+      "TPM1",
+      "TNNCI",
+      "TNNI3",
+      "MYL2",
+      "TTN"
+    ]);
+    let optionalTableHeaders = ref([]);
+    const pageSize = 15;
+    let queryInput = ref("");
+    let queryOperand = ref("");
+    let renderableResults = ref([]);
+    const router = useRouter();
+    let selectedGeneMutation = ref("Please select");
+    let selectedGraphKey = ref();
+    let selectedOperator = ref("Please select");
+    let selectedTablePage = ref(1);
+    let useAdvancedMode = ref(false);
 
-      (async () => {
-        isFetchingData.value = true;
+    (async () => {
+      isFetchingData.value = true;
 
-        try {
-          allDocuments = await fetchDocuments();
-          if (allDocuments.length === 0) throw new Error('No docs');
+      try {
+        allDocuments = await fetchDocuments();
+        if (allDocuments.length === 0) throw new Error("No docs");
 
-          cleanup();
+        cleanup();
 
-          optionalTableHeaders.value = determineKeys(allDocuments);
-          delete optionalTableHeaders.value.userId;
-          delete optionalTableHeaders.value.createdAt;
-          delete optionalTableHeaders.value.deletedAt;
+        optionalTableHeaders.value = determineKeys(allDocuments);
+        delete optionalTableHeaders.value.userId;
+        delete optionalTableHeaders.value.createdAt;
+        delete optionalTableHeaders.value.deletedAt;
 
-          activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
-        } catch (error) {
-          switch(true) {
-          case error.message.includes('Network Error'):
-            errorMessage.value = 'Firebase details are setup incorrectly';
+        activeTableHeaders.value.forEach(
+          key => (activeCheckboxes.value[key] = true)
+        );
+      } catch (error) {
+        switch (true) {
+          case error.message.includes("Network Error"):
+            errorMessage.value = "Firebase details are setup incorrectly";
             break;
-          case error.message.includes('multi-tab'):
-            errorMessage.value = 'Only one tab can be open at a time in development mode due to Firebase persistence';
+          case error.message.includes("multi-tab"):
+            errorMessage.value =
+              "Only one tab can be open at a time in development mode due to Firebase persistence";
             break;
-          case error.message.includes('No docs'):
-            errorMessage.value = 'No documents were found in the database';
+          case error.message.includes("No docs"):
+            errorMessage.value = "No documents were found in the database";
             break;
           default:
             console.error(error);
             errorMessage.value = error.message;
-          }
-        } finally {
-          isFetchingData.value = false;
         }
-      })();
+      } finally {
+        isFetchingData.value = false;
+      }
+    })();
 
-      const addFilter = () => {
-        if (optionalTableHeaders.value[queryInput.value] === undefined) {
-          alert('Attribute not found in database'); return;
-        }
+    const addFilter = () => {
+      if (optionalTableHeaders.value[queryInput.value] === undefined) {
+        alert("Attribute not found in database");
+        return;
+      }
 
-        const operandValidationMessage = operandIsValid(queryOperand.value);
-        if (!operandValidationMessage) {
-          alert('Input must be a number or equal to true or false'); return;
-        }
+      const operandValidationMessage = operandIsValid(queryOperand.value);
+      if (!operandValidationMessage) {
+        alert("Input must be a number or equal to true or false");
+        return;
+      }
 
-        filters.push({
-          fieldPath: queryInput.value,
-          opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
-          value: convertValueToType(queryOperand.value)
-        });
-      };
+      filters.push({
+        fieldPath: queryInput.value,
+        opStr: Object.keys(fireStoreOperators).find(
+          key => fireStoreOperators[key] === selectedOperator.value
+        ),
+        value: convertValueToType(queryOperand.value)
+      });
+    };
 
-      const cleanup = () => {
-        filteredResults.value = allDocuments;
-        selectedTablePage.value = 1;
-        renderableResults.value = resetTablePage(filteredResults.value);
-      };
+    const cleanup = () => {
+      filteredResults.value = allDocuments;
+      selectedTablePage.value = 1;
+      renderableResults.value = resetTablePage(filteredResults.value);
+    };
 
-      const convertValueToType = (value) => {
-        switch(true) {
-        case value === 'true' || value === 'True':
+    const convertValueToType = value => {
+      switch (true) {
+        case value === "true" || value === "True":
           return true;
-        case value === 'false' || value === 'False':
+        case value === "false" || value === "False":
           return false;
         default:
           return Number(value);
-        }
-      };
+      }
+    };
 
-      const deleteFilter = (index) => filters = filters.slice(index, 1);
+    const deleteFilter = index => (filters = filters.slice(index, 1));
 
-      const extractDataFromResults = (keyName) => {
-        let data = {};
-        let type;
+    const extractDataFromResults = keyName => {
+      let data = {};
+      let type;
 
-        switch(typeof(filteredResults.value[0][keyName])) {
-        case 'boolean':
-          type = 'pie';
+      switch (typeof filteredResults.value[0][keyName]) {
+        case "boolean":
+          type = "pie";
           break;
-        case 'number':
-          type = 'bar';
+        case "number":
+          type = "bar";
           break;
-        case 'string':
-          type = 'pie';
+        case "string":
+          type = "pie";
           break;
-        }
+      }
 
-        let counter = 0;
-        filteredResults.value.forEach((doc) => {
-          const keyValue = doc[keyName];
+      let counter = 0;
+      filteredResults.value.forEach(doc => {
+        const keyValue = doc[keyName];
 
-          switch (typeof keyValue) {
-          case 'boolean':
+        switch (typeof keyValue) {
+          case "boolean":
             // add key to object if it doesn't exist
             if (!data[keyValue]) data[keyValue] = [];
 
             data[keyValue] = ++data[keyValue];
             break;
-          case 'number':
+          case "number":
             if (!data[counter]) data[counter] = [];
 
             data[counter] = keyValue;
             counter++;
             break;
-          case 'string':
+          case "string":
             if (!data[keyValue]) data[keyValue] = 0;
 
             data[keyValue] = ++data[keyValue];
             break;
-          }
-        });
-
-        return { data: Object.entries(data), type };
-      };
-
-      const generateGraph = (keyName) => {
-        isLoadingGraph.value = true;
-
-        const { data, type } = extractDataFromResults(keyName);
-        data.unshift(['Test', 'Value']);
-
-        data.forEach((curData) => curData[0] = curData[0][0].toUpperCase()
-          + curData[0].slice(1).toLowerCase());
-
-        GoogleCharts.load(() => renderGraph(data, keyName, type));
-      };
-
-      const renderGraph = (data, keyName, type) => {
-        const chartHelper = GoogleCharts.api.visualization;
-        const chartData = chartHelper.arrayToDataTable(data);
-        chartData.sort([{ column: 1, asc: true }]);
-
-        const divToRenderChart = document.getElementById('chart');
-
-        const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
-          new chartHelper.ColumnChart(divToRenderChart);
-
-        chart.draw(chartData, {
-          title: mapKeyToWords(keyName),
-          is3D: true,
-          vAxis: {
-            title: 'Value'
-          },
-          hAxis: {
-            title: 'Record from database'
-          },
-          chartArea: { width: '82%', height: '80%' }
-        });
-        isLoadingGraph.value = false;
-        displayChart.value = true;
-      };
-
-      const resetTablePage = (array) => {
-        return array.slice(0, pageSize);
-      };
-
-      const selectGraphKey = (key) => selectedGraphKey.value = key;
-
-      const toggleHeader = (key) => {
-        if (activeTableHeaders.value.includes(key)) {
-          activeTableHeaders.value.slice(activeTableHeaders.value.indexOf(key), 1);
-          delete activeCheckboxes[key];
-        } else {
-          activeTableHeaders.value.push(key);
-          activeCheckboxes[key] = true;
         }
-      };
-
-      watch(filters, () => {
-        let intermediateResults = allDocuments;
-        filters.forEach(filter => {
-          intermediateResults = intermediateResults.filter(doc => {
-            const value = doc[filter.fieldPath];
-            const operator = filter.opStr;
-
-            switch (operator) {
-            case '==':
-              return value === filter.value;
-            case '<':
-              return value < filter.value;
-            case '<=':
-              return value <= filter.value;
-            case '>':
-              return value > filter.value;
-            case '>=':
-              return value >= filter.value;
-            case '!=':
-              return value !== filter.value;
-            }
-          });
-        });
-
-        filteredResults.value = intermediateResults;
-        selectedTablePage.value = 1;
-        renderableResults.value = resetTablePage(filteredResults.value);
-
-        if (displayChart.value) generateGraph(selectedGraphKey.value);
       });
 
-      watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
-        (queryInput.value !== '' && selectedOperator.value !== 'Please select' && queryOperand.value !== '')
+      return { data: Object.entries(data), type };
+    };
+
+    const generateGraph = keyName => {
+      isLoadingGraph.value = true;
+
+      const { data, type } = extractDataFromResults(keyName);
+      data.unshift(["Test", "Value"]);
+
+      data.forEach(
+        curData =>
+          (curData[0] =
+            curData[0][0].toUpperCase() + curData[0].slice(1).toLowerCase())
       );
 
-      watch(selectedGeneMutation, () => {
-        filters = [];
-        filteredResults.value = allDocuments
-          .filter(doc => doc[selectedGeneMutation.value]);
+      GoogleCharts.load(() => renderGraph(data, keyName, type));
+    };
 
-        cleanup();
+    const renderGraph = (data, keyName, type) => {
+      const chartHelper = GoogleCharts.api.visualization;
+      const chartData = chartHelper.arrayToDataTable(data);
+      chartData.sort([{ column: 1, asc: true }]);
+
+      const divToRenderChart = document.getElementById("chart");
+
+      const chart =
+        type === "pie"
+          ? new chartHelper.PieChart(divToRenderChart)
+          : new chartHelper.ColumnChart(divToRenderChart);
+
+      chart.draw(chartData, {
+        title: mapKeyToWords(keyName),
+        is3D: true,
+        vAxis: {
+          title: "Value"
+        },
+        hAxis: {
+          title: "Record from database"
+        },
+        chartArea: { width: "82%", height: "80%" }
+      });
+      isLoadingGraph.value = false;
+      displayChart.value = true;
+    };
+
+    const resetTablePage = array => {
+      return array.slice(0, pageSize);
+    };
+
+    const selectGraphKey = key => (selectedGraphKey.value = key);
+
+    const toggleHeader = key => {
+      if (activeTableHeaders.value.includes(key)) {
+        activeTableHeaders.value.slice(
+          activeTableHeaders.value.indexOf(key),
+          1
+        );
+        delete activeCheckboxes[key];
+      } else {
+        activeTableHeaders.value.push(key);
+        activeCheckboxes[key] = true;
+      }
+    };
+    watch(filters, () => {
+      let intermediateResults = allDocuments;
+      filters.forEach(filter => {
+        intermediateResults = intermediateResults.filter(doc => {
+          const value = doc[filter.fieldPath];
+          const operator = filter.opStr;
+
+          switch (operator) {
+            case "==":
+              return value === filter.value;
+            case "<":
+              return value < filter.value;
+            case "<=":
+              return value <= filter.value;
+            case ">":
+              return value > filter.value;
+            case ">=":
+              return value >= filter.value;
+            case "!=":
+              return value !== filter.value;
+          }
+        });
       });
 
-      watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+      filteredResults.value = intermediateResults;
+      selectedTablePage.value = 1;
+      renderableResults.value = resetTablePage(filteredResults.value);
 
-      // paginate table:
-      watch(selectedTablePage, () => {
-        const startIndex = (selectedTablePage.value - 1) * pageSize;
-        const endIndex = startIndex + pageSize;
-        renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
-      });
+      if (displayChart.value) generateGraph(selectedGraphKey.value);
+    });
 
-      watch(useAdvancedMode, () => cleanup());
+    watch(
+      [queryInput, selectedOperator, queryOperand],
+      () =>
+        (canSubmitFilter.value =
+          queryInput.value !== "" &&
+          selectedOperator.value !== "Please select" &&
+          queryOperand.value !== "")
+    );
 
-      const { currentUser } = getUser();
+    watch(selectedGeneMutation, () => {
+      filters = [];
+      filteredResults.value = allDocuments.filter(
+        doc => doc[selectedGeneMutation.value]
+      );
 
-      watchEffect(() => {
-        if (!currentUser.value) router.push('/login');
-      });
+      cleanup();
+    });
 
-      return { activeCheckboxes, activeTableHeaders, addFilter, canSubmitFilter, deleteFilter, displayChart,
-               errorMessage, filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
-               isLoadingGraph, mapKeyToWords, optionalTableHeaders, pageSize, queryInput, queryOperand,
-               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
-               toggleHeader, useAdvancedMode };
-    }
-  };
+    watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+
+    // paginate table:
+    watch(selectedTablePage, () => {
+      const startIndex = (selectedTablePage.value - 1) * pageSize;
+      const endIndex = startIndex + pageSize;
+      renderableResults.value = filteredResults.value.slice(
+        startIndex,
+        endIndex
+      );
+    });
+
+    watch(useAdvancedMode, () => cleanup());
+
+    const { currentUser } = getUser();
+
+    watchEffect(() => {
+      if (!currentUser.value) router.push("/login");
+    });
+
+    return {
+      activeCheckboxes,
+      activeTableHeaders,
+      addFilter,
+      canSubmitFilter,
+      deleteFilter,
+      displayChart,
+      errorMessage,
+      filters,
+      filteredResults,
+      fireStoreOperators,
+      geneMutations,
+      generateGraph,
+      isFetchingData,
+      isLoadingGraph,
+      mapKeyToWords,
+      optionalTableHeaders,
+      pageSize,
+      queryInput,
+      queryOperand,
+      renderableResults,
+      selectedGeneMutation,
+      selectGraphKey,
+      selectedOperator,
+      selectedTablePage,
+      toggleHeader,
+      useAdvancedMode
+    };
+  }
+};
 </script>
 
 <style lang="scss" scoped module>
-  @import './Query.module.scss';
+@import "./Query.module.scss";
 </style>

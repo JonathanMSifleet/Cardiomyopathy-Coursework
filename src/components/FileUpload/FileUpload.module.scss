@@ -25,6 +25,9 @@
 
 .SubmitButton {
   float: left;
+  display: block;
+  width: 21%;
+  margin-left: 12%;
 }
 
 .InstructionsWrapper {
@@ -33,6 +36,7 @@
 }
 
 .CollapseButton {
+  display: block;
   float: left;
   margin-bottom: 2%;
 }
@@ -49,6 +53,7 @@
   text-align: left;
   background-color: #F0F0F0;
   padding: 1%;
+  border-radius: 5%;
 }
 
 .StatusMessage {

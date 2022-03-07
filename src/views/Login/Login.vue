@@ -1,11 +1,11 @@
 <template>
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-      <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader>Login</MDBCardHeader>
+      <MDBCard :class="$style['login-card']" text="center">
+        <MDBCardHeader :class="$style['card-header']">Login</MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle v-if="errorMessage" :class="[$style['error-message'], 'mb-4']">
-            {{ errorMessage }}
+            <img src="https://i.imgur.com/GnyDvKN.png" alt="Red cross"> {{ errorMessage }}
           </MDBCardTitle>
           <MDBCardText>
             <form @submit.prevent="login">
@@ -48,14 +48,14 @@
         </MDBCardBody>
         <MDBCardFooter>
           <!-- Register buttons -->
-          <div class="text-center mt-3">
+          <div class="text-center">
             <p>
               Not a member?
               <router-link
                 to="/register"
                 :class="$style['register-link']"
               >
-                Register here
+                Create an account
               </router-link>
             </p>
           </div>

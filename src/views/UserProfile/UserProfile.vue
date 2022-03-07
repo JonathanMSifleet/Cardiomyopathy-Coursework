@@ -11,6 +11,7 @@
           <MDBModalTitle
             id="deleteConfirmationModalLabel"
             :style="{ fontWeight: 'bold' }"
+            :class="$style['card-header']"
           >
             Confirmation
           </MDBModalTitle>
@@ -46,6 +47,7 @@
           <MDBModalTitle
             id="experimentalDataModalLabel"
             :style="{ fontWeight: 'bold' }"
+            :class="$style['card-header']"
           >
             Experimental Data
           </MDBModalTitle>
@@ -87,7 +89,7 @@
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader :style="{ fontWeight: 'bold' }">
+        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">
           User Profile
         </MDBCardHeader>
         <MDBCardBody>
@@ -339,9 +341,9 @@
             email.value = docSnap.data().email;
             phoneNumber.value = docSnap.data().phone;
 
-            if (process.env.DEVELOPMENT) console.log('Document data:', docSnap.data());
+            console.log('Document data:', docSnap.data());
           } else {
-            if (process.env.DEVELOPMENT) console.log('No such document!');
+            console.log('No such document!');
           }
         });
       };
@@ -443,7 +445,7 @@
 
       return { cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal, deleteExperimentalDataDoc,
                email, experimentalData, experimentalDataModal, firstName, getExperimentalDataByUserId, lastName,
-               mapKeyToWords, phoneNumber, showCardContainer, showCards, toggleExperimentalDataModal, toggleModal,
+               mapKeyToWords, phoneNumber, addressLineOne, addressLineTwo, city, postcode, showCardContainer, showCards, toggleExperimentalDataModal, toggleModal,
                updateUser, userIdentity };
     }
   };
