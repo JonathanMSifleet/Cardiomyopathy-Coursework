@@ -8,21 +8,11 @@
         <p :class="$style['content-preview']">
           {{ post.description }}
         </p>
-        <p v-if="post.loginRegister">
-          <router-link v-if="!post.WelcomeSection" :class="$style['link']" :to="{name: post.link}">
-            Go to Login
-          </router-link>
-        </p>
-        <p v-if="post.loginRegister">
-          <router-link v-if="!post.WelcomeSection" :class="$style['link']" :to="{name: post.link2}">
-            Go to Registration
-          </router-link>
-        </p>
-        <p v-else>
+        <div>
           <router-link v-if="!post.WelcomeSection" :class="$style['link']" :to="{name: post.link}">
             Go to {{ post.title }}
           </router-link>
-        </p>
+        </div>
       </div>
     </div>
     <div :class="$style['bg-photo']">

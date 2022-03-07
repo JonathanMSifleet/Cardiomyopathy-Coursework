@@ -23,5 +23,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 *.jpeg
+*.png
 *.log
 *.cache

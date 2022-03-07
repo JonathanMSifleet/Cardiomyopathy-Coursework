@@ -63,7 +63,7 @@
                 {{ mapKeyToWords(key[0]) }}
               </th>
               <td>
-                {{ key[0] === "createdAt" ? key[1].toDate() : key[1] }}
+                {{ key[0] == "createdAt" ? key[1].toDate() : key[1] }}
               </td>
             </tr>
           </tbody>

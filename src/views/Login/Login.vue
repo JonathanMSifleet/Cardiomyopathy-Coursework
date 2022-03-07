@@ -67,7 +67,7 @@
 
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
-  import getUser from '../../composables/getUser';
+  import getUser from '../../composables/getUser.js';
   import { getAuth, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth';
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';

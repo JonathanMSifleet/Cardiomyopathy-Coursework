@@ -2,18 +2,20 @@
   <PageWrapper>
     <HomeComponent v-if="!currentUser" :post="Welcome" />
     <HomeComponent v-for="(post, index) in HCM" :key="index" :post="post" />
+    <NewsFeed />
   </PageWrapper>
 </template>
 
 <script>
   import HomeComponent from '../../components/HomeComponent/HomeComponent.vue';
+  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
   import { ref, onBeforeMount } from 'vue';
 
   export default {
     name: 'Home',
-    components: { HomeComponent, PageWrapper },
+    components: { HomeComponent, NewsFeed, PageWrapper },
     setup() {
       const { currentUser } = getUser();
       const name = ref('');
@@ -26,15 +28,15 @@
 
       return {
         Welcome: {
-          title: 'HCM Research',
+          title: 'COMPANY TITLE',
           description: 'This website is a central repository for experimental data on force/tension development '
             + 'and sarcomere length shortening in the cardiomyopathic cells.',
           WelcomeSection: true,
-          photo: 'display-hcm'
+          photo: 'hcm'
         },
         HCM: [
           {
-            title: 'Hypertrophic Cardiomyopathy (HCM)',
+            title: 'Hypertrophic cardiomyopathy (HCM)',
             description: 'In hypertrophic cardiomyopathy, the heart muscle cells enlarge '
               + 'and the walls of the heart chambers thicken.',
             photo: 'hcm',

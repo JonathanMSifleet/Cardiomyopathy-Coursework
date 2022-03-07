@@ -46,46 +46,50 @@
 </template>
 
 <script>
-  import ButtonSpinner from '../ButtonSpinner/ButtonSpinner.vue';
-  import csv from 'csvtojson';
-  import getUser from '../../composables/getUser';
-  import store from '../../services/store';
-  import { MDBBtn, MDBFile, MDBRadio } from 'mdb-vue-ui-kit';
-  import { XMLParser } from 'fast-xml-parser';
-  import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-  import { parse as parseYaml } from 'yaml';
-  import { ref, watch } from 'vue';
+import ButtonSpinner from "../ButtonSpinner/ButtonSpinner.vue";
+import YAML from "yaml";
+import csv from "csvtojson";
+import getUser from "../../composables/getUser";
+import store from "../../services/store";
+import { MDBBtn, MDBFile, MDBRadio } from "mdb-vue-ui-kit";
+import { XMLParser } from "fast-xml-parser";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { ref, watch } from "vue";
 
-  export default {
-    components: { ButtonSpinner, MDBBtn, MDBFile, MDBRadio },
-    setup() {
-      const { currentUser } = getUser();
-      let fileUpload = ref([]);
-      const formatTypes = ref([
-        'JSON',
-        'YAML',
-        'XML',
-        'CSV'
-      ]);
-      const shouldSubmitData = ref(false);
-      let isSubmitting = ref(false);
-      let radioFormat = ref('JSON');
-      let showFormatInstructions = ref(false);
-      let statusMessage = ref('');
+export default {
+  components: { ButtonSpinner, MDBBtn, MDBFile, MDBRadio },
+  setup() {
+    const { currentUser } = getUser();
+    let fileUpload = ref([]);
+    const formatTypes = ref(["JSON", "YAML", "XML", "CSV"]);
+    const shouldSubmitData = ref(false);
+    let isSubmitting = ref(false);
+    let radioFormat = ref("JSON");
+    let showFormatInstructions = ref(false);
+    let showFormatVisible = ref(false);
+    let statusMessage = ref("");
 
-      const determineFormatInstructions = () => {
-        const intermediateText = require(`./exampleData/${radioFormat.value.toLowerCase()}.txt`);
-        return intermediateText.default.toString().replaceAll('\\n', '\n').trim();
-      };
+    const showHowToFormat = () => {
+      showFormatInstructions.value = !showFormatInstructions.value;
+      showFormatVisible.value = true;
+    }
+
+    const determineFormatInstructions = () => {
+      const intermediateText = require(`./exampleData/${radioFormat.value.toLowerCase()}.txt`);
+      return intermediateText.default
+        .toString()
+        .replaceAll("\\n", "\n")
+        .trim();
+    };
 
     const handleFileFormat = async parsableData => {
       isSubmitting.value = true;
 
-        try {
-          switch (radioFormat.value) {
-          case 'YAML':
-            return uploadData(parseYaml(parsableData));
-          case 'XML':
+      try {
+        switch (radioFormat.value) {
+          case "YAML":
+            return uploadData(YAML.parse(parsableData));
+          case "XML":
             return uploadData(new XMLParser().parse(parsableData).root.row);
           case "CSV":
             return uploadData(await csv().fromString(parsableData));

@@ -135,7 +135,7 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import getUser from '../../composables/getUser';
-  import store from '../../services/store';
+  import store from '../../services/store.js';
   import useSignup from '../../composables/useSignup';
   import { auth } from '../../firebase/config';
   import { doc, setDoc } from 'firebase/firestore';
@@ -302,7 +302,7 @@
         return inputsValid;
       };
 
-      watch([addressLineOne, city, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
+      watch([addressLineOne, city, country, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
         canRegister.value =
           addressLineOne.value !== '' &&
           city.value !== '' &&
@@ -314,7 +314,7 @@
           phone.value !== '';
       });
 
-      return { addressLineOne, addressLineTwo, canRegister, city, email, firstName, handleSubmit, lastName,
+      return { addressLineOne, addressLineTwo, canRegister, city, country, email, firstName, handleSubmit, lastName,
                passConfirm, passMatchErr, password, phone, postcode, signupError };
     }
   };

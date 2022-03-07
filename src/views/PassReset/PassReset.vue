@@ -30,7 +30,6 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import usePassReset from '../../composables/passReset';
-  import { getAuth } from 'firebase/auth';
   import { ref } from 'vue';
   import {
     MDBBtn,
