@@ -1,10 +1,10 @@
 <template>
   <PageWrapper>
-    <h1 :class="$style.Heading">
-      Gene mutation data
+    <h1 :class="[$style.Heading, 'mt-4', 'pb-3']">
+      Query data
     </h1>
 
-    <div :class="$style.AdvancedModeSwitchWrapper">
+    <div :class="[$style.AdvancedModeSwitchWrapper, 'mt-4', 'me-4']">
       <MDBSwitch
         v-model="useAdvancedMode"
         :class="$style.AdvancedModeSwitch"
@@ -17,7 +17,7 @@
       <div v-if="useAdvancedMode">
         <div v-if="!isFetchingData" :class="$style.ComponentWrapper">
           <div v-if="filters.length !== 0" :class="$style.FiltersWrapper">
-            <p> Filters: </p>
+            <p>Filters:</p>
             <ul>
               <li
                 v-for="(filter, index) in filters"
@@ -26,18 +26,22 @@
                 @click="deleteFilter(index)"
               >
                 {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
-                <span :class="$style.DeleteFilterSpan">x</span>
+                <span
+                  :class="$style.DeleteFilterSpan"
+                >x</span>
               </li>
             </ul>
           </div>
 
-          <p>
+          <p :class="[$style.filterHeading, 'mt-4']">
             Please add a filter
-            <span :class="$style.FilterInstruction">(using text in brackets if it is a default column)</span>:
+            <span
+              :class="$style.FilterInstruction"
+            >(using text in brackets if it is a default column)</span>:
           </p>
 
-          <div :class="$style.FilterWrapper">
-            <div :class="$style.InputWrapper">
+          <div :class="[$style.FilterWrapper, 'mb-4']">
+            <div :class="[$style.InputWrapper, 'me-2']">
               <MDBInput
                 v-model="queryInput"
                 label="Attribute"
@@ -46,7 +50,7 @@
               />
             </div>
 
-            <div :class="$style.SelectWrapper">
+            <div :class="[$style.SelectWrapper, 'me-4']">
               <select v-model="selectedOperator" :class="[$style.Select, 'form-select']">
                 <option
                   v-for="operation in Object.entries(fireStoreOperators)"
@@ -58,7 +62,7 @@
               </select>
             </div>
 
-            <div :class="$style.InputWrapper">
+            <div :class="[$style.InputWrapper, 'me-2']">
               <MDBInput
                 v-model="queryOperand"
                 label="Value"
@@ -67,11 +71,7 @@
               />
             </div>
 
-            <MDBBtn
-              color="primary"
-              :disabled="!canSubmitFilter"
-              @click="addFilter"
-            >
+            <MDBBtn color="primary" :disabled="!canSubmitFilter" @click="addFilter">
               Add filter
             </MDBBtn>
           </div>
@@ -79,10 +79,10 @@
       </div>
 
       <div v-else :class="$style.ComponentWrapper">
-        <p :class="$style.GeneMutationSelection">
-          Select a gene mutation:
+        <p :class="[$style.GeneMutationSelection, 'mt-2']">
+          Gene mutation:
         </p>
-        <div :class="[$style.SelectWrapper]">
+        <div :class="[$style.SelectWrapper, 'ms-2', 'mb-4']">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
             <option
               v-for="geneMutation in geneMutations"
@@ -97,7 +97,9 @@
       </div>
 
       <div :class="$style.CheckboxWrapper">
-        <p>Selected columns:</p>
+        <p :class="$style.checkboxTitle">
+          Selected columns:
+        </p>
         <MDBCheckbox
           v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
           :key="index"
@@ -108,29 +110,29 @@
         />
       </div>
 
-      <p :class="$style.GraphPrompt">
+      <p :class="[$style.GraphPrompt, 'mt-5']">
         Click a table header to view a graph on the data
       </p>
       <div :class="$style.TableWrapper">
-        <p>Results ({{ filteredResults.length }}):</p>
+        <p :class="[$style.ResultsIndicator, 'mb-4']">
+          Results ({{ filteredResults.length }}):
+        </p>
 
         <Spinner v-if="isLoadingGraph" />
         <div id="chart" />
 
-        <p
-          v-for="index in Math.ceil(filteredResults.length / pageSize)"
-          :key="index"
-          :class="[$style.PaginationOptions, index === selectedTablePage ? $style.SelectedPaginationOption : '']"
-          @click="selectedTablePage = index"
-        >
-          {{ index }}
-        </p>
+        <MDBPagination circle>
+          <MDBPageItem
+            v-for="index in Math.ceil(filteredResults.length / pageSize)"
+            :key="index"
+            :class="[$style.PaginationOptions, index === selectedTablePage ? ' icon active': '']"
+            @click="selectedTablePage = index"
+          >
+            {{ index }}
+          </MDBPageItem>
+        </MDBPagination>
 
-        <MDBTable
-          bordered
-          striped
-          :class="$style.Table"
-        >
+        <MDBTable bordered striped :class="$style.Table">
           <thead>
             <tr>
               <th
@@ -152,7 +154,10 @@
           </thead>
           <tbody>
             <tr v-for="(dataItem, outerIndex) in renderableResults" :key="outerIndex">
-              <td v-for="(key, innerIndex) in activeTableHeaders" :key="innerIndex">
+              <td
+                v-for="(key, innerIndex) in activeTableHeaders"
+                :key="innerIndex"
+              >
                 {{ dataItem[key] }}
               </td>
             </tr>
@@ -323,9 +328,7 @@
 
       const deleteFilter = (index) => filters = filters.slice(index, 1);
 
-      const resetTablePage = (array) => {
-        return array.slice(0, pageSize);
-      };
+      const resetTablePage = (array) => array.slice(0, pageSize);
 
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 

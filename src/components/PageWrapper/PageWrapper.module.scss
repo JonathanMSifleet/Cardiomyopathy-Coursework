@@ -20,7 +20,7 @@
 
     .SideColumnLeft {
       display: flex;
-      height: 0;
+      height: auto;
       padding: 0;
       @media(min-width: 800px){
         height: 100vh;
