@@ -5,7 +5,7 @@
       <MDBCol :class="$style.SideColumnLeft" md="2" />
       <MDBCol :class="$style.MainContent" md="8">
         <slot />
-        <NewsFeed />
+        <NewsFeed v-if="path"/>
       </MDBCol>
       <MDBCol :class="$style.SideColumnRight" md="2">
       </MDBCol>
