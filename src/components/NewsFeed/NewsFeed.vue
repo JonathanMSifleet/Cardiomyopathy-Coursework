@@ -55,13 +55,14 @@
     <div class="text-center mt-3">
       <MDBBtn
         color="primary"
+        :class="['animate__animated ', collapse ? 'animate__zoomIn' : 'animate__fadeIn']"
         @click="
           () => {
             collapse = !collapse;
           }
         "
         aria-controls="multiCollapseExample"
-        >Expand News Feed</MDBBtn
+        >{{ collapse ? 'Shrink ' : 'Expand ' }}News Feed</MDBBtn
       >
     </div>
     <MDBCollapse v-model="collapse" id="multiCollapseExample">
@@ -73,7 +74,7 @@
           :key="item.title"
         >
           <a v-mdb-ripple="{ color: 'light' }">
-            <MDBCardImg :src="item.enclosure.link" top :alt="item.title" />
+            <MDBCardImg :src="item.enclosure.link" top :alt="item.title" title="Click to view article"/>
           </a>
           <MDBCardTitle
             :class="[$style['card-text'], 'ms-2', 'mt-3', $style['add-style']]"
