@@ -25,21 +25,46 @@
           >
             Query
           </MDBNavbarItem>
-          <MDBNavbarItem v-if="loggedInAndVerif()" :class="$style['link']" :to="{ name: 'MutationComparison' }" active>
+          <MDBNavbarItem
+            v-if="loggedInAndVerif()"
+            :class="$style['link']"
+            :to="{ name: 'MutationComparison' }"
+            active
+          >
             Mutation Comparison
           </MDBNavbarItem>
-          <MDBNavbarItem v-if="loggedInAndVerif()" :class="$style['link']" :to="{ name: 'ExperimentalData' }" active>
+          <MDBNavbarItem
+            v-if="loggedInAndVerif()"
+            :class="$style['link']"
+            :to="{ name: 'ExperimentalData' }"
+            active
+          >
             Experimental Data
           </MDBNavbarItem>
         </MDBNavbarNav>
         <MDBNavbarNav right class="mb-2 mb-lg-0">
-          <MDBNavbarItem v-if="showLoginRegister()" :class="$style['link']" :to="{ name: 'Login' }" active>
+          <MDBNavbarItem
+            v-if="showLoginRegister()"
+            :class="$style['link']"
+            :to="{ name: 'Login' }"
+            active
+          >
             Login
           </MDBNavbarItem>
-          <MDBNavbarItem v-if="showLoginRegister()" :class="$style['link']" :to="{ name: 'Registration' }" active>
+          <MDBNavbarItem
+            v-if="showLoginRegister()"
+            :class="$style['link']"
+            :to="{ name: 'Registration' }"
+            active
+          >
             Register
           </MDBNavbarItem>
-          <MDBNavbarItem v-if="loggedInAndVerif()" :class="$style['link']" :to="{ name: 'UserProfile' }" active>
+          <MDBNavbarItem
+            v-if="loggedInAndVerif()"
+            :class="$style['link']"
+            :to="{ name: 'UserProfile' }"
+            active
+          >
             Profile
           </MDBNavbarItem>
           <MDBNavbarItem :class="$style['link']" :to="{ name: 'Help' }" active>
