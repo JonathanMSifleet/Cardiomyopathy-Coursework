@@ -121,7 +121,7 @@
         <Spinner v-if="isLoadingGraph" />
         <div id="chart" />
 
-        <MDBPagination circle>
+        <MDBPagination>
           <MDBPageItem
             v-for="index in Math.ceil(filteredResults.length / pageSize)"
             :key="index"
@@ -185,7 +185,7 @@
   import getUser from '../../composables/getUser';
   import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
-  import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
+  import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, MDBPagination, MDBPageItem } from 'mdb-vue-ui-kit';
   import { operandIsValid } from '../../utils/validationFunctions';
   import { reactive, ref, watch, watchEffect } from 'vue';
   import { useRouter } from 'vue-router';
@@ -193,7 +193,7 @@
   export default {
     name: 'Query',
     components: {
-      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
+      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, MDBPagination, MDBPageItem, Spinner, GeneModal
     },
     setup() {
       let activeCheckboxes = ref({});
