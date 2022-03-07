@@ -105,7 +105,7 @@
         }
       };
 
-      const uploadData = async data => {
+      const uploadData = async (data) => {
         const database = await store.database;
         const tasks = [];
 
@@ -148,5 +148,5 @@
 </script>
 
 <style lang="scss" scoped module>
-@import "./FileUpload.module.scss";
+  @import './FileUpload.module.scss';
 </style>
