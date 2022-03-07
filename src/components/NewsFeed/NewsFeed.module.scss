@@ -25,8 +25,12 @@
 }
 
 .carousel {
-    float: right;
-    width: 15.625rem;
+    display: none;
+    @media(min-width: 700px){
+        display: flex;
+        float: right;
+        width: 20rem;
+    }
 }
 
 .left-arrow,
