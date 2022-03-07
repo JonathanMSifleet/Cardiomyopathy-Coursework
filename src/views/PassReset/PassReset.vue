@@ -1,11 +1,13 @@
 <template>
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-      <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader>Reset Password</MDBCardHeader>
+      <MDBCard :class="$style['login-card']" text="center">
+        <MDBCardHeader :class="$style['card-header']">
+          Reset Password
+        </MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle v-if="error" :class="[$style['error-message'], 'mb-4']">
-            {{ error }}
+            <img src="https://i.imgur.com/GnyDvKN.png" alt="Red cross"> {{ error }}
           </MDBCardTitle>
           <MDBCardText>
             <form @submit.prevent="handleSubmit">
@@ -30,7 +32,6 @@
 <script>
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import usePassReset from '../../composables/passReset';
-  import { getAuth } from 'firebase/auth';
   import { ref } from 'vue';
   import {
     MDBBtn,

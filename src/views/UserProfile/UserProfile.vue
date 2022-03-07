@@ -11,6 +11,7 @@
           <MDBModalTitle
             id="deleteConfirmationModalLabel"
             :style="{ fontWeight: 'bold' }"
+            :class="$style['card-header']"
           >
             Confirmation
           </MDBModalTitle>
@@ -46,6 +47,7 @@
           <MDBModalTitle
             id="experimentalDataModalLabel"
             :style="{ fontWeight: 'bold' }"
+            :class="$style['card-header']"
           >
             Experimental Data
           </MDBModalTitle>
@@ -87,7 +89,7 @@
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader :style="{ fontWeight: 'bold' }">
+        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">
           User Profile
         </MDBCardHeader>
         <MDBCardBody>
@@ -443,8 +445,8 @@
 
       return { cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal, deleteExperimentalDataDoc,
                email, experimentalData, experimentalDataModal, firstName, getExperimentalDataByUserId, lastName,
-               mapKeyToWords, phoneNumber, showCardContainer, showCards, toggleExperimentalDataModal, toggleModal,
-               updateUser, userIdentity };
+               mapKeyToWords, phoneNumber, addressLineOne, addressLineTwo, city, postcode, showCardContainer, showCards,
+               toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
     }
   };
 </script>

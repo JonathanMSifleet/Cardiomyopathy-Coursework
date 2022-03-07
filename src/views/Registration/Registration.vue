@@ -1,13 +1,13 @@
 <template>
   <PageWrapper>
-    <div class="login w-100 p-4 d-flex align-items-center justify-content-center">
-      <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader>User Registration</MDBCardHeader>
+    <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
+      <MDBCard :class="$style['registration-card']" text="center">
+        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">User Registration</MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle>
             <!--print any google auth errors-->
             <div v-if="signupError" :class="[$style['error-message'], 'mb-4']">
-              {{ signupError }}
+              <img src="https://i.imgur.com/GnyDvKN.png" alt="Red cross"> {{ signupError }}
             </div>
             <div v-if="passMatchErr" :class="[$style['error-message'], 'mb-4']">
               {{ passMatchErr }}
@@ -118,7 +118,7 @@
         </MDBCardBody>
         <MDBCardFooter>
           <!-- Register buttons -->
-          <div class="text-center mt-3">
+          <div class="text-center">
             <p>
               Already a member?
               <router-link :to="{ name: 'Login' }" :class="$style['register-link']">

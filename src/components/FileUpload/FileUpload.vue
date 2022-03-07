@@ -11,10 +11,18 @@
       />
     </div>
 
-    <div :class="$style.FileUploadComponentWrapper">
+    <div :class="[$style.FileUploadComponentWrapper]">
       <MDBFile v-model="fileUpload" :class="$style.FileUpload" />
     </div>
 
+    <MDBBtn
+      color="primary"
+      aria-controls="collapsibleContent1"
+      :class="[[$style.CollapseButton], 'ms-3']"
+      @click="showHowToFormat"
+    >
+      How to format {{ radioFormat }}
+    </MDBBtn>
     <ButtonSpinner v-if="isSubmitting" :class="$style.ButtonSpinner" />
     <MDBBtn
       v-else
@@ -23,31 +31,23 @@
       :disabled="fileUpload.length === 0"
       @click="shouldSubmitData = true"
     >
-      Submit
-    </MDBBtn>
-    <MDBBtn
-      color="primary"
-      aria-controls="collapsibleContent1"
-      :aria-expanded="showFormatInstructions"
-      :class="$style.CollapseButton"
-      @click="showFormatInstructions = !showFormatInstructions"
-    >
-      How to format {{ radioFormat }}
+      Upload File
     </MDBBtn>
   </div>
-  <div :class="$style.ExampleWrapper">
+  <div
+    v-if="showFormatVisible"
+    :class="$style.ExampleWrapper"
+  >
     <!-- do not format this pre tag! -->
     <pre
-      v-if="showFormatInstructions"
       div
-      :class="$style.InstructionText"
+      :class="[$style.InstructionText, ' animate__animated ',
+               [showFormatInstructions ? 'animate__bounceInDown' : 'animate__bounceOutUp']]"
+      :style="[!showFormatInstructions && 'display: none']"
     >{{ determineFormatInstructions() }}</pre>
   </div>
 
-  <p
-    v-if="statusMessage !== ''"
-    :class="$style.StatusMessage"
-  >
+  <p v-if="statusMessage !== ''" :class="$style.StatusMessage">
     {{ statusMessage }}
   </p>
 </template>
@@ -85,7 +85,7 @@
         return intermediateText.default.toString().replaceAll('\\n', '\n').trim();
       };
 
-      const handleFileFormat = async (parsableData) => {
+      const handleFileFormat = async parsableData => {
         isSubmitting.value = true;
 
         try {
@@ -105,16 +105,20 @@
         }
       };
 
-      const uploadData = async (data) => {
+      const uploadData = async data => {
         const database = await store.database;
         const tasks = [];
 
-        data.forEach(doc => tasks.push(addDoc(collection(database, 'hcmData'), {
-          ...doc,
-          createdAt: serverTimestamp(),
-          createdByUser: true,
-          userId: currentUser.value.uid
-        })));
+        data.forEach(doc =>
+          tasks.push(
+            addDoc(collection(database, 'hcmData'), {
+              ...doc,
+              createdAt: serverTimestamp(),
+              createdByUser: true,
+              userId: currentUser.value.uid
+            })
+          )
+        );
 
         await Promise.all(tasks);
 
@@ -137,12 +141,12 @@
         };
       });
 
-      return { determineFormatInstructions, fileUpload, formatTypes, isSubmitting, radioFormat,
-               shouldSubmitData,showFormatInstructions, statusMessage };
+      return { determineFormatInstructions, fileUpload, formatTypes, isSubmitting, radioFormat, shouldSubmitData,
+               showFormatInstructions, statusMessage };
     }
   };
 </script>
 
 <style lang="scss" scoped module>
-  @import './FileUpload.module.scss';
+@import "./FileUpload.module.scss";
 </style>
