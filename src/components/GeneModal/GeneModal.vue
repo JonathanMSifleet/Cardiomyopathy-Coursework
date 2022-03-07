@@ -5,6 +5,7 @@
     color="primary"
     aria-controls="geneModal"
     @click="geneModal=true, populateModal()"
+    class="ms-4"
   >
     Gene Info
   </MDBBtn>
