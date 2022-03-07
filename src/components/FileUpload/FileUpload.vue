@@ -20,7 +20,9 @@
       aria-controls="collapsibleContent1"
       :class="[[$style.CollapseButton], 'ms-3']"
       @click="showHowToFormat"
-    >How to format {{ radioFormat }}</MDBBtn>
+    >
+      How to format {{ radioFormat }}
+    </MDBBtn>
     <ButtonSpinner v-if="isSubmitting" :class="$style.ButtonSpinner" />
     <MDBBtn
       v-else
@@ -28,21 +30,26 @@
       :class="$style.SubmitButton"
       :disabled="fileUpload.length === 0"
       @click="shouldSubmitData = true"
-    >Upload File</MDBBtn>
+    >
+      Upload File
+    </MDBBtn>
   </div>
   <div
-    :class="$style.ExampleWrapper"
     v-if="showFormatVisible"
+    :class="$style.ExampleWrapper"
   >
     <!-- do not format this pre tag! -->
     <pre
       div
-      :class="[[$style.InstructionText], ' animate__animated ', [showFormatInstructions ? 'animate__bounceInDown' : 'animate__bounceOutUp']]"
+      :class="[$style.InstructionText, ' animate__animated ',
+               [showFormatInstructions ? 'animate__bounceInDown' : 'animate__bounceOutUp']]"
       :style="[!showFormatInstructions && 'display: none']"
     >{{ determineFormatInstructions() }}</pre>
   </div>
 
-  <p v-if="statusMessage !== ''" :class="$style.StatusMessage">{{ statusMessage }}</p>
+  <p v-if="statusMessage !== ''" :class="$style.StatusMessage">
+    {{ statusMessage }}
+  </p>
 </template>
 
 <script>
@@ -78,8 +85,8 @@
         return intermediateText.default.toString().replaceAll('\\n', '\n').trim();
       };
 
-    const handleFileFormat = async parsableData => {
-      isSubmitting.value = true;
+      const handleFileFormat = async parsableData => {
+        isSubmitting.value = true;
 
         try {
           switch (radioFormat.value) {
@@ -87,67 +94,57 @@
             return uploadData(parseYaml(parsableData));
           case 'XML':
             return uploadData(new XMLParser().parse(parsableData).root.row);
-          case "CSV":
+          case 'CSV':
             return uploadData(await csv().fromString(parsableData));
           default:
             return uploadData(JSON.parse(parsableData));
+          }
+        } catch (error) {
+          isSubmitting.value = false;
+          statusMessage.value = 'Data formatted incorrectly';
         }
-      } catch (error) {
-        isSubmitting.value = false;
-        statusMessage.value = "Data formatted incorrectly";
-      }
-    };
-
-    const uploadData = async data => {
-      const database = await store.database;
-      const tasks = [];
-
-      data.forEach(doc =>
-        tasks.push(
-          addDoc(collection(database, "hcmData"), {
-            ...doc,
-            createdAt: serverTimestamp(),
-            createdByUser: true,
-            userId: currentUser.value.uid
-          })
-        )
-      );
-
-      await Promise.all(tasks);
-
-      shouldSubmitData.value = false;
-      fileUpload.value = [];
-
-      isSubmitting.value = false;
-      alert("Data uploaded successfully");
-    };
-
-    watch([fileUpload, shouldSubmitData], () => {
-      statusMessage.value = "";
-      if (!shouldSubmitData.value) return;
-
-      const reader = new FileReader();
-
-      reader.readAsText(fileUpload.value[0]);
-      reader.onload = () => {
-        handleFileFormat(reader.result);
       };
-    });
 
-    return {
-      determineFormatInstructions,
-      fileUpload,
-      formatTypes,
-      isSubmitting,
-      radioFormat,
-      shouldSubmitData,
-      showFormatInstructions,
-      showHowToFormat,
-      showFormatVisible,
-      statusMessage
-    };
-  }
-};
+      const uploadData = async data => {
+        const database = await store.database;
+        const tasks = [];
+
+        data.forEach(doc =>
+          tasks.push(
+            addDoc(collection(database, 'hcmData'), {
+              ...doc,
+              createdAt: serverTimestamp(),
+              createdByUser: true,
+              userId: currentUser.value.uid
+            })
+          )
+        );
+
+        await Promise.all(tasks);
+
+        shouldSubmitData.value = false;
+        fileUpload.value = [];
+
+        isSubmitting.value = false;
+        alert('Data uploaded successfully');
+      };
+
+      watch([fileUpload, shouldSubmitData], () => {
+        statusMessage.value = '';
+        if (!shouldSubmitData.value) return;
+
+        const reader = new FileReader();
+
+        reader.readAsText(fileUpload.value[0]);
+        reader.onload = () => {
+          handleFileFormat(reader.result);
+        };
+      });
+
+      return { determineFormatInstructions, fileUpload, formatTypes, isSubmitting, radioFormat, shouldSubmitData,
+               showFormatInstructions, statusMessage };
+    }
+  };
 </script>
 
 <style lang="scss" scoped module>

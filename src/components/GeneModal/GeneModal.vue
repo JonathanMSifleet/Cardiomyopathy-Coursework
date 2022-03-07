@@ -4,8 +4,8 @@
     v-if="showButton()"
     color="primary"
     aria-controls="geneModal"
-    @click="geneModal=true, populateModal()"
     class="ms-4"
+    @click="geneModal=true, populateModal()"
   >
     Gene Info
   </MDBBtn>

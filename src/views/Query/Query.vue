@@ -1,8 +1,10 @@
 <template>
   <PageWrapper>
-    <h1 :class="[[$style.Heading], 'mt-4', 'pb-3']">Query data</h1>
+    <h1 :class="[$style.Heading, 'mt-4', 'pb-3']">
+      Query data
+    </h1>
 
-    <div :class="[[$style.AdvancedModeSwitchWrapper], 'mt-4', 'me-4']">
+    <div :class="[$style.AdvancedModeSwitchWrapper, 'mt-4', 'me-4']">
       <MDBSwitch
         v-model="useAdvancedMode"
         :class="$style.AdvancedModeSwitch"
@@ -31,53 +33,73 @@
             </ul>
           </div>
 
-          <p :class="[[$style.filterHeading], 'mt-4']">
+          <p :class="[$style.filterHeading, 'mt-4']">
             Please add a filter
             <span
               :class="$style.FilterInstruction"
             >(using text in brackets if it is a default column)</span>:
           </p>
 
-          <div :class="[[$style.FilterWrapper], 'mb-4']">
-            <div :class="[[$style.InputWrapper], 'me-2']">
-              <MDBInput v-model="queryInput" label="Attribute" type="text" :class="$style.Input" />
+          <div :class="[$style.FilterWrapper, 'mb-4']">
+            <div :class="[$style.InputWrapper, 'me-2']">
+              <MDBInput
+                v-model="queryInput"
+                label="Attribute"
+                type="text"
+                :class="$style.Input"
+              />
             </div>
 
-            <div :class="[[$style.SelectWrapper], 'me-4']">
+            <div :class="[$style.SelectWrapper, 'me-4']">
               <select v-model="selectedOperator" :class="[$style.Select, 'form-select']">
                 <option
                   v-for="operation in Object.entries(fireStoreOperators)"
                   :key="operation"
                   :disabled="operation[1] === 'Please select'"
-                >{{ operation[1] }}</option>
+                >
+                  {{ operation[1] }}
+                </option>
               </select>
             </div>
 
-            <div :class="[[$style.InputWrapper], 'me-2']">
-              <MDBInput v-model="queryOperand" label="Value" type="text" :class="$style.Input" />
+            <div :class="[$style.InputWrapper, 'me-2']">
+              <MDBInput
+                v-model="queryOperand"
+                label="Value"
+                type="text"
+                :class="$style.Input"
+              />
             </div>
 
-            <MDBBtn color="primary" :disabled="!canSubmitFilter" @click="addFilter">Add filter</MDBBtn>
+            <MDBBtn color="primary" :disabled="!canSubmitFilter" @click="addFilter">
+              Add filter
+            </MDBBtn>
           </div>
         </div>
       </div>
 
       <div v-else :class="$style.ComponentWrapper">
-        <p :class="[[$style.GeneMutationSelection], 'mt-2']">Gene mutation:</p>
-        <div :class="[[$style.SelectWrapper], 'ms-2', 'mb-4']">
+        <p :class="[$style.GeneMutationSelection, 'mt-2']">
+          Gene mutation:
+        </p>
+        <div :class="[$style.SelectWrapper, 'ms-2', 'mb-4']">
           <select v-model="selectedGeneMutation" :class="[$style.Select, 'form-select']">
             <option
               v-for="geneMutation in geneMutations"
               :key="geneMutation"
               :disabled="geneMutation === 'Please select'"
-            >{{ geneMutation }}</option>
+            >
+              {{ geneMutation }}
+            </option>
           </select>
         </div>
         <GeneModal :selectedGene="selectedGeneMutation" />
       </div>
 
       <div :class="$style.CheckboxWrapper">
-        <p :class="$style.checkboxTitle">Selected columns:</p>
+        <p :class="$style.checkboxTitle">
+          Selected columns:
+        </p>
         <MDBCheckbox
           v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
           :key="index"
@@ -88,9 +110,13 @@
         />
       </div>
 
-      <p :class="[[$style.GraphPrompt], 'mt-5']">Click a table header to view a graph on the data</p>
+      <p :class="[$style.GraphPrompt, 'mt-5']">
+        Click a table header to view a graph on the data
+      </p>
       <div :class="$style.TableWrapper">
-        <p :class="[[$style.ResultsIndicator], 'mb-4']">Results ({{ filteredResults.length }}):</p>
+        <p :class="[$style.ResultsIndicator, 'mb-4']">
+          Results ({{ filteredResults.length }}):
+        </p>
 
         <Spinner v-if="isLoadingGraph" />
         <div id="chart" />
@@ -101,7 +127,9 @@
             :key="index"
             :class="[$style.PaginationOptions, index === selectedTablePage ? ' icon active': '']"
             @click="selectedTablePage = index"
-          >{{ index }}</MDBPageItem>
+          >
+            {{ index }}
+          </MDBPageItem>
         </MDBPagination>
 
         <MDBTable bordered striped :class="$style.Table">
@@ -117,8 +145,8 @@
                 <p :class="$style.TableHeaderText">
                   {{ mapKeyToWords(header) }}
                   {{ header[0] !== mapKeyToWords(header)
-                  ? `(${header})`
-                  : null
+                    ? `(${header})`
+                    : null
                   }}
                 </p>
               </th>
@@ -129,15 +157,21 @@
               <td
                 v-for="(key, innerIndex) in activeTableHeaders"
                 :key="innerIndex"
-              >{{ dataItem[key] }}</td>
+              >
+                {{ dataItem[key] }}
+              </td>
             </tr>
           </tbody>
         </MDBTable>
       </div>
     </div>
     <div v-else>
-      <p :class="$style.ErrorOccuredText">An error occured while fetching data:</p>
-      <p :class="$style.ErrorOccuredText">{{ errorMessage }}</p>
+      <p :class="$style.ErrorOccuredText">
+        An error occured while fetching data:
+      </p>
+      <p :class="$style.ErrorOccuredText">
+        {{ errorMessage }}
+      </p>
     </div>
   </PageWrapper>
 </template>
@@ -294,9 +328,7 @@
 
       const deleteFilter = (index) => filters = filters.slice(index, 1);
 
-      const resetTablePage = (array) => {
-        return array.slice(0, pageSize);
-      };
+      const resetTablePage = (array) => array.slice(0, pageSize);
 
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
@@ -384,5 +416,5 @@
 </script>
 
 <style lang="scss" scoped module>
-@import "./Query.module.scss";
+  @import './Query.module.scss';
 </style>

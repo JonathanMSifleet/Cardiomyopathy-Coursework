@@ -2,7 +2,9 @@
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
       <MDBCard :class="$style['login-card']" text="center">
-        <MDBCardHeader :class="$style['card-header']">Login</MDBCardHeader>
+        <MDBCardHeader :class="$style['card-header']">
+          Login
+        </MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle v-if="errorMessage" :class="[$style['error-message'], 'mb-4']">
             <img src="https://i.imgur.com/GnyDvKN.png" alt="Red cross"> {{ errorMessage }}
@@ -148,7 +150,7 @@
             errorMessage.value = 'Please verify your email before login. Email resent.';
             break;
           default:
-            console.log('DEFAULT');
+            if (process.env.DEVELOPMENT) console.log('DEFAULT');
             errorMessage.value = error.message;
             break;
           }

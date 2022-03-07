@@ -341,9 +341,9 @@
             email.value = docSnap.data().email;
             phoneNumber.value = docSnap.data().phone;
 
-            console.log('Document data:', docSnap.data());
+            if (process.env.DEVELOPMENT) console.log('Document data:', docSnap.data());
           } else {
-            console.log('No such document!');
+            if (process.env.DEVELOPMENT) console.log('No such document!');
           }
         });
       };
@@ -445,8 +445,8 @@
 
       return { cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal, deleteExperimentalDataDoc,
                email, experimentalData, experimentalDataModal, firstName, getExperimentalDataByUserId, lastName,
-               mapKeyToWords, phoneNumber, addressLineOne, addressLineTwo, city, postcode, showCardContainer, showCards, toggleExperimentalDataModal, toggleModal,
-               updateUser, userIdentity };
+               mapKeyToWords, phoneNumber, addressLineOne, addressLineTwo, city, postcode, showCardContainer, showCards,
+               toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
     }
   };
 </script>
