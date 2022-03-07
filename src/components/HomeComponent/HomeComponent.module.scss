@@ -1,7 +1,7 @@
 .information-wrapper{
   display: flex;
   flex-direction: column;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.55), 0 2px 4px -1px rgba(0, 0, 0, 0.75);
+  padding: 0 0 40px 0;
   @media(min-width: 700px) {
     min-height: 650px;
     max-height: 650px;
@@ -11,14 +11,15 @@
   .information-content {
     display: flex;
     flex-direction: column;
+    background-color: #efefef;
     justify-content: center;
     align-items: center;
     flex: 4;
     order: 2;
-    @media(min-width: 700px) {
+    @media(min-width: 800px) {
       order: 1;
     }
-    @media(min-width: 800px) {
+    @media(min-width: 900px) {
       flex: 3;
     }
 
@@ -26,27 +27,23 @@
       max-width: 375px;
       padding: 72px 74px;
       @media(min-width: 700px) {
-        padding: 0 24px;
+        padding: 0 1px;
       }
 
       h2 {
-        font-size: 32px;
+        font-size: 1.5rem;
         font-weight: 300;
-        text-transform: uppercase;
         margin-bottom: 24px;
+        line-height: 1.2; 
         @media(min-width: 700px) {
-          font-size: 30px;
+          font-size: 2rem;
         }
       }
 
       p {
-        font-size: 15px;
+        font-size: 1.3rem;
         font-weight: 300;
         line-height: 1.7;
-      }
-
-      .content-preview {
-        font-size: 15px;
       }
 
       .link {
@@ -56,6 +53,7 @@
         padding-bottom: 4px;
         border-bottom: 1px solid transparent;
         transition: .5s ease-in all;
+        font-size: 1.3rem;
 
         &:hover {
           border-bottom-color: #303030;
@@ -73,7 +71,6 @@
   .bg-photo {
     order: 1;
     flex: 3;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.55), 0 2px 4px -1px rgba(0, 0, 0, 0.75);
 
     @media (min-width: 700px) {
       order: 2;
@@ -84,7 +81,7 @@
     }
 
     img {
-      display: block;
+      // display: block;
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -114,7 +111,7 @@
 
 .no-user:first-child{
   .information-content {
-    background-color: #303030;
+    background-color: #d98326;
     color: #fff;
   }
 }

@@ -1,0 +1,54 @@
+.Heading {
+  font-size: 2rem;
+  clear: both;
+  color: darkblue;
+  float: left;
+  margin-bottom: 1%;
+}
+
+.GeneSelectionInstructionText {
+  clear: both;
+  float: left;
+  margin-bottom: 1%;
+}
+
+.OuterSelectWrapper {
+  clear: both;
+}
+
+.SelectWrapper {
+  float: left;
+  margin-right: 10vw;
+  width: 15vw;
+}
+
+.GraphAndKeyWrapper {
+  clear: both;
+  float: left;
+}
+
+.ChartWrapper {
+  clear: both;
+  margin-top: 2%;
+}
+
+.Chart {
+  float: left;
+  width: 47%;
+  margin-right: 3%;
+}
+
+.KeyWrapper {
+  clear: both;
+  float: left;
+}
+
+.ClickKeyInstructionText {
+  margin-bottom: 1%;
+  margin-top: 1%;
+}
+
+.Key {
+  color: blue;
+  cursor: pointer;
+}

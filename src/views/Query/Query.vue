@@ -143,386 +143,244 @@
 </template>
 
 <script>
-import GeneModal from "../../components/GeneModal/GeneModal.vue";
-import PageWrapper from "../../components/PageWrapper/PageWrapper.vue";
-import Spinner from "../../components/Spinner/Spinner.vue";
-import determineKeys from "../../utils/determineKeys";
-import fetchDocuments from "../../utils/fetchDocuments";
-import getUser from "../../composables/getUser";
-import mapKeyToWords from "../../utils/mapKeyToWords";
-import { GoogleCharts } from "google-charts";
-import {
-  MDBBtn,
-  MDBCheckbox,
-  MDBInput,
-  MDBSwitch,
-  MDBTable,
-  MDBPagination,
-  MDBPageNav,
-  MDBPageItem
-} from "mdb-vue-ui-kit";
-import { operandIsValid } from "../../utils/validationFunctions";
-import { reactive, ref, watch, watchEffect } from "vue";
-import { useRouter } from "vue-router";
+  import GeneModal from '../../components/GeneModal/GeneModal.vue';
+  import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
+  import Spinner from '../../components/Spinner/Spinner.vue';
+  import determineKeys from '../../utils/determineKeys';
+  import fetchDocuments from '../../utils/fetchDocuments';
+  import getUser from '../../composables/getUser';
+  import generateGraph from '../../utils/generateGraph';
+  import mapKeyToWords from '../../utils/mapKeyToWords';
+  import { MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable } from 'mdb-vue-ui-kit';
+  import { operandIsValid } from '../../utils/validationFunctions';
+  import { reactive, ref, watch, watchEffect } from 'vue';
+  import { useRouter } from 'vue-router';
 
-export default {
-  name: "Query",
-  components: {
-    MDBBtn,
-    MDBCheckbox,
-    MDBInput,
-    MDBSwitch,
-    MDBTable,
-    MDBPagination,
-    MDBPageNav,
-    MDBPageItem,
-    PageWrapper,
-    Spinner,
-    GeneModal
-  },
-  setup() {
-    let activeCheckboxes = ref({});
-    const activeTableHeaders = ref([
-      "ledv",
-      "redv",
-      "lesv",
-      "resv",
-      "lvef",
-      "rvef",
-      "lvmass",
-      "lsv",
-      "rsv",
-      "scar",
-      "Gender",
-      "AgeatMRI",
-      "ApicalHCM",
-      "SuddenCardiacDeath",
-      "Hypertension",
-      "Diabetes",
-      "Myectomy"
-    ]);
-    let allDocuments = [];
-    let displayChart = ref(false);
-    let errorMessage = ref("");
-    const fireStoreOperators = {
-      "": "Please select",
-      "==": "equal to",
-      "<": "less than",
-      "<=": "less than or equal to",
-      ">": "greater than",
-      ">=": "greater than or equal to",
-      "!=": "not equal to"
-    };
-    let filters = reactive([]);
-    let isFetchingData = ref(false);
-    let isLoadingGraph = ref(false);
-    let canSubmitFilter = ref(false);
-    let filteredResults = ref([]);
-    const geneMutations = ref([
-      "Please select",
-      "MYH7",
-      "MYBPC3",
-      "TNNT2",
-      "ACTC",
-      "TPM1",
-      "TNNCI",
-      "TNNI3",
-      "MYL2",
-      "TTN"
-    ]);
-    let optionalTableHeaders = ref([]);
-    const pageSize = 15;
-    let queryInput = ref("");
-    let queryOperand = ref("");
-    let renderableResults = ref([]);
-    const router = useRouter();
-    let selectedGeneMutation = ref("Please select");
-    let selectedGraphKey = ref();
-    let selectedOperator = ref("Please select");
-    let selectedTablePage = ref(1);
-    let useAdvancedMode = ref(false);
+  export default {
+    name: 'Query',
+    components: {
+      MDBBtn, MDBCheckbox, MDBInput, MDBSwitch, MDBTable, PageWrapper, Spinner, GeneModal
+    },
+    setup() {
+      let activeCheckboxes = ref({});
+      const activeTableHeaders = ref([
+        'ledv',
+        'redv',
+        'lesv',
+        'resv',
+        'lvef',
+        'rvef',
+        'lvmass',
+        'lsv',
+        'rsv',
+        'scar',
+        'Gender',
+        'AgeatMRI',
+        'ApicalHCM',
+        'SuddenCardiacDeath',
+        'Hypertension',
+        'Diabetes',
+        'Myectomy'
+      ]);
+      let allDocuments = [];
+      let displayChart = ref(false);
+      let errorMessage = ref('');
+      const fireStoreOperators = {
+        '': 'Please select',
+        '==': 'equal to',
+        '<': 'less than',
+        '<=': 'less than or equal to',
+        '>': 'greater than',
+        '>=': 'greater than or equal to',
+        '!=': 'not equal to'
+      };
+      let filters = reactive([]);
+      let isFetchingData = ref(false);
+      let isLoadingGraph = ref(false);
+      let canSubmitFilter = ref(false);
+      let filteredResults = ref([]);
+      const geneMutations = ref([
+        'Please select',
+        'MYH7',
+        'MYBPC3',
+        'TNNT2',
+        'ACTC',
+        'TPM1',
+        'TNNCI',
+        'TNNI3',
+        'MYL2',
+        'TTN'
+      ]);
+      let optionalTableHeaders = ref([]);
+      const pageSize = 15;
+      let queryInput = ref('');
+      let queryOperand = ref('');
+      let renderableResults = ref([]);
+      const router = useRouter();
+      let selectedGeneMutation = ref('Please select');
+      let selectedGraphKey = ref();
+      let selectedOperator = ref('Please select');
+      let selectedTablePage = ref(1);
+      let useAdvancedMode = ref(false);
 
-    (async () => {
-      isFetchingData.value = true;
+      (async () => {
+        isFetchingData.value = true;
 
-      try {
-        allDocuments = await fetchDocuments();
-        if (allDocuments.length === 0) throw new Error("No docs");
+        try {
+          allDocuments = await fetchDocuments();
+          if (allDocuments.length === 0) throw new Error('No docs');
 
-        cleanup();
+          cleanup();
 
-        optionalTableHeaders.value = determineKeys(allDocuments);
-        delete optionalTableHeaders.value.userId;
-        delete optionalTableHeaders.value.createdAt;
-        delete optionalTableHeaders.value.deletedAt;
+          optionalTableHeaders.value = determineKeys(allDocuments);
+          delete optionalTableHeaders.value.userId;
+          delete optionalTableHeaders.value.createdAt;
+          delete optionalTableHeaders.value.deletedAt;
 
-        activeTableHeaders.value.forEach(
-          key => (activeCheckboxes.value[key] = true)
-        );
-      } catch (error) {
-        switch (true) {
-          case error.message.includes("Network Error"):
-            errorMessage.value = "Firebase details are setup incorrectly";
+          activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
+        } catch (error) {
+          switch(true) {
+          case error.message.includes('Network Error'):
+            errorMessage.value = 'Firebase details are setup incorrectly';
             break;
-          case error.message.includes("multi-tab"):
-            errorMessage.value =
-              "Only one tab can be open at a time in development mode due to Firebase persistence";
+          case error.message.includes('multi-tab'):
+            errorMessage.value = 'Only one tab can be open at a time in development mode due to Firebase persistence';
             break;
-          case error.message.includes("No docs"):
-            errorMessage.value = "No documents were found in the database";
+          case error.message.includes('No docs'):
+            errorMessage.value = 'No documents were found in the database';
             break;
           default:
             console.error(error);
             errorMessage.value = error.message;
+          }
+        } finally {
+          isFetchingData.value = false;
         }
-      } finally {
-        isFetchingData.value = false;
-      }
-    })();
+      })();
 
-    const addFilter = () => {
-      if (optionalTableHeaders.value[queryInput.value] === undefined) {
-        alert("Attribute not found in database");
-        return;
-      }
+      const addFilter = () => {
+        if (optionalTableHeaders.value[queryInput.value] === undefined) {
+          alert('Attribute not found in database'); return;
+        }
 
-      const operandValidationMessage = operandIsValid(queryOperand.value);
-      if (!operandValidationMessage) {
-        alert("Input must be a number or equal to true or false");
-        return;
-      }
+        const operandValidationMessage = operandIsValid(queryOperand.value);
+        if (!operandValidationMessage) {
+          alert('Input must be a number or equal to true or false'); return;
+        }
 
-      filters.push({
-        fieldPath: queryInput.value,
-        opStr: Object.keys(fireStoreOperators).find(
-          key => fireStoreOperators[key] === selectedOperator.value
-        ),
-        value: convertValueToType(queryOperand.value)
-      });
-    };
+        filters.push({
+          fieldPath: queryInput.value,
+          opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
+          value: convertValueToType(queryOperand.value)
+        });
+      };
 
-    const cleanup = () => {
-      filteredResults.value = allDocuments;
-      selectedTablePage.value = 1;
-      renderableResults.value = resetTablePage(filteredResults.value);
-    };
+      const cleanup = () => {
+        filteredResults.value = allDocuments;
+        selectedTablePage.value = 1;
+        renderableResults.value = resetTablePage(filteredResults.value);
+      };
 
-    const convertValueToType = value => {
-      switch (true) {
-        case value === "true" || value === "True":
+      const convertValueToType = (value) => {
+        switch(true) {
+        case value === 'true' || value === 'True':
           return true;
-        case value === "false" || value === "False":
+        case value === 'false' || value === 'False':
           return false;
         default:
           return Number(value);
-      }
-    };
-
-    const deleteFilter = index => (filters = filters.slice(index, 1));
-
-    const extractDataFromResults = keyName => {
-      let data = {};
-      let type;
-
-      switch (typeof filteredResults.value[0][keyName]) {
-        case "boolean":
-          type = "pie";
-          break;
-        case "number":
-          type = "bar";
-          break;
-        case "string":
-          type = "pie";
-          break;
-      }
-
-      let counter = 0;
-      filteredResults.value.forEach(doc => {
-        const keyValue = doc[keyName];
-
-        switch (typeof keyValue) {
-          case "boolean":
-            // add key to object if it doesn't exist
-            if (!data[keyValue]) data[keyValue] = [];
-
-            data[keyValue] = ++data[keyValue];
-            break;
-          case "number":
-            if (!data[counter]) data[counter] = [];
-
-            data[counter] = keyValue;
-            counter++;
-            break;
-          case "string":
-            if (!data[keyValue]) data[keyValue] = 0;
-
-            data[keyValue] = ++data[keyValue];
-            break;
         }
-      });
+      };
 
-      return { data: Object.entries(data), type };
-    };
+      const deleteFilter = (index) => filters = filters.slice(index, 1);
 
-    const generateGraph = keyName => {
-      isLoadingGraph.value = true;
+      const resetTablePage = (array) => {
+        return array.slice(0, pageSize);
+      };
 
-      const { data, type } = extractDataFromResults(keyName);
-      data.unshift(["Test", "Value"]);
+      const selectGraphKey = (key) => selectedGraphKey.value = key;
 
-      data.forEach(
-        curData =>
-          (curData[0] =
-            curData[0][0].toUpperCase() + curData[0].slice(1).toLowerCase())
-      );
+      const toggleHeader = (key) => {
+        if (activeTableHeaders.value.includes(key)) {
+          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
+          delete activeCheckboxes[key];
+        } else {
+          activeTableHeaders.value.push(key);
+          activeCheckboxes[key] = true;
+        }
+      };
 
-      GoogleCharts.load(() => renderGraph(data, keyName, type));
-    };
+      watch(filters, () => {
+        let intermediateResults = allDocuments;
+        filters.forEach(filter => {
+          intermediateResults = intermediateResults.filter(doc => {
+            const value = doc[filter.fieldPath];
+            const operator = filter.opStr;
 
-    const renderGraph = (data, keyName, type) => {
-      const chartHelper = GoogleCharts.api.visualization;
-      const chartData = chartHelper.arrayToDataTable(data);
-      chartData.sort([{ column: 1, asc: true }]);
-
-      const divToRenderChart = document.getElementById("chart");
-
-      const chart =
-        type === "pie"
-          ? new chartHelper.PieChart(divToRenderChart)
-          : new chartHelper.ColumnChart(divToRenderChart);
-
-      chart.draw(chartData, {
-        title: mapKeyToWords(keyName),
-        is3D: true,
-        vAxis: {
-          title: "Value"
-        },
-        hAxis: {
-          title: "Record from database"
-        },
-        chartArea: { width: "82%", height: "80%" }
-      });
-      isLoadingGraph.value = false;
-      displayChart.value = true;
-    };
-
-    const resetTablePage = array => {
-      return array.slice(0, pageSize);
-    };
-
-    const selectGraphKey = key => (selectedGraphKey.value = key);
-
-    const toggleHeader = key => {
-      if (activeTableHeaders.value.includes(key)) {
-        activeTableHeaders.value.slice(
-          activeTableHeaders.value.indexOf(key),
-          1
-        );
-        delete activeCheckboxes[key];
-      } else {
-        activeTableHeaders.value.push(key);
-        activeCheckboxes[key] = true;
-      }
-    };
-    watch(filters, () => {
-      let intermediateResults = allDocuments;
-      filters.forEach(filter => {
-        intermediateResults = intermediateResults.filter(doc => {
-          const value = doc[filter.fieldPath];
-          const operator = filter.opStr;
-
-          switch (operator) {
-            case "==":
+            switch (operator) {
+            case '==':
               return value === filter.value;
-            case "<":
+            case '<':
               return value < filter.value;
-            case "<=":
+            case '<=':
               return value <= filter.value;
-            case ">":
+            case '>':
               return value > filter.value;
-            case ">=":
+            case '>=':
               return value >= filter.value;
-            case "!=":
+            case '!=':
               return value !== filter.value;
-          }
+            }
+          });
         });
+
+        filteredResults.value = intermediateResults;
+        selectedTablePage.value = 1;
+        renderableResults.value = resetTablePage(filteredResults.value);
+
+        if (displayChart.value)
+          generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
+                        selectedGraphKey.value, null, filteredResults.value, false);
       });
 
-      filteredResults.value = intermediateResults;
-      selectedTablePage.value = 1;
-      renderableResults.value = resetTablePage(filteredResults.value);
-
-      if (displayChart.value) generateGraph(selectedGraphKey.value);
-    });
-
-    watch(
-      [queryInput, selectedOperator, queryOperand],
-      () =>
-        (canSubmitFilter.value =
-          queryInput.value !== "" &&
-          selectedOperator.value !== "Please select" &&
-          queryOperand.value !== "")
-    );
-
-    watch(selectedGeneMutation, () => {
-      filters = [];
-      filteredResults.value = allDocuments.filter(
-        doc => doc[selectedGeneMutation.value]
+      watch([queryInput, selectedOperator, queryOperand], () => canSubmitFilter.value =
+        (queryInput.value !== '' && selectedOperator.value !== 'Please select' && queryOperand.value !== '')
       );
 
-      cleanup();
-    });
+      watch(selectedGeneMutation, () => {
+        filters = [];
+        filteredResults.value = allDocuments
+          .filter(doc => doc[selectedGeneMutation.value]);
 
-    watch(selectedGraphKey, () => generateGraph(selectedGraphKey.value));
+        cleanup();
+      });
 
-    // paginate table:
-    watch(selectedTablePage, () => {
-      const startIndex = (selectedTablePage.value - 1) * pageSize;
-      const endIndex = startIndex + pageSize;
-      renderableResults.value = filteredResults.value.slice(
-        startIndex,
-        endIndex
-      );
-    });
+      watch(selectedGraphKey, () =>
+        generateGraph(displayChart.value, 'chart', isLoadingGraph.value,
+                      selectedGraphKey.value, null, filteredResults.value, false));
 
-    watch(useAdvancedMode, () => cleanup());
+      // paginate table:
+      watch(selectedTablePage, () => {
+        const startIndex = (selectedTablePage.value - 1) * pageSize;
+        const endIndex = startIndex + pageSize;
+        renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
+      });
 
-    const { currentUser } = getUser();
+      watch(useAdvancedMode, () => cleanup());
 
-    watchEffect(() => {
-      if (!currentUser.value) router.push("/login");
-    });
+      const { currentUser } = getUser();
 
-    return {
-      activeCheckboxes,
-      activeTableHeaders,
-      addFilter,
-      canSubmitFilter,
-      deleteFilter,
-      displayChart,
-      errorMessage,
-      filters,
-      filteredResults,
-      fireStoreOperators,
-      geneMutations,
-      generateGraph,
-      isFetchingData,
-      isLoadingGraph,
-      mapKeyToWords,
-      optionalTableHeaders,
-      pageSize,
-      queryInput,
-      queryOperand,
-      renderableResults,
-      selectedGeneMutation,
-      selectGraphKey,
-      selectedOperator,
-      selectedTablePage,
-      toggleHeader,
-      useAdvancedMode
-    };
-  }
-};
+      watchEffect(() => {
+        if (!currentUser.value) router.push('/login');
+      });
+
+      return { activeCheckboxes, activeTableHeaders, addFilter, canSubmitFilter, deleteFilter, displayChart,
+               errorMessage, filters, filteredResults, fireStoreOperators, geneMutations, generateGraph, isFetchingData,
+               isLoadingGraph, mapKeyToWords, optionalTableHeaders, pageSize, queryInput, queryOperand,
+               renderableResults, selectedGeneMutation, selectGraphKey, selectedOperator, selectedTablePage,
+               toggleHeader, useAdvancedMode };
+    }
+  };
 </script>
 
 <style lang="scss" scoped module>

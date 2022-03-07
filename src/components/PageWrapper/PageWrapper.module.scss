@@ -21,11 +21,25 @@
       height: 100%;
     }
 
-    .SideColumn {
-      background-color: #F0F0F0;
+    .SideColumnLeft {
       display: flex;
       height: auto;
       padding: 0;
+      @media(min-width: 800px){
+        height: 100vh;
+      }
+    }
+    .SideColumnRight {
+      display: flex;
+      height: 0vh;
+      padding: 0;
+      @media(min-width: 800px){
+        height: 100vh;
+      }
     }
   }
+}
+
+.Newsfeed {
+  margin-top: 10vw;
 }
