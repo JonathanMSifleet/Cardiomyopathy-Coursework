@@ -52,86 +52,56 @@
         <MDBBtn color="primary" @click="newsFeedModal = false"> Close </MDBBtn>
       </MDBModalFooter>
     </MDBModal>
-    <div
-      id="carouselExampleFade"
-      :class="[$style.carousel, 'slide', 'carousel-fade', 'me-5']"
-      data-bs-ride="carousel"
-    >
-      <div class="carousel-inner">
-        <MDBCard
-          v-for="(item, index) of items"
+    <div class="text-center mt-3">
+      <MDBBtn
+        color="primary"
+        @click="
+          () => {
+            collapse = !collapse;
+          }
+        "
+        aria-controls="multiCollapseExample"
+        >Expand News Feed</MDBBtn
+      >
+    </div>
+    <MDBCollapse v-model="collapse" id="multiCollapseExample">
+      <div :class="[[$style.container], 'mt-5']">
+        <div
+          :class="$style.card"
+          v-for="item of items"
+          @click="toggleModal(item)"
           :key="item.title"
-          class="mb-4 carousel-item"
-          :class="[
-            index == activeCarousel &&
-              'active animate__animated animate__fadeIn ',
-          ]"
         >
           <a v-mdb-ripple="{ color: 'light' }">
             <MDBCardImg :src="item.enclosure.link" top :alt="item.title" />
           </a>
-
-          <div class="text-center">
-            <MDBCardBody>
-              <MDBRow>
-                <MDBCol md="6">
-                  <button type="button" class="float-start" @click="prevSlide">
-                    <MDBIcon
-                      icon="chevron-left"
-                      :class="$style['left-arrow']"
-                      size="lg"
-                    />
-                  </button>
-                </MDBCol>
-                <MDBCol md="6">
-                  <button type="button" class="float-end" @click="nextSlide">
-                    <MDBIcon
-                      icon="chevron-right"
-                      :class="$style['right-arrow']"
-                      size="lg"
-                    />
-                  </button>
-                </MDBCol>
-              </MDBRow>
-              <MDBCardTitle
-                class="card-title"
-                :class="[
-                  readMore ? $style['remove-style'] : $style['add-style'],
-                ]"
-              >
-                {{ item.title }}
-              </MDBCardTitle>
-
-              <MDBBtn
-                tag="button"
-                class="btn-primary mt-2"
-                @click="toggleModal(item)"
-              >
-                View content
-              </MDBBtn>
-              <button
-                :class="[$style['read-more-link'], 'mt-4']"
-                @click="toggleClass"
-              >
-                {{ readMore ? "Read less..." : "Read more..." }}
-              </button>
-            </MDBCardBody>
+          <MDBCardTitle
+            :class="[$style['card-text'], 'ms-2', 'mt-3', $style['add-style']]"
+          >
+            {{ item.title }}
+          </MDBCardTitle>
+          <div :class="$style.circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <circle :class="$style.stroke" cx="60" cy="60" r="50" />
+            </svg>
           </div>
-        </MDBCard>
+          <div :class="$style.bar">
+            <div :class="$style.emptybar"></div>
+            <div :class="$style.filledbar"></div>
+          </div>
+        </div>
       </div>
-    </div>
+    </MDBCollapse>
   </div>
 </template>
 
 <script>
 import {
   MDBBtn,
-  MDBCard,
   MDBCardBody,
   MDBCardImg,
   MDBCardTitle,
   MDBCol,
-  MDBIcon,
   MDBModal,
   MDBModalBody,
   MDBModalFooter,
@@ -139,35 +109,34 @@ import {
   MDBModalTitle,
   MDBRow,
   mdbRipple,
+  MDBCollapse,
 } from "mdb-vue-ui-kit";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 export default {
   components: {
     MDBBtn,
-    MDBCard,
     MDBCardBody,
     MDBCardImg,
     MDBCardTitle,
     MDBCol,
-    MDBIcon,
     MDBModal,
     MDBModalBody,
     MDBModalFooter,
     MDBModalHeader,
     MDBModalTitle,
     MDBRow,
+    MDBCollapse,
   },
   directives: {
     mdbRipple,
   },
   setup() {
-    let carouselIndex = ref(0);
     let isModalActive = ref(false);
     let items = ref([]);
     let modalItem = ref({});
     const newsFeedModal = ref(false);
-    let readMore = ref(false);
+    const collapse = ref(false);
 
     (async () => {
       const res = await fetch(
@@ -177,8 +146,6 @@ export default {
       const data = await res.json();
       items.value = data.items;
     })();
-
-    const toggleClass = () => (readMore.value = !readMore.value);
 
     const toggleModal = (item = {}) => {
       modalItem.value = item;
@@ -193,31 +160,14 @@ export default {
         day: "numeric",
       });
 
-    const nextSlide = () => {
-      carouselIndex.value += 1;
-    };
-
-    const prevSlide = () => {
-      carouselIndex.value -= 1;
-    };
-    const activeCarousel = computed(() => {
-      if (carouselIndex.value < 0) carouselIndex.value = items.value.length - 1;
-
-      return carouselIndex.value % items.value.length;
-    });
-
     return {
-      activeCarousel,
       dateTime,
       isModalActive,
       items,
       modalItem,
       newsFeedModal,
-      nextSlide,
-      prevSlide,
-      readMore,
-      toggleClass,
       toggleModal,
+      collapse,
     };
   },
 };
