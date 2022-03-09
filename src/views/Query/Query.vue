@@ -383,7 +383,7 @@
         filters = [];
         filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
-          
+
         renderableResults.value = resetTablePage();
 
         cleanup();
