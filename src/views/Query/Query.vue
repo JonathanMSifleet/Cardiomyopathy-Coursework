@@ -7,7 +7,6 @@
     <div :class="[$style.AdvancedModeSwitchWrapper, 'mt-4', 'me-4']">
       <MDBSwitch
         v-model="useAdvancedMode"
-        :class="$style.AdvancedModeSwitch"
         label="Advanced search"
       />
     </div>
