@@ -13,21 +13,21 @@
 </template>
 
 <script>
-import Footer from "../../components/Footer/Footer.vue";
-import Header from "../../components/Header/Header.vue";
-import { MDBContainer, MDBCol, MDBRow } from "mdb-vue-ui-kit";
+  import Footer from '../../components/Footer/Footer.vue';
+  import Header from '../../components/Header/Header.vue';
+  import { MDBContainer, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
 
-export default {
-  components: {
-    Footer,
-    Header,
-    MDBCol,
-    MDBContainer,
-    MDBRow,
-  }
-};
+  export default {
+    components: {
+      Footer,
+      Header,
+      MDBCol,
+      MDBContainer,
+      MDBRow
+    }
+  };
 </script>
 
 <style module lang="scss">
-@import "./PageWrapper.module.scss";
+  @import './PageWrapper.module.scss';
 </style>
