@@ -14,7 +14,7 @@ const passReset = async(email) => {
   isPending.value = true;
 
   try {
-    await sendPasswordResetEmail(actionCodeSettings, auth, email);
+    await sendPasswordResetEmail(auth, email, actionCodeSettings);
     isPending.value = false;
   } catch (err) {
     console.error(err.message);
@@ -25,7 +25,7 @@ const passReset = async(email) => {
 
 //composable function
 const usePassReset = () => {
-  return { error, isPending, passReset };
+  return { error, passReset, isPending };
 };
 
 export default usePassReset;

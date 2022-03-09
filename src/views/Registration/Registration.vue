@@ -1,13 +1,15 @@
 <template>
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
-      <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader>User Registration</MDBCardHeader>
+      <MDBCard :class="$style['registration-card']" text="center">
+        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">
+          User Registration
+        </MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle>
             <!--print any google auth errors-->
             <div v-if="signupError" :class="[$style['error-message'], 'mb-4']">
-              {{ signupError }}
+              <img src="https://i.imgur.com/GnyDvKN.png" alt="Red cross"> {{ signupError }}
             </div>
           </MDBCardTitle>
           <MDBCardText>
@@ -24,7 +26,7 @@
                     required
                   />
                 </MDBCol>
-               
+
                 <MDBCol md="6">
                   <MDBInput
                     id="form2LastName"
@@ -38,8 +40,10 @@
                 </MDBCol>
                 <MDBRow>
                   <div
-                    v-for="message in firstNameValMessages" 
-                    v-if="firstNameValMessages!=='[]'" 
+                    v-for="message in firstNameValMessages"
+                    v-if="firstNameValMessages!=='[]'"
+                    :key="message"
+
                     :class="[$style['error-message'], 'mb-4']"
                   >
                     {{ message }}
@@ -47,14 +51,14 @@
                 </MDBRow>
                 <MDBRow>
                   <div
-                    v-for="message in lastNameValMessages" 
-                    v-if="lastNameValMessages!=='[]'" 
-                  :class="[$style['error-message'], 'mb-4']"
+                    v-for="message in lastNameValMessages"
+                    v-if="lastNameValMessages!=='[]'"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
                   >
                     {{ message }}
                   </div>
-                  
-              </MDBRow>
+                </MDBRow>
               </MDBRow>
               <MDBInput
                 id="form2Email"
@@ -67,8 +71,9 @@
               />
               <MDBRow>
                 <div
-                  v-for="message in emailValMessages" 
-                  v-if="emailValMessages!=='[]'" 
+                  v-for="message in emailValMessages"
+                  v-if="emailValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -95,8 +100,9 @@
               />
               <MDBRow>
                 <div
-                  v-for="message in passwordValMessages" 
-                  v-if="passwordValMessages!=='[]'" 
+                  v-for="message in passwordValMessages"
+                  v-if="passwordValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -116,8 +122,9 @@
               />
               <MDBRow>
                 <div
-                  v-for="message in phoneValMessages" 
-                  v-if="phoneValMessages!=='[]'" 
+                  v-for="message in phoneValMessages"
+                  v-if="phoneValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -133,9 +140,10 @@
                 required
               />
               <MDBRow>
-              <div
-                  v-for="message in addressLineOneValMessages" 
-                  v-if="addressLineOneValMessages!=='[]'" 
+                <div
+                  v-for="message in addressLineOneValMessages"
+                  v-if="addressLineOneValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -151,8 +159,9 @@
               />
               <MDBRow>
                 <div
-                  v-for="message in addressLineTwoValMessages" 
-                  v-if="addressLineTwoValMessages!=='[]'" 
+                  v-for="message in addressLineTwoValMessages"
+                  v-if="addressLineTwoValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -168,8 +177,9 @@
               />
               <MDBRow>
                 <div
-                  v-for="message in cityValMessages" 
-                  v-if="cityValMessages!=='[]'" 
+                  v-for="message in cityValMessages"
+                  v-if="cityValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -184,9 +194,10 @@
                 :maxlength="8"
               />
               <MDBRow>
-              <div
-                  v-for="message in postcodeValMessages" 
-                  v-if="postcodeValMessages!=='[]'" 
+                <div
+                  v-for="message in postcodeValMessages"
+                  v-if="postcodeValMessages!=='[]'"
+                  :key="message"
                   :class="[$style['error-message'], 'mb-4']"
                 >
                   {{ message }}
@@ -201,7 +212,7 @@
         </MDBCardBody>
         <MDBCardFooter>
           <!-- Register buttons -->
-          <div class="text-center mt-3">
+          <div class="text-center">
             <p>
               Already a member?
               <router-link :to="{ name: 'Login' }" :class="$style['register-link']">

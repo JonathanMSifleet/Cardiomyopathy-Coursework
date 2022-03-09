@@ -1,83 +1,85 @@
 .ComponentWrapper {
-    clear: left;
-    margin-top: 2%;
+  clear: left;
+  margin-top: 2%;
 }
 
 .Heading {
-    font-size: 2rem;
-    color: darkblue;
-    float: left;
-    margin-bottom: 1%;
+  color: #000;
+  text-align: center;
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 0 !important;
 }
 
 .AdvancedModeSwitchWrapper {
-    float: left;
-    margin-left: 1%;
+  float: right;
+  margin-left: 1%;
 }
 
 .PageSpinner {
-    clear: both;
+  clear: both;
 }
 
 .FilterInstruction {
-    font-size: 0.8rem;
+  font-size: 0.8rem;
 }
 
 .FilterWrapper {
-    float: left;
-    clear: both;
+  float: left;
+  clear: both;
 }
 
 .FilterListItem {
-    align-items: center;
-    flex-direction: row;
-    background-color: lightgray;
-    border-radius: 10px;
-    display: flex;
-    font-size: 1rem;
-    margin-bottom: 1%;
-    margin-right: 5%;
-    max-height: 2vh;
-    padding: 0.5%;
-    width: fit-content;
+  align-items: center;
+  flex-direction: row;
+  background-color: lightgray;
+  border-radius: 10px;
+  display: flex;
+  font-size: 1rem;
+  margin-bottom: 1%;
+  margin-right: 5%;
+  max-height: 2vh;
+  padding: 0.5%;
+  width: fit-content;
 }
 
 .DeleteFilterSpan {
-    cursor: pointer;
-    font-weight: bold;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .GeneMutationSelection {
-    clear: both;
-    float: left;
+  float: left;
+  font-weight: bold;
 }
 
 .GeneMutationWrapper {
-    margin-left: 1%;
+  margin-left: 1%;
 }
 
 .InputWrapper,
 .SelectWrapper {
-    height: 3vh;
-    float: left;
+  height: 3vh;
+  float: left;
 }
 
 .InputWrapper {
-    float: left;
-    height: 3.3vh;
-    width: 10vw;
+  float: left;
+  height: 3.3vh;
+  width: 10vw;
 }
 
 .SelectWrapper {
-    display: block;
-    height: 3.3vh;
-    position: relative;
-    width: 10vw;
+  display: block;
+  height: 3.3vh;
+  position: relative;
+  width: 10vw;
 }
 
 .Select {
-    float: left;
-    height: 100%;
+  float: left;
+  height: 2.3rem;
+  width: 11vw;
 }
 
 .GeneInfoWrapper {
@@ -85,47 +87,65 @@
 }
 
 .CheckboxWrapper {
-    margin-top: 1%;
-    margin-bottom: 1%;
-    float: left;
-    height: 15vh;
-    overflow-y: scroll;
-    min-width: 100%;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  float: left;
+  height: 15vh;
+  overflow-y: scroll;
+  min-width: 100%;
 }
 
 .GraphPrompt {
-    clear: both;
-    float: left;
+  clear: both;
+  float: left;
+  font-weight: bold;
 }
 
 .TableWrapper {
-    float: left;
-    width: 100%;
-    height: 70vh;
-    overflow-y: scroll;
-    overflow-x: scroll;
+  float: left;
+  width: 100%;
+  height: 70vh;
+  overflow-y: scroll;
+  overflow-x: scroll;
 }
 
-.PaginationOptions {
-    color: blue;
-    cursor: pointer;
-    float: left;
-    margin-left: 1%;
-}
-
-.SelectedPaginationOption {
-    color: grey;
+.PaginationOptions:hover {
+  text-decoration: none !important;
+  font-weight: bold;
 }
 
 .TableHeaderText {
-    color: blue;
-    cursor: pointer;
-    font-size: 0.9vw;
-    line-height: 0.9rem;
+  color: #1266f1;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+  font-weight: bold;
+  transition: 0.3s;
+  opacity: 0.6;
+}
+
+.TableHeaderText:hover {
+  transition: 0.4s;
+  color: #0a58cc;
+  opacity: 1;
+  -webkit-transform: scale(0.9);
+  -ms-transform: scale(0.9);
+  transform: scale(0.9);
 }
 
 .ErrorOccuredText {
-    clear: both;
-    color: red;
-    font-weight: bold;
+  clear: both;
+  color: red;
+  font-weight: bold;
+}
+
+.checkboxTitle,
+.filterHeading,
+.FilterInstruction,
+.ResultsIndicator {
+  font-weight: bold;
+}
+
+.filterHeading {
+  margin-bottom: 1%;
 }

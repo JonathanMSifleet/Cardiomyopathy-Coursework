@@ -1,5 +1,3 @@
-@import '../../components/Header/Header.module.scss';
-
 .PageWrapper {
   background-color: white;
   height: 100%;
@@ -14,18 +12,32 @@
   .Row {
     height: 100%;
     margin: 0;
-    padding-top: $headerHeight;
 
     .MainContent {
       padding: 0.5%;
       height: 100%;
     }
 
-    .SideColumn {
-      background-color: #F0F0F0;
+    .SideColumnLeft {
       display: flex;
-      height: 100vh;
+      height: auto;
       padding: 0;
+      @media(min-width: 800px){
+        height: 100vh;
+      }
+    }
+    .SideColumnRight {
+      display: flex;
+      height: 0vh;
+      padding: 0;
+      @media(min-width: 800px){
+        height: 100vh;
+        oveflow-x: hidden;
+      }
     }
   }
+}
+
+.Newsfeed {
+  margin-top: 10vw;
 }

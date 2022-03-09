@@ -1,7 +1,21 @@
-$headerHeight: 6vh;
+.header-img {
+  margin: 1vw 0;
+  height: 3.5vh;
+}
 
-.Header {
-  height: $headerHeight;
-  position: fixed;
-  width: 100%;
+.link {
+  align-self: center;
+  font-size: 1.2rem;
+}
+
+.logout {
+  align-self: center;
+  padding: 1vh 2vw;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.nav-btn {
+  padding: 2vh;
+  background-color: white;
 }

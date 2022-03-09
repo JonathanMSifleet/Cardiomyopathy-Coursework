@@ -11,6 +11,7 @@
           <MDBModalTitle
             id="deleteConfirmationModalLabel"
             :style="{ fontWeight: 'bold' }"
+            :class="$style['card-header']"
           >
             Confirmation
           </MDBModalTitle>
@@ -46,6 +47,7 @@
           <MDBModalTitle
             id="experimentalDataModalLabel"
             :style="{ fontWeight: 'bold' }"
+            :class="$style['card-header']"
           >
             Experimental Data
           </MDBModalTitle>
@@ -87,7 +89,7 @@
       style="height: 70%"
     >
       <MDBCard :class="$style['authentication-card']" text="center">
-        <MDBCardHeader :style="{ fontWeight: 'bold' }">
+        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">
           User Profile
         </MDBCardHeader>
         <MDBCardBody>
@@ -388,7 +390,6 @@
 
         const querySnapshot = await getDocs(firestoreQuery);
         querySnapshot.forEach((doc) => {
-          // doc.data() is never undefined for query doc snapshots
           experimentalData.value.push({ documentId: doc.id, ...doc.data() });
           if (process.env.DEVELOPMENT) console.log(doc.id, ' => ', doc.data());
         });
@@ -443,8 +444,8 @@
 
       return { cardsVisible, currentDocId, currentEntity, dateTime, deleteConfirmationModal, deleteExperimentalDataDoc,
                email, experimentalData, experimentalDataModal, firstName, getExperimentalDataByUserId, lastName,
-               mapKeyToWords, phoneNumber, showCardContainer, showCards, toggleExperimentalDataModal, toggleModal,
-               updateUser, userIdentity };
+               mapKeyToWords, phoneNumber, addressLineOne, addressLineTwo, city, postcode, showCardContainer, showCards,
+               toggleExperimentalDataModal, toggleModal, updateUser, userIdentity };
     }
   };
 </script>

@@ -7,11 +7,6 @@
     font-weight: bold;
 }
 
-.remove-style {
-    all: unset;
-    font-weight: bold;
-}
-
 .read-more-link {
     font-size: 0.875rem;
     opacity: 0.6;
@@ -25,8 +20,12 @@
 }
 
 .carousel {
-    float: right;
-    width: 15.625rem;
+    display: none;
+    @media (min-width: 700px) {
+        display: flex;
+        float: right;
+        width: 20rem;
+    }
 }
 
 .left-arrow,
@@ -39,4 +38,93 @@
 .right-arrow:hover {
     transition: 0.4s;
     color: #1266f1 !important;
+}
+
+.container {
+    height: 300px;
+    width: 600px;
+    left: calc(50% - 300px);
+    display: flex;
+    margin-left: 8%;
+    margin-bottom: 10%;
+}
+
+.card {
+    height: 360px;
+    width: 250px;
+    background-color: #ffffff;
+    border-radius: 5%;
+    box-shadow: -0.8rem 0 2rem #1266f1;
+    /*   margin-left: -50px; */
+    transition: 0.4s ease-out;
+    position: relative;
+    left: 0px;
+}
+
+.card:not(:first-child) {
+    margin-left: -150px;
+}
+
+.card:hover {
+    transform: translateY(-20px);
+    transition: 0.4s ease-out;
+}
+
+.card:hover ~ .card {
+    position: relative;
+    left: 50px;
+    transition: 0.4s ease-out;
+}
+
+.bar {
+    position: absolute;
+    top: 345px;
+    left: 20%;
+    height: 5px;
+    width: 150px;
+}
+
+.emptybar {
+    background-color: #efefef;
+    width: 100%;
+    height: 100%;
+}
+
+.filledbar {
+    position: absolute;
+    top: 0px;
+    z-index: 3;
+    width: 0px;
+    height: 100%;
+    background: rgb(0, 154, 217);
+    background: linear-gradient(90deg, rgba(0, 154, 217, 1) 0%, rgba(217, 147, 0, 1) 65%, rgba(255, 186, 0, 1) 100%);
+    transition: 0.6s ease-out;
+}
+
+.card:hover .filledbar {
+    width: 120px;
+    transition: 0.4s ease-out;
+}
+
+.circle {
+    position: absolute;
+    top: 225px;
+    left: calc(50% - 60px);
+}
+
+.stroke {
+    stroke: #1266f1;
+    stroke-dasharray: 360;
+    stroke-dashoffset: 360;
+    transition: 0.6s ease-out;
+}
+
+svg {
+    fill: #efefef;
+    stroke-width: 2px;
+}
+
+.card:hover .stroke {
+    stroke-dashoffset: 100;
+    transition: 0.6s ease-out;
 }

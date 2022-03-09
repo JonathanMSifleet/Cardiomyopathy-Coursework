@@ -4,6 +4,7 @@
     v-if="showButton()"
     color="primary"
     aria-controls="geneModal"
+    class="ms-4"
     @click="geneModal=true, populateModal()"
   >
     Gene Info
