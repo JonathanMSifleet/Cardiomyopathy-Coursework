@@ -26,9 +26,9 @@
                 @click="deleteFilter(index)"
               >
                 {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
-                <span
-                  :class="$style.DeleteFilterSpan"
-                >x</span>
+                <span :class="$style.DeleteFilterSpan">
+                  x
+                </span>
               </li>
             </ul>
           </div>
@@ -87,7 +87,6 @@
             <option
               v-for="geneMutation in geneMutations"
               :key="geneMutation"
-              :disabled="geneMutation === 'Please select'"
             >
               {{ geneMutation }}
             </option>
@@ -264,7 +263,7 @@
           allDocuments = await fetchDocuments();
           if (allDocuments.length === 0) throw new Error('No docs');
 
-          cleanup();
+          filteredResults.value = allDocuments;
 
           optionalTableHeaders.value = determineKeys(allDocuments);
           delete optionalTableHeaders.value.userId;
@@ -314,11 +313,6 @@
         queryOperand.value = '';
       };
 
-      const cleanup = () => {
-        filteredResults.value = allDocuments;
-        renderableResults.value = resetTablePage(filteredResults.value);
-      };
-
       const convertValueToType = (value) => {
         switch(true) {
         case value === 'true' || value === 'True':
@@ -332,24 +326,7 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const resetTablePage = (array) => {
-        selectedTablePage.value = 1;
-        return array = array.slice(0, pageSize);
-      };
-
-      const selectGraphKey = (key) => selectedGraphKey.value = key;
-
-      const toggleHeader = (key) => {
-        if (activeTableHeaders.value.includes(key)) {
-          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
-          delete activeCheckboxes[key];
-        } else {
-          activeTableHeaders.value.push(key);
-          activeCheckboxes[key] = true;
-        }
-      };
-
-      watch(filters, () => {
+      const filterResults = () => {
         let intermediateResults = allDocuments;
         filters.forEach(filter => {
           intermediateResults = intermediateResults.filter(doc => {
@@ -372,7 +349,28 @@
           });
         });
 
-        filteredResults.value = intermediateResults;
+        return intermediateResults;
+      };
+
+      const resetTablePage = (array) => {
+        selectedTablePage.value = 1;
+        return array.slice(0, pageSize);
+      };
+
+      const selectGraphKey = (key) => selectedGraphKey.value = key;
+
+      const toggleHeader = (key) => {
+        if (activeTableHeaders.value.includes(key)) {
+          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
+          delete activeCheckboxes[key];
+        } else {
+          activeTableHeaders.value.push(key);
+          activeCheckboxes[key] = true;
+        }
+      };
+
+      watch(filters, () => {
+        filteredResults.value = filterResults();
         selectedTablePage.value = 1;
         renderableResults.value = resetTablePage(filteredResults.value);
 
@@ -386,10 +384,11 @@
       );
 
       watch(selectedGeneMutation, () => {
-        filters = [];
+        if (useAdvancedMode.value) return;
 
-        filteredResults.value = allDocuments
-          .filter(doc => doc[selectedGeneMutation.value]);
+        filteredResults.value = selectedGeneMutation.value !== 'Please select'
+          ? allDocuments.filter(doc => doc[selectedGeneMutation.value])
+          : allDocuments;
 
         renderableResults.value = resetTablePage(filteredResults.value);
       });
@@ -405,7 +404,16 @@
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
       });
 
-      watch(useAdvancedMode, () => cleanup());
+      watch(useAdvancedMode, () => {
+        if (useAdvancedMode.value) {
+          selectedGeneMutation.value = 'Please select';
+          filteredResults.value = filterResults();
+        } else {
+          filteredResults.value = allDocuments;
+        }
+
+        renderableResults.value = resetTablePage(filteredResults.value);
+      });
 
       const { currentUser } = getUser();
 
