@@ -2,7 +2,9 @@
   <PageWrapper>
     <div class="login w-100 p-4 d-flex align-items-center justify-content-center" style="height: 70%">
       <MDBCard :class="$style['registration-card']" text="center">
-        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">User Registration</MDBCardHeader>
+        <MDBCardHeader :class="[$style['card-header'], 'mt-3']">
+          User Registration
+        </MDBCardHeader>
         <MDBCardBody>
           <MDBCardTitle>
             <!--print any google auth errors-->
