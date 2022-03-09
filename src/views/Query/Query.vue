@@ -87,7 +87,6 @@
             <option
               v-for="geneMutation in geneMutations"
               :key="geneMutation"
-              :disabled="geneMutation === 'Please select'"
             >
               {{ geneMutation }}
             </option>
@@ -264,7 +263,7 @@
           allDocuments = await fetchDocuments();
           if (allDocuments.length === 0) throw new Error('No docs');
 
-          cleanup();
+          filteredResults.value = allDocuments;
 
           optionalTableHeaders.value = determineKeys(allDocuments);
           delete optionalTableHeaders.value.userId;
@@ -314,11 +313,6 @@
         queryOperand.value = '';
       };
 
-      const cleanup = () => {
-        filteredResults.value = allDocuments;
-        renderableResults.value = resetTablePage(filteredResults.value);
-      };
-
       const convertValueToType = (value) => {
         switch(true) {
         case value === 'true' || value === 'True':
@@ -334,7 +328,7 @@
 
       const resetTablePage = (array) => {
         selectedTablePage.value = 1;
-        return array = array.slice(0, pageSize);
+        return array.slice(0, pageSize);
       };
 
       const selectGraphKey = (key) => selectedGraphKey.value = key;
@@ -350,6 +344,8 @@
       };
 
       watch(filters, () => {
+        console.log('new filter added');
+
         let intermediateResults = allDocuments;
         filters.forEach(filter => {
           intermediateResults = intermediateResults.filter(doc => {
@@ -386,10 +382,13 @@
       );
 
       watch(selectedGeneMutation, () => {
+        if (useAdvancedMode.value) return;
+
         filters = [];
 
-        filteredResults.value = allDocuments
-          .filter(doc => doc[selectedGeneMutation.value]);
+        filteredResults.value = selectedGeneMutation.value !== 'Please select'
+          ? allDocuments.filter(doc => doc[selectedGeneMutation.value])
+          : allDocuments;
 
         renderableResults.value = resetTablePage(filteredResults.value);
       });
@@ -405,7 +404,14 @@
         renderableResults.value = filteredResults.value.slice(startIndex, endIndex);
       });
 
-      watch(useAdvancedMode, () => cleanup());
+      watch(useAdvancedMode, () => {
+        useAdvancedMode.value
+          ? selectedGeneMutation.value = 'Please select'
+          : filters = [];
+
+        filteredResults.value = allDocuments;
+        renderableResults.value = resetTablePage(filteredResults.value);
+      });
 
       const { currentUser } = getUser();
 
