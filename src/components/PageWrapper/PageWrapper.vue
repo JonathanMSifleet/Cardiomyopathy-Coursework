@@ -5,12 +5,9 @@
       <MDBCol :class="$style.SideColumnLeft" md="2" />
       <MDBCol :class="$style.MainContent" md="8">
         <slot />
+        <NewsFeed v-if="path" />
       </MDBCol>
-      <MDBCol :class="$style.SideColumnRight" md="2">
-        <div :class="$style.Newsfeed">
-          <NewsFeed v-if="path" />
-        </div>
-      </MDBCol>
+      <MDBCol :class="$style.SideColumnRight" md="2" />
     </MDBRow>
     <Footer />
   </MDBContainer>
@@ -38,7 +35,7 @@
       const route = useRoute();
 
       const commpPath = computed(() => route.path);
-      if(commpPath.value == '/') path.value = true;
+      if (commpPath.value == '/') path.value = true;
 
       return { path };
     }

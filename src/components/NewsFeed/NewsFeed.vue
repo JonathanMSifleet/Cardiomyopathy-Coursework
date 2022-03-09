@@ -33,7 +33,7 @@
               "
               data-mdb-ripple-color="light"
             >
-              <img :src="modalItem.enclosure.link" class="img-fluid" />
+              <img :src="modalItem.enclosure.link" class="img-fluid">
               <a href="#!">
                 <div
                   class="mask"
@@ -49,178 +49,128 @@
       </MDBModalBody>
 
       <MDBModalFooter>
-        <MDBBtn color="primary" @click="newsFeedModal = false"> Close </MDBBtn>
+        <MDBBtn color="primary" @click="newsFeedModal = false">
+          Close
+        </MDBBtn>
       </MDBModalFooter>
     </MDBModal>
-    <div
-      id="carouselExampleFade"
-      :class="[$style.carousel, 'slide', 'carousel-fade', 'me-5']"
-      data-bs-ride="carousel"
-    >
-      <div class="carousel-inner">
-        <MDBCard
-          v-for="(item, index) of items"
+    <div class="text-center mt-3">
+      <MDBBtn
+        color="primary"
+        :class="['animate__animated ', collapse ? 'animate__zoomIn' : 'animate__fadeIn']"
+        aria-controls="multiCollapseExample"
+        @click="() => collapse = !collapse"
+      >
+        {{ collapse ? 'Shrink ' : 'Expand ' }} News Feed
+      </MDBBtn>
+    </div>
+    <MDBCollapse id="multiCollapseExample" v-model="collapse">
+      <div :class="[[$style.container], 'mt-5']">
+        <div
+          v-for="item of items"
           :key="item.title"
-          class="mb-4 carousel-item"
-          :class="[
-            index == activeCarousel &&
-              'active animate__animated animate__fadeIn ',
-          ]"
+          :class="$style.card"
+          @click="toggleModal(item)"
         >
           <a v-mdb-ripple="{ color: 'light' }">
-            <MDBCardImg :src="item.enclosure.link" top :alt="item.title" />
+            <MDBCardImg
+              :src="item.enclosure.link"
+              top
+              :alt="item.title"
+              title="Click to view article"
+            />
           </a>
-
-          <div class="text-center">
-            <MDBCardBody>
-              <MDBRow>
-                <MDBCol md="6">
-                  <button type="button" class="float-start" @click="prevSlide">
-                    <MDBIcon
-                      icon="chevron-left"
-                      :class="$style['left-arrow']"
-                      size="lg"
-                    />
-                  </button>
-                </MDBCol>
-                <MDBCol md="6">
-                  <button type="button" class="float-end" @click="nextSlide">
-                    <MDBIcon
-                      icon="chevron-right"
-                      :class="$style['right-arrow']"
-                      size="lg"
-                    />
-                  </button>
-                </MDBCol>
-              </MDBRow>
-              <MDBCardTitle
-                class="card-title"
-                :class="[
-                  readMore ? $style['remove-style'] : $style['add-style'],
-                ]"
-              >
-                {{ item.title }}
-              </MDBCardTitle>
-
-              <MDBBtn
-                tag="button"
-                class="btn-primary mt-2"
-                @click="toggleModal(item)"
-              >
-                View content
-              </MDBBtn>
-              <button
-                :class="[$style['read-more-link'], 'mt-4']"
-                @click="toggleClass"
-              >
-                {{ readMore ? "Read less..." : "Read more..." }}
-              </button>
-            </MDBCardBody>
+          <MDBCardTitle
+            :class="[$style['card-text'], 'ms-2', 'mt-3', $style['add-style']]"
+          >
+            {{ item.title }}
+          </MDBCardTitle>
+          <div :class="$style.circle">
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <circle
+                :class="$style.stroke"
+                cx="60"
+                cy="60"
+                r="50"
+              />
+            </svg>
           </div>
-        </MDBCard>
+          <div :class="$style.bar">
+            <div :class="$style.emptybar" />
+            <div :class="$style.filledbar" />
+          </div>
+        </div>
       </div>
-    </div>
+    </MDBCollapse>
   </div>
 </template>
 
 <script>
-import {
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBCardImg,
-  MDBCardTitle,
-  MDBCol,
-  MDBIcon,
-  MDBModal,
-  MDBModalBody,
-  MDBModalFooter,
-  MDBModalHeader,
-  MDBModalTitle,
-  MDBRow,
-  mdbRipple,
-} from "mdb-vue-ui-kit";
-import { ref, computed } from "vue";
-
-export default {
-  components: {
+  import {
     MDBBtn,
-    MDBCard,
-    MDBCardBody,
     MDBCardImg,
     MDBCardTitle,
     MDBCol,
-    MDBIcon,
+    MDBCollapse,
     MDBModal,
     MDBModalBody,
     MDBModalFooter,
     MDBModalHeader,
     MDBModalTitle,
     MDBRow,
-  },
-  directives: {
-    mdbRipple,
-  },
-  setup() {
-    let carouselIndex = ref(0);
-    let isModalActive = ref(false);
-    let items = ref([]);
-    let modalItem = ref({});
-    const newsFeedModal = ref(false);
-    let readMore = ref(false);
+    mdbRipple
+  } from 'mdb-vue-ui-kit';
+  import { ref } from 'vue';
 
-    (async () => {
-      const res = await fetch(
-        "https://api.rss2json.com/v1/api.json?rss_url=" +
-          "https%3A%2F%2Fwww.news-medical.net%2Ftag%2Ffeed%2FCardiomyopathy.aspx"
-      );
-      const data = await res.json();
-      items.value = data.items;
-    })();
+  export default {
+    components: {
+      MDBBtn,
+      MDBCardImg,
+      MDBCardTitle,
+      MDBCol,
+      MDBCollapse,
+      MDBModal,
+      MDBModalBody,
+      MDBModalFooter,
+      MDBModalHeader,
+      MDBModalTitle,
+      MDBRow
+    },
+    directives: {
+      mdbRipple
+    },
+    setup() {
+      let isModalActive = ref(false);
+      let items = ref([]);
+      let modalItem = ref({});
+      const newsFeedModal = ref(false);
+      const collapse = ref(false);
 
-    const toggleClass = () => (readMore.value = !readMore.value);
+      (async () => {
+        const res = await fetch(
+          'https://api.rss2json.com/v1/api.json?rss_url=' +
+            'https%3A%2F%2Fwww.news-medical.net%2Ftag%2Ffeed%2FCardiomyopathy.aspx'
+        );
+        const data = await res.json();
+        items.value = data.items;
+      })();
 
-    const toggleModal = (item = {}) => {
-      modalItem.value = item;
-      newsFeedModal.value = !newsFeedModal.value;
-    };
+      const toggleModal = (item = {}) => {
+        modalItem.value = item;
+        newsFeedModal.value = !newsFeedModal.value;
+      };
 
-    const dateTime = (value) =>
-      new Date(value).toLocaleDateString("en-GB", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+      const dateTime = (value) =>
+        new Date(value).toLocaleDateString('en-GB', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
 
-    const nextSlide = () => {
-      carouselIndex.value += 1;
-    };
-
-    const prevSlide = () => {
-      carouselIndex.value -= 1;
-    };
-    const activeCarousel = computed(() => {
-      if (carouselIndex.value < 0) carouselIndex.value = items.value.length - 1;
-
-      return carouselIndex.value % items.value.length;
-    });
-
-    return {
-      activeCarousel,
-      dateTime,
-      isModalActive,
-      items,
-      modalItem,
-      newsFeedModal,
-      nextSlide,
-      prevSlide,
-      readMore,
-      toggleClass,
-      toggleModal,
-    };
-  },
-};
+      return { collapse, dateTime, isModalActive, items, modalItem, newsFeedModal, toggleModal };
+    }
+  };
 </script>
 
 <style module lang="scss">
