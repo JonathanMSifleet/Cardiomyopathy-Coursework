@@ -332,7 +332,9 @@
         passwordValMessages.value = validatePassword(password.value);
         phoneValMessages.value = validatePhoneNumber(phone.value);
         addressLineOneValMessages.value = validateAddressLineOne(addressLineOne.value);
-        addressLineTwoValMessages.value = validateAddressLineTwo(addressLineTwo.value);
+        if(addressLineTwo.value && addressLineTwo.value.length !== 0)
+          addressLineTwoValMessages.value = validateAddressLineTwo(addressLineTwo.value);
+
         cityValMessages.value = validateCity(addressLineOne.value);
         postcodeValMessages.value = validatePostcode(postcode.value);
 
@@ -343,7 +345,6 @@
           passwordValMessages.value.length !== 0 ||
           phoneValMessages.value.length !== 0 ||
           addressLineOneValMessages.value.length !== 0 ||
-          addressLineTwoValMessages.value.length !== 0 ||
           cityValMessages.value.length !== 0 ||
           postcodeValMessages.value.length !== 0 ||
           passMatchErr.value
