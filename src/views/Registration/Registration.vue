@@ -347,8 +347,9 @@
           cityValMessages.value.length !== 0 ||
           postcodeValMessages.value.length !== 0 ||
           passMatchErr.value
-        ) {inputsValid.value = false;}
-        else{
+        ) {
+          inputsValid.value = false;
+        } else {
           inputsValid.value = true;
         }
       };

@@ -32,7 +32,6 @@ export const validatePassword = (input) => {
   if(!validateLength(input, 8, 64)) valMessages.push('Password must be between 8 and 64 characters');
   if(!validateRegex(input, /[A-Z]/)) valMessages.push('Password must contain at least one uppercase letter');
   if(!validateRegex(input, /[a-z]/)) valMessages.push('Password must contain at least one lowercase letter');
-  // eslint-disable-next-line no-useless-escape
   if(!validateRegex(input, specialCharRegex))
     valMessages.push('Password must contain at least one special character');
 
@@ -50,13 +49,10 @@ export const validatePhoneNumber = (input) => {
 
 export const validateAddressLineOne = (input) => {
   const valMessages = [];
-  console.log('address1');
 
   if(!validateLength(input, 4, 255)) valMessages.push('Address must be between 4 and 255 characters');
-  console.log('address2');
   //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
   //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
-  console.log('address3');
   return valMessages;
 };
 
@@ -72,15 +68,11 @@ export const validateAddressLineTwo = (input) => {
 
 export const validateCity = (input) => {
   const valMessages = [];
-  console.log('city1');
 
   if(!validateRegex(input, /^[a-zA-Z0-9_]+$/)) valMessages.push('City must only contain letters a-z and A-Z');
-  console.log('city2');
   if(!validateLength(input, 4, 35)) valMessages.push('City must be between 4 and 35 characters');
-  console.log('city3');
   //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
   //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
-  console.log('city4');
 
   return valMessages;
 };
