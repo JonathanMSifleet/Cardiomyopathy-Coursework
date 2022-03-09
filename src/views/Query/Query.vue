@@ -307,6 +307,10 @@
           opStr: Object.keys(fireStoreOperators).find(key => fireStoreOperators[key] === selectedOperator.value),
           value: convertValueToType(queryOperand.value)
         });
+
+        queryInput.value = '';
+        selectedOperator.value = 'Please select';
+        queryOperand.value = '';
       };
 
       const cleanup = () => {
@@ -326,7 +330,7 @@
         }
       };
 
-      const deleteFilter = (index) => filters = filters.slice(index, 1);
+      const deleteFilter = (index) => filters = filters.splice(index, 1);
 
       const resetTablePage = (array) => array.slice(0, pageSize);
 
