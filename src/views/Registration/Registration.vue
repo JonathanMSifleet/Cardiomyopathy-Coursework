@@ -39,24 +39,26 @@
                   />
                 </MDBCol>
                 <MDBRow>
-                  <div
-                    v-for="message in firstNameValMessages"
-                    v-if="firstNameValMessages!=='[]'"
-                    :key="message"
+                  <div v-if="firstNameValMessages!=='[]'">
+                    <div
+                      v-for="message in firstNameValMessages"
+                      :key="message"
 
-                    :class="[$style['error-message'], 'mb-4']"
-                  >
-                    {{ message }}
+                      :class="[$style['error-message'], 'mb-4']"
+                    >
+                      {{ message }}
+                    </div>
                   </div>
                 </MDBRow>
                 <MDBRow>
-                  <div
-                    v-for="message in lastNameValMessages"
-                    v-if="lastNameValMessages!=='[]'"
-                    :key="message"
-                    :class="[$style['error-message'], 'mb-4']"
-                  >
-                    {{ message }}
+                  <div v-if="lastNameValMessages!=='[]'">
+                    <div
+                      v-for="message in lastNameValMessages"
+                      :key="message"
+                      :class="[$style['error-message'], 'mb-4']"
+                    >
+                      {{ message }}
+                    </div>
                   </div>
                 </MDBRow>
               </MDBRow>
@@ -70,13 +72,14 @@
                 required
               />
               <MDBRow>
-                <div
-                  v-for="message in emailValMessages"
-                  v-if="emailValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="emailValMessages!=='[]'">
+                  <div
+                    v-for="message in emailValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
               </MDBRow>
               <!-- Password input -->
@@ -99,13 +102,14 @@
                 required
               />
               <MDBRow>
-                <div
-                  v-for="message in passwordValMessages"
-                  v-if="passwordValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="passwordValMessages!=='[]'">
+                  <div
+                    v-for="message in passwordValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
                 <div v-if="passMatchErr" :class="[$style['error-message'], 'mb-4']">
                   {{ passMatchErr }}
@@ -121,13 +125,14 @@
                 required
               />
               <MDBRow>
-                <div
-                  v-for="message in phoneValMessages"
-                  v-if="phoneValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="phoneValMessages!=='[]'">
+                  <div
+                    v-for="message in phoneValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
               </MDBRow>
               <MDBInput
@@ -140,13 +145,14 @@
                 required
               />
               <MDBRow>
-                <div
-                  v-for="message in addressLineOneValMessages"
-                  v-if="addressLineOneValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="addressLineOneValMessages!=='[]'">
+                  <div
+                    v-for="message in addressLineOneValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
               </MDBRow>
               <MDBInput
@@ -158,13 +164,14 @@
                 :maxlength="35"
               />
               <MDBRow>
-                <div
-                  v-for="message in addressLineTwoValMessages"
-                  v-if="addressLineTwoValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="addressLineTwoValMessages!=='[]'">
+                  <div
+                    v-for="message in addressLineTwoValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
               </MDBRow>
               <MDBInput
@@ -176,13 +183,14 @@
                 :maxlength="35"
               />
               <MDBRow>
-                <div
-                  v-for="message in cityValMessages"
-                  v-if="cityValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="cityValMessages!=='[]'">
+                  <div
+                    v-for="message in cityValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
               </MDBRow>
               <MDBInput
@@ -194,13 +202,14 @@
                 :maxlength="8"
               />
               <MDBRow>
-                <div
-                  v-for="message in postcodeValMessages"
-                  v-if="postcodeValMessages!=='[]'"
-                  :key="message"
-                  :class="[$style['error-message'], 'mb-4']"
-                >
-                  {{ message }}
+                <div v-if="postcodeValMessages!=='[]'">
+                  <div
+                    v-for="message in postcodeValMessages"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
                 </div>
               </MDBRow>
 
