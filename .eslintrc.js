@@ -46,7 +46,6 @@ module.exports = {
         'max': 1
       }
     }],
-    'vue/no-use-v-if-with-v-for': 0,
     'vue/script-indent': [
       'error',
       2,
