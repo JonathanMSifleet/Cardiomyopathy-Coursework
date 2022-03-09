@@ -5,44 +5,43 @@
       <MDBCol :class="$style.SideColumnLeft" md="2" />
       <MDBCol :class="$style.MainContent" md="8">
         <slot />
-        <NewsFeed v-if="path"/>
+        <NewsFeed v-if="path" />
       </MDBCol>
-      <MDBCol :class="$style.SideColumnRight" md="2">
-      </MDBCol>
+      <MDBCol :class="$style.SideColumnRight" md="2" />
     </MDBRow>
     <Footer />
   </MDBContainer>
 </template>
 
 <script>
-import Footer from "../../components/Footer/Footer.vue";
-import Header from "../../components/Header/Header.vue";
-import NewsFeed from "../../components/NewsFeed/NewsFeed.vue";
-import { MDBContainer, MDBCol, MDBRow } from "mdb-vue-ui-kit";
-import { computed, ref } from "vue";
-import { useRoute } from "vue-router";
+  import Footer from '../../components/Footer/Footer.vue';
+  import Header from '../../components/Header/Header.vue';
+  import NewsFeed from '../../components/NewsFeed/NewsFeed.vue';
+  import { MDBContainer, MDBCol, MDBRow } from 'mdb-vue-ui-kit';
+  import { computed, ref } from 'vue';
+  import { useRoute } from 'vue-router';
 
-export default {
-  components: {
-    Footer,
-    Header,
-    MDBCol,
-    MDBContainer,
-    MDBRow,
-    NewsFeed,
-  },
-  setup() {
-    const path = ref(false);
-    const route = useRoute();
+  export default {
+    components: {
+      Footer,
+      Header,
+      MDBCol,
+      MDBContainer,
+      MDBRow,
+      NewsFeed
+    },
+    setup() {
+      const path = ref(false);
+      const route = useRoute();
 
-    const commpPath = computed(() => route.path);
-    if (commpPath.value == "/") path.value = true;
+      const commpPath = computed(() => route.path);
+      if (commpPath.value == '/') path.value = true;
 
-    return { path };
-  },
-};
+      return { path };
+    }
+  };
 </script>
 
 <style module lang="scss">
-@import "./PageWrapper.module.scss";
+  @import './PageWrapper.module.scss';
 </style>
