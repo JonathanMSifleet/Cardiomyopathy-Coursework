@@ -26,9 +26,9 @@
                 @click="deleteFilter(index)"
               >
                 {{ filter.fieldPath }} {{ filter.opStr }} {{ filter.value }}
-                <span
-                  :class="$style.DeleteFilterSpan"
-                >x</span>
+                <span :class="$style.DeleteFilterSpan">
+                  x
+                </span>
               </li>
             </ul>
           </div>
@@ -407,9 +407,11 @@
       watch(useAdvancedMode, () => {
         if (useAdvancedMode.value) {
           selectedGeneMutation.value = 'Please select';
+          filteredResults.value = filterResults();
+        } else {
+          filteredResults.value = allDocuments;
         }
 
-        filteredResults.value = allDocuments;
         renderableResults.value = resetTablePage(filteredResults.value);
       });
 
