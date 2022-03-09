@@ -294,8 +294,8 @@
       })();
 
       const addFilter = () => {
-        if (optionalTableHeaders.value[queryInput.value] === undefined) {
-          alert('Attribute not found in database'); return;
+        if (optionalTableHeaders.value[queryInput.value.toLowerCase()] === undefined) {
+          alert('Attribute not found in database, please check casing from table'); return;
         }
 
         const operandValidationMessage = operandIsValid(queryOperand.value);
@@ -354,9 +354,8 @@
         filters.forEach(filter => {
           intermediateResults = intermediateResults.filter(doc => {
             const value = doc[filter.fieldPath];
-            const operator = filter.opStr;
 
-            switch (operator) {
+            switch (filter.opStr) {
             case '==':
               return value === filter.value;
             case '<':
@@ -388,6 +387,7 @@
 
       watch(selectedGeneMutation, () => {
         filters = [];
+
         filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
 
