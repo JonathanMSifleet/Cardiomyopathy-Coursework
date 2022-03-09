@@ -32,7 +32,6 @@ export const validatePassword = (input) => {
   if(!validateLength(input, 8, 64)) valMessages.push('Password must be between 8 and 64 characters');
   if(!validateRegex(input, /[A-Z]/)) valMessages.push('Password must contain at least one uppercase letter');
   if(!validateRegex(input, /[a-z]/)) valMessages.push('Password must contain at least one lowercase letter');
-  // eslint-disable-next-line no-useless-escape
   if(!validateRegex(input, specialCharRegex))
     valMessages.push('Password must contain at least one special character');
 
@@ -52,7 +51,9 @@ export const validateAddressLineOne = (input) => {
   const valMessages = [];
 
   if(!validateLength(input, 4, 255)) valMessages.push('Address must be between 4 and 255 characters');
-  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
+  //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  return valMessages;
 };
 
 export const validateAddressLineTwo = (input) => {
@@ -60,7 +61,9 @@ export const validateAddressLineTwo = (input) => {
   const valMessages = [];
 
   if(!validateLength(input, 0, 255)) valMessages.push('Address must be between 4 and 255 characters');
-  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
+  //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  return valMessages;
 };
 
 export const validateCity = (input) => {
@@ -68,7 +71,8 @@ export const validateCity = (input) => {
 
   if(!validateRegex(input, /^[a-zA-Z0-9_]+$/)) valMessages.push('City must only contain letters a-z and A-Z');
   if(!validateLength(input, 4, 35)) valMessages.push('City must be between 4 and 35 characters');
-  if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
+  //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
+  //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');
 
   return valMessages;
 };

@@ -11,9 +11,6 @@
             <div v-if="signupError" :class="[$style['error-message'], 'mb-4']">
               <img src="https://i.imgur.com/GnyDvKN.png" alt="Red cross"> {{ signupError }}
             </div>
-            <div v-if="passMatchErr" :class="[$style['error-message'], 'mb-4']">
-              {{ passMatchErr }}
-            </div>
           </MDBCardTitle>
           <MDBCardText>
             <form @submit.prevent="handleSubmit">
@@ -29,6 +26,7 @@
                     required
                   />
                 </MDBCol>
+
                 <MDBCol md="6">
                   <MDBInput
                     id="form2LastName"
@@ -40,6 +38,27 @@
                     required
                   />
                 </MDBCol>
+                <MDBRow>
+                  <div
+                    v-for="message in firstNameValMessages"
+                    v-if="firstNameValMessages!=='[]'"
+                    :key="message"
+
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
+                </MDBRow>
+                <MDBRow>
+                  <div
+                    v-for="message in lastNameValMessages"
+                    v-if="lastNameValMessages!=='[]'"
+                    :key="message"
+                    :class="[$style['error-message'], 'mb-4']"
+                  >
+                    {{ message }}
+                  </div>
+                </MDBRow>
               </MDBRow>
               <MDBInput
                 id="form2Email"
@@ -50,6 +69,16 @@
                 :maxlength="320"
                 required
               />
+              <MDBRow>
+                <div
+                  v-for="message in emailValMessages"
+                  v-if="emailValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+              </MDBRow>
               <!-- Password input -->
               <MDBInput
                 id="form2Password"
@@ -69,6 +98,19 @@
                 :maxlength="64"
                 required
               />
+              <MDBRow>
+                <div
+                  v-for="message in passwordValMessages"
+                  v-if="passwordValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+                <div v-if="passMatchErr" :class="[$style['error-message'], 'mb-4']">
+                  {{ passMatchErr }}
+                </div>
+              </MDBRow>
               <MDBInput
                 id="form2Phone"
                 v-model.trim="phone"
@@ -78,6 +120,16 @@
                 :maxlength="15"
                 required
               />
+              <MDBRow>
+                <div
+                  v-for="message in phoneValMessages"
+                  v-if="phoneValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+              </MDBRow>
               <MDBInput
                 id="form2AddressLineOne"
                 v-model.trim="addressLineOne"
@@ -87,6 +139,16 @@
                 :maxlength="35"
                 required
               />
+              <MDBRow>
+                <div
+                  v-for="message in addressLineOneValMessages"
+                  v-if="addressLineOneValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+              </MDBRow>
               <MDBInput
                 id="form2AddressLineTwo"
                 v-model.trim="addressLineTwo"
@@ -95,6 +157,16 @@
                 wrapper-class="mb-4"
                 :maxlength="35"
               />
+              <MDBRow>
+                <div
+                  v-for="message in addressLineTwoValMessages"
+                  v-if="addressLineTwoValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+              </MDBRow>
               <MDBInput
                 id="form2city"
                 v-model.trim="city"
@@ -103,6 +175,16 @@
                 wrapper-class="mb-4"
                 :maxlength="35"
               />
+              <MDBRow>
+                <div
+                  v-for="message in cityValMessages"
+                  v-if="cityValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+              </MDBRow>
               <MDBInput
                 id="form2postcode"
                 v-model.trim="postcode"
@@ -111,6 +193,16 @@
                 wrapper-class="mb-4"
                 :maxlength="8"
               />
+              <MDBRow>
+                <div
+                  v-for="message in postcodeValMessages"
+                  v-if="postcodeValMessages!=='[]'"
+                  :key="message"
+                  :class="[$style['error-message'], 'mb-4']"
+                >
+                  {{ message }}
+                </div>
+              </MDBRow>
 
               <MDBBtn type="submit" color="primary" :disabled="!canRegister">
                 Register
@@ -197,6 +289,19 @@
       const router = useRouter();
       const { signupError, signup } = useSignup();
 
+      const firstNameValMessages = ref(null);
+      const lastNameValMessages = ref(null);
+      const emailValMessages = ref(null);
+      const passwordValMessages = ref(null);
+      const phoneValMessages = ref(null);
+      const addressLineOneValMessages = ref(null);
+      const addressLineTwoValMessages = ref(null);
+      const cityValMessages = ref(null);
+      const postcodeValMessages = ref(null);
+
+      const inputsValid = ref(true);
+
+
       //in firebase firestore, create collection called users
       //change db rules to: write: if request.auth != null;
       //for this to work (if not in test mode)
@@ -218,10 +323,42 @@
         return passwordsMatch;
       };
 
+      const validateInputs = () => {
+        checkPasswordsMatch();
+
+        firstNameValMessages.value = validateName(firstName.value);
+        lastNameValMessages.value = validateName(lastName.value);
+        emailValMessages.value = validateEmail(email.value);
+        passwordValMessages.value = validatePassword(password.value);
+        phoneValMessages.value = validatePhoneNumber(phone.value);
+        addressLineOneValMessages.value = validateAddressLineOne(addressLineOne.value);
+        addressLineTwoValMessages.value = validateAddressLineTwo(addressLineTwo.value);
+        cityValMessages.value = validateCity(addressLineOne.value);
+        postcodeValMessages.value = validatePostcode(postcode.value);
+
+        if (
+          firstNameValMessages.value.length !== 0 ||
+          lastNameValMessages.value.length !== 0 ||
+          emailValMessages.value.length !== 0 ||
+          passwordValMessages.value.length !== 0 ||
+          phoneValMessages.value.length !== 0 ||
+          addressLineOneValMessages.value.length !== 0 ||
+          addressLineTwoValMessages.value.length !== 0 ||
+          cityValMessages.value.length !== 0 ||
+          postcodeValMessages.value.length !== 0 ||
+          passMatchErr.value
+        ) {
+          inputsValid.value = false;
+        } else {
+          inputsValid.value = true;
+        }
+      };
+
       //submit registration data and create account
       const handleSubmit = async () => {
         // check all inputs are valid:
-        if (!validateInputs()) return;
+        validateInputs();
+        if(!inputsValid.value) return;
 
         //create user acc
         await signup(email.value, password.value);
@@ -274,36 +411,6 @@
         }
       };
 
-      const validateInputs = () => {
-        let inputsValid = true;
-
-        if(!checkPasswordsMatch()) inputsValid = false;
-
-        const firstNameValMessages = validateName(firstName.value);
-        const lastNameValMessages = validateName(lastName.value);
-        const emailValMessages = validateEmail(email.value);
-        const passwordValMessages = validatePassword(password.value);
-        const phoneValMessages = validatePhoneNumber(phone.value);
-        const addressLineOneValMessages = validateAddressLineOne(addressLineOne.value);
-        const addressLineTwoValMessages = validateAddressLineTwo(addressLineTwo.value);
-        const cityValMessages = validateCity(city.value);
-        const postcodeValMessages = validatePostcode(postcode.value);
-
-        if (
-          firstNameValMessages.length !== 0 ||
-          lastNameValMessages.length !== 0 ||
-          emailValMessages.length !== 0 ||
-          passwordValMessages.length !== 0 ||
-          phoneValMessages.length !== 0 ||
-          addressLineOneValMessages.length !== 0 ||
-          addressLineTwoValMessages.length !== 0 ||
-          cityValMessages.length !== 0 ||
-          postcodeValMessages.length !== 0
-        ) inputsValid = false;
-
-        return inputsValid;
-      };
-
       watch([addressLineOne, city, email, firstName, lastName, passConfirm, password, phone, postcode], () => {
         canRegister.value =
           addressLineOne.value !== '' &&
@@ -317,7 +424,10 @@
       });
 
       return { addressLineOne, addressLineTwo, canRegister, city, email, firstName, handleSubmit, lastName,
-               passConfirm, passMatchErr, password, phone, postcode, signupError };
+               passConfirm, passMatchErr, password, phone, postcode, signupError, firstNameValMessages,
+               lastNameValMessages,emailValMessages, passwordValMessages, phoneValMessages,
+               addressLineOneValMessages, addressLineTwoValMessages,
+               cityValMessages, postcodeValMessages, validateInputs, inputsValid };
     }
   };
 </script>
