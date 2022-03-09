@@ -99,8 +99,8 @@
           Selected columns:
         </p>
         <MDBCheckbox
-          v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
-          :key="index"
+          v-for="key in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
+          :key="key"
           v-model="activeCheckboxes[key]"
           :label="mapKeyToWords(key)"
           inline

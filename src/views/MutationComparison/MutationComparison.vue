@@ -11,7 +11,22 @@
       />
     </div>
 
-    <div v-if="compareSingleGene" />
+    <div v-if="compareSingleGene">
+      <p :class="$style.SingleGeneInstruction">
+        Please select a gene mutation in order to compare its data
+      </p>
+      <div :class="[$style.SelectWrapper, 'me-4']">
+        <select v-model="selectedComparisonGene" :class="'form-select'">
+          <option
+            v-for="geneMutation in geneMutations"
+            :key="geneMutation"
+            :disabled="geneMutation === 'Please select'"
+          >
+            {{ geneMutation }}
+          </option>
+        </select>
+      </div>
+    </div>
 
     <div v-else>
       <p :class="$style.GeneSelectionInstructionText">
@@ -23,8 +38,8 @@
           <p> Gene mutation one: </p>
           <select v-model="selectedGeneMutationOne" :class="'form-select'">
             <option
-              v-for="(geneMutation, index) in availableMutationsOne"
-              :key="index"
+              v-for="geneMutation in availableMutationsOne"
+              :key="geneMutation"
               :disabled="geneMutation === 'Please select'"
             >
               {{ geneMutation }}
@@ -36,8 +51,8 @@
           <p> Gene mutation two: </p>
           <select v-model="selectedGeneMutationTwo" :class="'form-select'">
             <option
-              v-for="(geneMutation, index) in availableMutationsTwo"
-              :key="index"
+              v-for="geneMutation in availableMutationsTwo"
+              :key="geneMutation"
               :disabled="geneMutation === 'Please select'"
             >
               {{ geneMutation }}
@@ -88,7 +103,7 @@
   import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
   import { MDBCol, MDBRow, MDBSwitch } from 'mdb-vue-ui-kit';
-  import { ref, watch } from 'vue';
+  import { reactive, ref, watch } from 'vue';
 
   export default {
     name: 'MutationComparison',
@@ -101,7 +116,7 @@
       let compareSingleGene = ref(false);
       let displayCharts = ref(false);
       const doughnutRef = ref();
-      const geneMutations = [
+      const geneMutations = reactive([
         'Please select',
         'MYH7',
         'MYBPC3',
@@ -112,13 +127,15 @@
         'TNNI3',
         'MYL2',
         'TTN'
-      ];
+      ]);
       let isLoadingGraphs = ref(false);
       let mutationOneDocuments = [];
       let mutationTwoDocuments = [];
+      let selectedComparisonGene = ref('Please select');
       let selectedGeneMutationOne = ref('Please select');
       let selectedGeneMutationTwo = ref('Please select');
       let selectedKey = ref('');
+      let singleMutationDocuments = [];
       let tableKeys = [];
 
       (async () => {
@@ -132,44 +149,11 @@
         });
       })();
 
-      watch(selectedGeneMutationOne, () => {
-        availableMutationsTwo.value = geneMutations;
-        availableMutationsTwo.value = availableMutationsTwo.value.filter(mutation =>
-          mutation !== selectedGeneMutationOne.value);
-      });
+      const refreshKeys = (singleMutation) => {
+        tableKeys = singleMutation
+          ? Object.keys(determineKeys([singleMutationDocuments]))
+          : Object.keys(determineKeys([...mutationOneDocuments, ...mutationTwoDocuments]));
 
-      watch(selectedGeneMutationTwo, () => {
-        availableMutationsOne.value = geneMutations;
-        availableMutationsOne.value = availableMutationsOne.value.filter(mutation =>
-          mutation !== selectedGeneMutationTwo.value);
-      });
-
-      watch(selectedGeneMutationOne, () => {
-        mutationOneDocuments = allDocuments.filter(doc =>
-          doc[selectedGeneMutationOne.value] === true);
-
-        refreshKeys();
-        if (selectedGeneMutationOne.value !== 'Please select' &&
-          selectedGeneMutationTwo.value !== 'Please select' &&
-          selectedKey.value !== '')
-          generateGraph(displayCharts, 'graphOne', isLoadingGraphs.value, selectedKey.value,
-                        mapKeyToWords(selectedGeneMutationOne.value), mutationOneDocuments, true);
-      });
-
-      watch(selectedGeneMutationTwo, () => {
-        mutationTwoDocuments = allDocuments.filter(doc =>
-          doc[selectedGeneMutationTwo.value] === true);
-
-        refreshKeys();
-        if (selectedGeneMutationOne.value !== 'Please select' &&
-          selectedGeneMutationTwo.value !== 'Please select' &&
-          selectedKey.value !== '')
-          generateGraph(displayCharts, 'graphTwo', isLoadingGraphs.value, selectedKey.value,
-                        mapKeyToWords(selectedGeneMutationTwo.value), mutationTwoDocuments, true);
-      });
-
-      const refreshKeys = () => {
-        tableKeys = Object.keys(determineKeys([...mutationOneDocuments, ...mutationTwoDocuments]));
         // insensitive sort:
         tableKeys = tableKeys.sort(Intl.Collator().compare);
 
@@ -183,8 +167,41 @@
                       mapKeyToWords(selectedGeneMutationTwo.value), mutationTwoDocuments, true);
       });
 
+      watch(selectedGeneMutationOne, () => {
+        availableMutationsTwo.value = geneMutations;
+        availableMutationsTwo.value = availableMutationsTwo.value.filter(mutation =>
+          mutation !== selectedGeneMutationOne.value);
+
+        mutationOneDocuments = allDocuments.filter(doc =>
+          doc[selectedGeneMutationOne.value] === true);
+
+        refreshKeys(false);
+        if (selectedGeneMutationOne.value !== 'Please select' &&
+          selectedGeneMutationTwo.value !== 'Please select' &&
+          selectedKey.value !== '')
+          generateGraph(displayCharts, 'graphOne', isLoadingGraphs.value, selectedKey.value,
+                        mapKeyToWords(selectedGeneMutationOne.value), mutationOneDocuments, true);
+      });
+
+      watch(selectedGeneMutationTwo, () => {
+        availableMutationsOne.value = geneMutations;
+        availableMutationsOne.value = availableMutationsOne.value.filter(mutation =>
+          mutation !== selectedGeneMutationTwo.value);
+
+        mutationTwoDocuments = allDocuments.filter(doc =>
+          doc[selectedGeneMutationTwo.value] === true);
+
+        refreshKeys(false);
+        if (selectedGeneMutationOne.value !== 'Please select' &&
+          selectedGeneMutationTwo.value !== 'Please select' &&
+          selectedKey.value !== '')
+          generateGraph(displayCharts, 'graphTwo', isLoadingGraphs.value, selectedKey.value,
+                        mapKeyToWords(selectedGeneMutationTwo.value), mutationTwoDocuments, true);
+      });
+
       return { availableMutationsOne, availableMutationsTwo, chunkedKeys, compareSingleGene, doughnutRef,
-               isLoadingGraphs, mapKeyToWords, selectedGeneMutationOne, selectedGeneMutationTwo, selectedKey };
+               geneMutations, isLoadingGraphs, mapKeyToWords, selectedComparisonGene, selectedGeneMutationOne,
+               selectedGeneMutationTwo, selectedKey };
     }
   };
 </script>
