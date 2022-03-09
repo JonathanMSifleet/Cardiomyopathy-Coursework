@@ -272,6 +272,7 @@
           delete optionalTableHeaders.value.deletedAt;
 
           activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
+          renderableResults.value = resetTablePage(allDocuments);
         } catch (error) {
           switch(true) {
           case error.message.includes('Network Error'):
@@ -315,7 +316,6 @@
 
       const cleanup = () => {
         filteredResults.value = allDocuments;
-        selectedTablePage.value = 1;
         renderableResults.value = resetTablePage(filteredResults.value);
       };
 
@@ -332,7 +332,10 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const resetTablePage = (array) => array.slice(0, pageSize);
+      const resetTablePage = (array) => {
+        selectedTablePage.value = 1;
+        return array = array.slice(0, pageSize);
+      };
 
       const selectGraphKey = (key) => selectedGraphKey.value = key;
 
@@ -388,9 +391,7 @@
         filteredResults.value = allDocuments
           .filter(doc => doc[selectedGeneMutation.value]);
 
-        renderableResults.value = resetTablePage();
-
-        cleanup();
+        renderableResults.value = resetTablePage(filteredResults.value);
       });
 
       watch(selectedGraphKey, () =>
