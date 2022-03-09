@@ -69,7 +69,7 @@ export const validateAddressLineTwo = (input) => {
 export const validateCity = (input) => {
   const valMessages = [];
 
-  if(!validateRegex(input, /[a-zA-Z ]+/)) valMessages.push('City must only contain letters a-z and A-Z');
+  if(!validateRegex(input, /^[a-zA-Z\s]*$/)) valMessages.push('City must only contain letters a-z and A-Z');
   if(!validateLength(input, 4, 35)) valMessages.push('City must be between 4 and 35 characters');
   //THE SPECIAL CHAR REGEX CHECK IS BROKEN, does not run
   //if(validateRegex(specialCharRegex)) valMessages.push('Address must not contain special characters');

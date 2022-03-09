@@ -344,7 +344,7 @@
         if(addressLineTwo.value && addressLineTwo.value.length !== 0)
           addressLineTwoValMessages.value = validateAddressLineTwo(addressLineTwo.value);
 
-        cityValMessages.value = validateCity(addressLineOne.value);
+        cityValMessages.value = validateCity(city.value);
         postcodeValMessages.value = validatePostcode(postcode.value);
 
         if (
