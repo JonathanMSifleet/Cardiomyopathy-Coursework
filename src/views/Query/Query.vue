@@ -344,8 +344,6 @@
       };
 
       watch(filters, () => {
-        console.log('new filter added');
-
         let intermediateResults = allDocuments;
         filters.forEach(filter => {
           intermediateResults = intermediateResults.filter(doc => {
@@ -383,8 +381,6 @@
 
       watch(selectedGeneMutation, () => {
         if (useAdvancedMode.value) return;
-
-        filters = [];
 
         filteredResults.value = selectedGeneMutation.value !== 'Please select'
           ? allDocuments.filter(doc => doc[selectedGeneMutation.value])
