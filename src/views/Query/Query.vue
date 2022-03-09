@@ -326,24 +326,7 @@
 
       const deleteFilter = (index) => filters = filters.splice(index, 1);
 
-      const resetTablePage = (array) => {
-        selectedTablePage.value = 1;
-        return array.slice(0, pageSize);
-      };
-
-      const selectGraphKey = (key) => selectedGraphKey.value = key;
-
-      const toggleHeader = (key) => {
-        if (activeTableHeaders.value.includes(key)) {
-          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
-          delete activeCheckboxes[key];
-        } else {
-          activeTableHeaders.value.push(key);
-          activeCheckboxes[key] = true;
-        }
-      };
-
-      watch(filters, () => {
+      const filterResults = () => {
         let intermediateResults = allDocuments;
         filters.forEach(filter => {
           intermediateResults = intermediateResults.filter(doc => {
@@ -366,7 +349,28 @@
           });
         });
 
-        filteredResults.value = intermediateResults;
+        return intermediateResults;
+      };
+
+      const resetTablePage = (array) => {
+        selectedTablePage.value = 1;
+        return array.slice(0, pageSize);
+      };
+
+      const selectGraphKey = (key) => selectedGraphKey.value = key;
+
+      const toggleHeader = (key) => {
+        if (activeTableHeaders.value.includes(key)) {
+          activeTableHeaders.value.splice(activeTableHeaders.value.indexOf(key), 1);
+          delete activeCheckboxes[key];
+        } else {
+          activeTableHeaders.value.push(key);
+          activeCheckboxes[key] = true;
+        }
+      };
+
+      watch(filters, () => {
+        filteredResults.value = filterResults();
         selectedTablePage.value = 1;
         renderableResults.value = resetTablePage(filteredResults.value);
 
@@ -401,9 +405,9 @@
       });
 
       watch(useAdvancedMode, () => {
-        useAdvancedMode.value
-          ? selectedGeneMutation.value = 'Please select'
-          : filters = [];
+        if (useAdvancedMode.value) {
+          selectedGeneMutation.value = 'Please select';
+        }
 
         filteredResults.value = allDocuments;
         renderableResults.value = resetTablePage(filteredResults.value);
