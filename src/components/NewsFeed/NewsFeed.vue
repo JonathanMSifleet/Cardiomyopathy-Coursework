@@ -1,5 +1,5 @@
 <template>
-  <div id="newsFeed">
+  <div id="newsFeed" class="mb-5">
     <MDBModal
       id="newsFeedModal"
       v-model="newsFeedModal"
