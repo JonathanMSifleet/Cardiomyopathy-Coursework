@@ -178,8 +178,8 @@
   import GeneModal from '../../components/GeneModal/GeneModal.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
-  import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import getSanitisedDocuments from '../../utils/getSanitisedDocuments';
   import getUser from '../../composables/getUser';
   import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
@@ -261,16 +261,12 @@
         try {
           allDocuments = await fetchDocuments();
           if (allDocuments.length === 0) throw new Error('No docs');
-
-          filteredResults.value = allDocuments;
-
-          optionalTableHeaders.value = determineKeys(allDocuments);
-          delete optionalTableHeaders.value.userId;
-          delete optionalTableHeaders.value.createdAt;
-          delete optionalTableHeaders.value.deletedAt;
+          optionalTableHeaders.value = getSanitisedDocuments(allDocuments);
 
           activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
           renderableResults.value = resetTablePage(allDocuments);
+
+          filteredResults.value = allDocuments;
         } catch (error) {
           switch(true) {
           case error.message.includes('Network Error'):
