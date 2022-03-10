@@ -2,6 +2,7 @@ import { GoogleCharts } from 'google-charts';
 import mapKeyToWords from './mapKeyToWords';
 
 export default (displayChart, divId, isLoadingGraph, keyName, mutationName, results, isComparing) => {
+  console.log('🚀 ~ file: generateGraph.js ~ line 5 ~ results', results);
   isLoadingGraph = true;
 
   const { data, type } = prepareGraphData(results, keyName);

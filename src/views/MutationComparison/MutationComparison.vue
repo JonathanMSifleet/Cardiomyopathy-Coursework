@@ -34,8 +34,11 @@
           v-model="activeCheckboxes[key]"
           :label="mapKeyToWords(key)"
           inline
+          @change="toggleGraph(key)"
         />
       </div>
+
+      <div v-for="index in graphIndex" :id="`comparisonGraph${index}`" :key="index" />
     </div>
 
     <div v-if="!compareSingleGene">
@@ -141,6 +144,7 @@
         'MYL2',
         'TTN'
       ]);
+      let graphIndex = ref(1);
       let isLoadingGraphs = ref(false);
       let mutationOneDocuments = [];
       let mutationTwoDocuments = [];
@@ -170,6 +174,13 @@
         tableKeys = tableKeys.sort(Intl.Collator().compare);
 
         chunkedKeys.value = chunk(tableKeys, Math.ceil(tableKeys.length / 4));
+      };
+
+      const toggleGraph = (key) => {
+        graphIndex.value++;
+
+        generateGraph(true, `comparisonGraph${graphIndex.value}`, false, key,
+                      mapKeyToWords(key), selectedComparisonGeneDocuments, false);
       };
 
       watch(selectedKey, () => {
@@ -226,9 +237,9 @@
       });
 
       return { activeCheckboxes, availableMutationsOne, availableMutationsTwo, canShowComparisonFields, chunkedKeys,
-               compareSingleGene, doughnutRef, geneMutations, isLoadingGraphs, mapKeyToWords, optionalFields,
-               selectedComparisonGene, selectedComparisonGeneDocuments, selectedGeneMutationOne,
-               selectedGeneMutationTwo, selectedKey };
+               compareSingleGene, doughnutRef, geneMutations, graphIndex, isLoadingGraphs, mapKeyToWords,
+               optionalFields, selectedComparisonGene, selectedComparisonGeneDocuments,  selectedGeneMutationOne,
+               selectedGeneMutationTwo, selectedKey, toggleGraph };
     }
   };
 </script>
