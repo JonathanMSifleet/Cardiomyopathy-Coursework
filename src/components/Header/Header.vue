@@ -31,7 +31,7 @@
             :to="{ name: 'MutationComparison' }"
             active
           >
-            Mutation Comparison
+            Data Comparison
           </MDBNavbarItem>
           <MDBNavbarItem
             v-if="loggedInAndVerif()"

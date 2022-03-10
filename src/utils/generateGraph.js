@@ -31,8 +31,9 @@ const drawChart = (data, divId, keyName, type, isComparing, mutationName) => {
 
   const divToRenderChart = document.getElementById(divId);
 
-  const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
-    new chartHelper.ColumnChart(divToRenderChart);
+  const chart = type === 'pie'
+    ? new chartHelper.PieChart(divToRenderChart)
+    : new chartHelper.ColumnChart(divToRenderChart);
 
   let chartOptions = {
     title: mapKeyToWords(keyName),

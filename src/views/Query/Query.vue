@@ -7,7 +7,6 @@
     <div :class="[$style.AdvancedModeSwitchWrapper, 'mt-4', 'me-4']">
       <MDBSwitch
         v-model="useAdvancedMode"
-        :class="$style.AdvancedModeSwitch"
         label="Advanced search"
       />
     </div>
@@ -100,8 +99,8 @@
           Selected columns:
         </p>
         <MDBCheckbox
-          v-for="(key, index) in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
-          :key="index"
+          v-for="key in mapKeyToWords(Object.keys(optionalTableHeaders)).sort(Intl.Collator().compare)"
+          :key="key"
           v-model="activeCheckboxes[key]"
           :label="mapKeyToWords(key)"
           inline
@@ -179,8 +178,8 @@
   import GeneModal from '../../components/GeneModal/GeneModal.vue';
   import PageWrapper from '../../components/PageWrapper/PageWrapper.vue';
   import Spinner from '../../components/Spinner/Spinner.vue';
-  import determineKeys from '../../utils/determineKeys';
   import fetchDocuments from '../../utils/fetchDocuments';
+  import getSanitisedDocuments from '../../utils/getSanitisedDocuments';
   import getUser from '../../composables/getUser';
   import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
@@ -262,16 +261,12 @@
         try {
           allDocuments = await fetchDocuments();
           if (allDocuments.length === 0) throw new Error('No docs');
-
-          filteredResults.value = allDocuments;
-
-          optionalTableHeaders.value = determineKeys(allDocuments);
-          delete optionalTableHeaders.value.userId;
-          delete optionalTableHeaders.value.createdAt;
-          delete optionalTableHeaders.value.deletedAt;
+          optionalTableHeaders.value = getSanitisedDocuments(allDocuments);
 
           activeTableHeaders.value.forEach(key => activeCheckboxes.value[key] = true);
           renderableResults.value = resetTablePage(allDocuments);
+
+          filteredResults.value = allDocuments;
         } catch (error) {
           switch(true) {
           case error.message.includes('Network Error'):

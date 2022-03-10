@@ -6,10 +6,32 @@
   margin-bottom: 0 !important;
 }
 
+.SelectSingleGeneWrapper {
+  clear: both;
+}
+
+.CompareSingleGeneWrapper {
+  float: right;
+  margin-left: 1%;
+}
+
+.SingleGeneInstruction {
+  margin-top: 4%;
+  margin-bottom: 1%;
+}
+
 .GeneSelectionInstructionText {
   clear: both;
   float: left;
   margin-bottom: 1%;
+}
+
+.CheckboxWrapper {
+  clear: both;
+  height: 25vh;
+  margin-top: 5%;
+  margin-bottom: 1%;
+  overflow-y: scroll;
 }
 
 .OuterSelectWrapper {
@@ -22,6 +44,13 @@
   width: 15vw;
 }
 
+.SelectFieldInstructions {
+  clear: both;
+  float: left;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
 .GraphAndKeyWrapper {
   clear: both;
   float: left;
@@ -30,6 +59,12 @@
 .ChartWrapper {
   clear: both;
   margin-top: 2%;
+}
+
+.SmallerChart {
+  float: left;
+  width: 30%;
+  margin-right: 3%;
 }
 
 .Chart {
