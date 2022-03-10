@@ -11,7 +11,7 @@
       />
     </div>
 
-    <div v-if="compareSingleGene">
+    <div v-if="compareSingleGene" :class="$style.SelectSingleGeneWrapper">
       <p :class="$style.SingleGeneInstruction">
         Please select a gene mutation in order to compare its data
       </p>
@@ -26,9 +26,19 @@
           </option>
         </select>
       </div>
+
+      <div v-if="selectedComparisonGene !== 'Please select' && canShowComparisonFields" :class="$style.CheckboxWrapper">
+        <MDBCheckbox
+          v-for="key in mapKeyToWords(Object.keys(optionalFields)).sort(Intl.Collator().compare)"
+          :key="key"
+          v-model="activeCheckboxes[key]"
+          :label="mapKeyToWords(key)"
+          inline
+        />
+      </div>
     </div>
 
-    <div v-else>
+    <div v-if="!compareSingleGene">
       <p :class="$style.GeneSelectionInstructionText">
         Please select two gene mutations in order to compare them:
       </p>
@@ -102,16 +112,19 @@
   import fetchDocuments from '../../utils/fetchDocuments';
   import generateGraph from '../../utils/generateGraph';
   import mapKeyToWords from '../../utils/mapKeyToWords';
-  import { MDBCol, MDBRow, MDBSwitch } from 'mdb-vue-ui-kit';
+  import { MDBCheckbox, MDBCol, MDBRow, MDBSwitch } from 'mdb-vue-ui-kit';
   import { reactive, ref, watch } from 'vue';
+  import getSanitisedDocuments from '../../utils/getSanitisedDocuments';
 
   export default {
     name: 'MutationComparison',
-    components: { MDBCol, MDBRow, MDBSwitch, PageWrapper, Spinner },
+    components: { MDBCheckbox, MDBCol, MDBRow, MDBSwitch, PageWrapper, Spinner },
     setup() {
+      let activeCheckboxes = ref({});
       const allDocuments = [];
       let availableMutationsOne = ref([]);
       let availableMutationsTwo = ref([]);
+      let canShowComparisonFields = ref(false);
       let chunkedKeys = ref([]);
       let compareSingleGene = ref(false);
       let displayCharts = ref(false);
@@ -131,11 +144,12 @@
       let isLoadingGraphs = ref(false);
       let mutationOneDocuments = [];
       let mutationTwoDocuments = [];
+      let optionalFields = ref([]);
       let selectedComparisonGene = ref('Please select');
+      let selectedComparisonGeneDocuments = [];
       let selectedGeneMutationOne = ref('Please select');
       let selectedGeneMutationTwo = ref('Please select');
       let selectedKey = ref('');
-      let singleMutationDocuments = [];
       let tableKeys = [];
 
       (async () => {
@@ -149,10 +163,8 @@
         });
       })();
 
-      const refreshKeys = (singleMutation) => {
-        tableKeys = singleMutation
-          ? Object.keys(determineKeys([singleMutationDocuments]))
-          : Object.keys(determineKeys([...mutationOneDocuments, ...mutationTwoDocuments]));
+      const refreshKeys = () => {
+        tableKeys = Object.keys(determineKeys([...mutationOneDocuments, ...mutationTwoDocuments]));
 
         // insensitive sort:
         tableKeys = tableKeys.sort(Intl.Collator().compare);
@@ -175,7 +187,7 @@
         mutationOneDocuments = allDocuments.filter(doc =>
           doc[selectedGeneMutationOne.value] === true);
 
-        refreshKeys(false);
+        refreshKeys();
         if (selectedGeneMutationOne.value !== 'Please select' &&
           selectedGeneMutationTwo.value !== 'Please select' &&
           selectedKey.value !== '')
@@ -191,7 +203,7 @@
         mutationTwoDocuments = allDocuments.filter(doc =>
           doc[selectedGeneMutationTwo.value] === true);
 
-        refreshKeys(false);
+        refreshKeys();
         if (selectedGeneMutationOne.value !== 'Please select' &&
           selectedGeneMutationTwo.value !== 'Please select' &&
           selectedKey.value !== '')
@@ -199,8 +211,23 @@
                         mapKeyToWords(selectedGeneMutationTwo.value), mutationTwoDocuments, true);
       });
 
-      return { availableMutationsOne, availableMutationsTwo, chunkedKeys, compareSingleGene, doughnutRef,
-               geneMutations, isLoadingGraphs, mapKeyToWords, selectedComparisonGene, selectedGeneMutationOne,
+      watch(selectedComparisonGene, () => {
+        canShowComparisonFields.value = false;
+
+        selectedComparisonGeneDocuments = allDocuments.filter(doc =>
+          doc[selectedComparisonGene.value] === true);
+
+        optionalFields.value = getSanitisedDocuments(selectedComparisonGeneDocuments);
+        optionalFields.value.forEach(field => {
+          activeCheckboxes.value[field] = false;
+        });
+
+        canShowComparisonFields.value = true;
+      });
+
+      return { activeCheckboxes, availableMutationsOne, availableMutationsTwo, canShowComparisonFields, chunkedKeys,
+               compareSingleGene, doughnutRef, geneMutations, isLoadingGraphs, mapKeyToWords, optionalFields,
+               selectedComparisonGene, selectedComparisonGeneDocuments, selectedGeneMutationOne,
                selectedGeneMutationTwo, selectedKey };
     }
   };

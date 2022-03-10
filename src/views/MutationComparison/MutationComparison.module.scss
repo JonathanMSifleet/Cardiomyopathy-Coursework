@@ -6,13 +6,17 @@
   margin-bottom: 0 !important;
 }
 
+.SelectSingleGeneWrapper {
+  clear: both;
+}
+
 .CompareSingleGeneWrapper {
   float: right;
   margin-left: 1%;
 }
 
 .SingleGeneInstruction {
-  margin-top: 6%;
+  margin-top: 4%;
   margin-bottom: 1%;
 }
 
@@ -20,6 +24,13 @@
   clear: both;
   float: left;
   margin-bottom: 1%;
+}
+
+.CheckboxWrapper {
+  clear: both;
+  height: 25vh;
+  margin-top: 5%;
+  overflow-y: scroll;
 }
 
 .OuterSelectWrapper {
