@@ -27,6 +27,10 @@
         </select>
       </div>
 
+      <p :class="$style.SelectFieldInstructions">
+        Please select fields you would like to compare data on:
+      </p>
+
       <div v-if="selectedComparisonGene !== 'Please select' && canShowComparisonFields" :class="$style.CheckboxWrapper">
         <MDBCheckbox
           v-for="key in mapKeyToWords(Object.keys(optionalFields)).sort(Intl.Collator().compare)"
@@ -38,7 +42,12 @@
         />
       </div>
 
-      <div v-for="key in activeGraphs" :id="`comparisonGraph${key}`" :key="key" />
+      <div
+        v-for="key in activeGraphs"
+        :id="`comparisonGraph${key}`"
+        :key="key"
+        :class="$style.SmallerChart"
+      />
     </div>
 
     <div v-if="!compareSingleGene">
@@ -245,8 +254,8 @@
         canShowComparisonFields.value = true;
       });
 
-      return { activeCheckboxes, activeGraphs, availableMutationsOne, availableMutationsTwo, canShowComparisonFields, chunkedKeys,
-               compareSingleGene, doughnutRef, geneMutations, graphIndex, isLoadingGraphs, mapKeyToWords,
+      return { activeCheckboxes, activeGraphs, availableMutationsOne, availableMutationsTwo, canShowComparisonFields,
+               chunkedKeys, compareSingleGene, doughnutRef, geneMutations, graphIndex, isLoadingGraphs, mapKeyToWords,
                optionalFields, selectedComparisonGene, selectedComparisonGeneDocuments,  selectedGeneMutationOne,
                selectedGeneMutationTwo, selectedKey, toggleGraph };
     }

@@ -2,7 +2,6 @@ import { GoogleCharts } from 'google-charts';
 import mapKeyToWords from './mapKeyToWords';
 
 export default (displayChart, divId, isLoadingGraph, keyName, mutationName, results, isComparing) => {
-  console.log('🚀 ~ file: generateGraph.js ~ line 5 ~ results', results);
   isLoadingGraph = true;
 
   const { data, type } = prepareGraphData(results, keyName);
@@ -32,8 +31,9 @@ const drawChart = (data, divId, keyName, type, isComparing, mutationName) => {
 
   const divToRenderChart = document.getElementById(divId);
 
-  const chart = type === 'pie' ? new chartHelper.PieChart(divToRenderChart) :
-    new chartHelper.ColumnChart(divToRenderChart);
+  const chart = type === 'pie'
+    ? new chartHelper.PieChart(divToRenderChart)
+    : new chartHelper.ColumnChart(divToRenderChart);
 
   let chartOptions = {
     title: mapKeyToWords(keyName),

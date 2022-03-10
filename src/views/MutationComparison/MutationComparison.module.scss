@@ -30,6 +30,7 @@
   clear: both;
   height: 25vh;
   margin-top: 5%;
+  margin-bottom: 1%;
   overflow-y: scroll;
 }
 
@@ -43,6 +44,13 @@
   width: 15vw;
 }
 
+.SelectFieldInstructions {
+  clear: both;
+  float: left;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
 .GraphAndKeyWrapper {
   clear: both;
   float: left;
@@ -51,6 +59,12 @@
 .ChartWrapper {
   clear: both;
   margin-top: 2%;
+}
+
+.SmallerChart {
+  float: left;
+  width: 30%;
+  margin-right: 3%;
 }
 
 .Chart {
