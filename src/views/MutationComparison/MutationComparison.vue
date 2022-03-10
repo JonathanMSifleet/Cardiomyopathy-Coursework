@@ -38,7 +38,7 @@
         />
       </div>
 
-      <div v-for="index in graphIndex" :id="`comparisonGraph${index}`" :key="index" />
+      <div v-for="key in activeGraphs" :id="`comparisonGraph${key}`" :key="key" />
     </div>
 
     <div v-if="!compareSingleGene">
@@ -124,6 +124,7 @@
     components: { MDBCheckbox, MDBCol, MDBRow, MDBSwitch, PageWrapper, Spinner },
     setup() {
       let activeCheckboxes = ref({});
+      let activeGraphs = ref([]);
       const allDocuments = [];
       let availableMutationsOne = ref([]);
       let availableMutationsTwo = ref([]);
@@ -177,9 +178,17 @@
       };
 
       const toggleGraph = (key) => {
-        graphIndex.value++;
+        let displayChart;
 
-        generateGraph(true, `comparisonGraph${graphIndex.value}`, false, key,
+        if(activeGraphs.value.includes(key)) {
+          activeGraphs.value.splice(activeGraphs.value.indexOf(key), 1);
+          displayChart = false;
+        } else {
+          activeGraphs.value.push(key);
+          displayChart = true;
+        }
+
+        generateGraph(displayChart, `comparisonGraph${key}`, false, key,
                       mapKeyToWords(key), selectedComparisonGeneDocuments, false);
       };
 
@@ -236,7 +245,7 @@
         canShowComparisonFields.value = true;
       });
 
-      return { activeCheckboxes, availableMutationsOne, availableMutationsTwo, canShowComparisonFields, chunkedKeys,
+      return { activeCheckboxes, activeGraphs, availableMutationsOne, availableMutationsTwo, canShowComparisonFields, chunkedKeys,
                compareSingleGene, doughnutRef, geneMutations, graphIndex, isLoadingGraphs, mapKeyToWords,
                optionalFields, selectedComparisonGene, selectedComparisonGeneDocuments,  selectedGeneMutationOne,
                selectedGeneMutationTwo, selectedKey, toggleGraph };
