@@ -83,7 +83,7 @@ module.exports = {
     new webpack.DefinePlugin({
       __VUE_OPTIONS_API__: true,
       __VUE_PROD_DEVTOOLS__: false,
-      'process.env.DEVELOPMENT': JSON.stringify(true),
+      'process.env.DEVELOPMENT': JSON.stringify(false),
       'process.env.API_KEY': JSON.stringify('AIzaSyDGrP1QWYsQqLFAoev-AHjAQKq4aal9q_M'),
       'process.env.AUTH_DOMAIN': JSON.stringify('advwebdevproject-7d239.firebaseapp.com'),
       'process.env.PROJECT_ID': JSON.stringify('advwebdevproject-7d239'),
