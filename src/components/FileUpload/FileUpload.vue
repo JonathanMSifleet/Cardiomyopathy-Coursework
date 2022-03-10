@@ -77,6 +77,7 @@
       const shouldSubmitData = ref(false);
       let isSubmitting = ref(false);
       let radioFormat = ref('JSON');
+      let showFormatVisible = ref(false);
       let showFormatInstructions = ref(false);
       let statusMessage = ref('');
 
@@ -103,6 +104,11 @@
           isSubmitting.value = false;
           statusMessage.value = 'Data formatted incorrectly';
         }
+      };
+
+      const showHowToFormat = () => {
+        showFormatInstructions.value = !showFormatInstructions.value;
+        showFormatVisible.value = true;
       };
 
       const uploadData = async (data) => {
@@ -142,7 +148,7 @@
       });
 
       return { determineFormatInstructions, fileUpload, formatTypes, isSubmitting, radioFormat, shouldSubmitData,
-               showFormatInstructions, statusMessage };
+               showFormatInstructions, showFormatVisible, showHowToFormat, statusMessage };
     }
   };
 </script>
