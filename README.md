@@ -1,3 +1,5 @@
+Group assessment, grade: 91%
+
 # advanced-web-project
 
 ## Project setup
