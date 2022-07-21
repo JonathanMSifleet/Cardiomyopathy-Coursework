@@ -18,7 +18,7 @@ onAuthStateChanged(auth, () => {
   app = createApp(App);
   app.use(router);
 
-  if (!process.env.DEVELOPMENT) {
+  if (!import.meta.env.VITE_DEVELOPMENT) {
     app.config.errorHandler = () => null;
     app.config.warnHandler = () => null;
   }
