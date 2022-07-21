@@ -25,13 +25,14 @@
       </div>
     </div>
     <div :class="$style['bg-photo']">
-      <img :src="require(`../../assets/imgs/${post.photo}.jpg`)">
+      <img :src="importImage(`../assets/imgs/${post.photo}.jpg`)">
     </div>
   </div>
 </template>
 
 <script>
   import getUser from '../../composables/getUser';
+  import importImage from '../../utils/importImage';
   import { ref, onBeforeMount } from 'vue';
 
   export default {
@@ -49,7 +50,7 @@
         if (currentUser.value) user.value = true;
       });
 
-      return { user };
+      return { importImage, user };
     }
   };
 </script>

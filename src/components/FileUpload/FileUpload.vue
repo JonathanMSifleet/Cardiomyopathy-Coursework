@@ -82,7 +82,7 @@
       let statusMessage = ref('');
 
       const determineFormatInstructions = () => {
-        const intermediateText = require(`./exampleData/${radioFormat.value.toLowerCase()}.txt`);
+        const intermediateText = import(`./exampleData/${radioFormat.value.toLowerCase()}.txt`);
         return intermediateText.default.toString().replaceAll('\\n', '\n').trim();
       };
 

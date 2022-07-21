@@ -26,15 +26,20 @@
       </div>
     </div>
     <div :class="$style['bg-photo']">
-      <img :src="require(`../../assets/imgs/${post.photo}.jpg`)">
+      <img :src="importImage(`../assets/imgs/${post.photo}.jpg`)">
     </div>
   </div>
 </template>
 
 <script>
+  import importImage from '../../utils/importImage';
+
   export default {
     name: 'HomeComponent',
-    props: ['post']
+    props: ['post'],
+    setup() {
+      return { importImage };
+    }
   };
 </script>
 
